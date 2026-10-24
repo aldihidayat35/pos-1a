@@ -14,6 +14,7 @@
     </div>
 
     <div class="space-y-2.5 pt-1">
+      @if(auth()->user()->hasPermission('pos.access'))
       <!-- 1. TERMINAL KASIR POS -->
       <a href="{{ route('store.pos.terminal') }}" 
          class="w-full p-3.5 bg-sidebar hover:bg-sidebar/95 text-white rounded-2xl transition duration-200 flex items-center justify-between group shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
@@ -30,7 +31,9 @@
         </div>
         <span class="px-2 py-0.5 rounded-lg bg-white/15 text-[10px] font-mono font-bold text-brandOrange">Kasir</span>
       </a>
+      @endif
 
+      @if(auth()->user()->hasPermission('b2b.pickup'))
       <!-- 2. SCAN QR TIKET PICKUP / MEMBER -->
       <a href="{{ route('b2b.pickup.scan') }}" 
          class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
@@ -49,7 +52,9 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
       </a>
+      @endif
 
+      @if(auth()->user()->hasPermission('emergency.input'))
       <!-- 3. + BELANJA EMERGENCY INSTAN -->
       <a href="{{ route('store.emergency.create') }}" 
          class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
@@ -68,6 +73,26 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
       </a>
+      @endif
+
+      @if(auth()->user()->isOwner())
+      <!-- EKSEKUTIF / OWNER: PUSAT LAPORAN & MONITORING -->
+      <a href="{{ route('reports.index') }}" 
+         class="w-full p-3.5 bg-sidebar hover:bg-sidebar/95 text-white rounded-2xl transition duration-200 flex items-center justify-between group shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition shrink-0">
+            <svg class="w-5 h-5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="text-left">
+            <p class="text-xs font-bold leading-tight">Pusat Laporan Eksekutif</p>
+            <p class="text-[10px] text-white/70 mt-0.5">Analisis Finansial & HPP</p>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 rounded-lg bg-white/15 text-[10px] font-mono font-bold text-brandOrange">Laporan</span>
+      </a>
+      @endif
 
       <!-- 4. FEED PERGERAKAN 5-WARNA & ANOMALI -->
       <a href="{{ route('audit.index') }}" 

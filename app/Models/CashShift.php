@@ -11,6 +11,10 @@ class CashShift extends Model
 {
     use HasFactory;
 
+    public const STATUS_OPEN = 'OPEN';
+    public const STATUS_CLOSED = 'CLOSED';
+    public const STATUS_VALIDATED = 'VALIDATED';
+
     protected $fillable = [
         'shift_number',
         'location_id',

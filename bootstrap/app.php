@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
+            \App\Http\Middleware\SetAppLocale::class,
             \App\Http\Middleware\EnsureLocationScope::class,
         ]);
     })

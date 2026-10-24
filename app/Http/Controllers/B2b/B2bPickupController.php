@@ -105,7 +105,7 @@ class B2bPickupController extends Controller
     /**
      * Process Redemption / Serah Terima Barang B2B.
      */
-    public function redeem(Request $request): RedirectResponse
+    public function redeem(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
             'token' => 'required|string',
@@ -115,6 +115,9 @@ class B2bPickupController extends Controller
         $activeLocation = $user->getActiveLocation();
 
         if (!$activeLocation) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Silakan pilih lokasi aktif sebelum melakukan serah terima.'], 422);
+            }
             return back()->with('error', 'Silakan pilih lokasi aktif (Gudang/Toko) sebelum melakukan serah terima.');
         }
 
@@ -123,9 +126,24 @@ class B2bPickupController extends Controller
             $order = $result['order'];
             $ticket = $result['ticket'];
 
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Serah terima berhasil! Tiket #{$ticket->ticket_number} telah digunakan.",
+                    'order_id' => $order->id,
+                ]);
+            }
+
             return redirect()->route('b2b.orders.show', $order)
                 ->with('success', "Serah terima berhasil! Tiket #{$ticket->ticket_number} telah digunakan. Stok reservasi dikonversi menjadi stok keluar (Ungu), dan faktur telah dibukukan.");
         } catch (DomainException $e) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 422);
+            }
+
             return back()->withInput()->with('error', $e->getMessage());
         }
     }

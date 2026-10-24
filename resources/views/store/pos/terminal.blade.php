@@ -332,9 +332,9 @@
   }
 
   // 3. Cart Management
-  function addToCart(item) {
-    const baseUom = item.uoms.find(u => u.is_base) || item.uoms[0];
-    const existing = cart.find(ci => ci.product_id === item.id && ci.product_uom_id === baseUom.id);
+  function addToCart(item, specificUom = null) {
+    const chosenUom = specificUom || item.uoms.find(u => u.is_base) || item.uoms[0];
+    const existing = cart.find(ci => ci.product_id === item.id && ci.product_uom_id === chosenUom.id);
 
     if (existing) {
       existing.quantity += 1;
@@ -343,13 +343,13 @@
         product_id: item.id,
         name: item.name,
         sku: item.sku,
-        product_uom_id: baseUom.id,
-        uom_name: baseUom.name,
-        uom_symbol: baseUom.symbol,
+        product_uom_id: chosenUom.id,
+        uom_name: chosenUom.name,
+        uom_symbol: chosenUom.symbol,
         uoms: item.uoms,
         quantity: 1,
-        unit_price: baseUom.calculated_price,
-        floor_price: baseUom.calculated_floor,
+        unit_price: chosenUom.calculated_price,
+        floor_price: chosenUom.calculated_floor,
       });
     }
 
@@ -580,6 +580,76 @@
       btn.disabled = false;
       btn.innerHTML = 'Konfirmasi & Cetak Struk';
     }
+  }
+
+  // 6. Fast Hardware Scanner & Keyboard Shortcut Engine
+  document.addEventListener('keydown', function(e) {
+    // F2: Focus scanner search box
+    if (e.key === 'F2') {
+      e.preventDefault();
+      const input = document.getElementById('posSearchInput');
+      if (input) { input.focus(); input.select(); }
+    }
+    // F9: Open Checkout Modal
+    if (e.key === 'F9') {
+      e.preventDefault();
+      if (cart.length > 0) openCheckoutModal();
+    }
+    // Escape: Close Modal
+    if (e.key === 'Escape') {
+      closeCheckoutModal();
+    }
+  });
+
+  const searchInput = document.getElementById('posSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const code = this.value.trim().toLowerCase();
+        if (!code) return;
+
+        // Try exact match by barcode or SKU in catalogData
+        let matchedItem = null;
+        let matchedUom = null;
+
+        for (const item of catalogData) {
+          if (item.sku.toLowerCase() === code) {
+            matchedItem = item;
+            matchedUom = item.uoms.find(u => u.is_base) || item.uoms[0];
+            break;
+          }
+          if (item.uoms && item.uoms.length) {
+            const foundUom = item.uoms.find(u => u.barcode && u.barcode.toLowerCase() === code);
+            if (foundUom) {
+              matchedItem = item;
+              matchedUom = foundUom;
+              break;
+            }
+          }
+        }
+
+        if (matchedItem && matchedUom) {
+          addToCart(matchedItem, matchedUom);
+          this.value = '';
+          filterCatalog();
+          if (typeof openToast === 'function') openToast(`+1 ${matchedItem.name} (${matchedUom.symbol})`);
+        } else {
+          // If single visible item in filtered list, pick that
+          const visible = Array.from(document.querySelectorAll('.product-card:not(.hidden)'));
+          if (visible.length === 1) {
+            const id = parseInt(visible[0].dataset.id);
+            const item = catalogData.find(i => i.id === id);
+            if (item) {
+              addToCart(item);
+              this.value = '';
+              filterCatalog();
+              if (typeof openToast === 'function') openToast(`+1 ${item.name}`);
+            }
+          }
+        }
+      }
+    });
   }
 </script>
 @endsection

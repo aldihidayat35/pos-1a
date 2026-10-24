@@ -232,6 +232,20 @@
     renderSubMenus();
     renderMovementStream();
 
+    // Sync with backend session & user preference
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (csrfToken) {
+      fetch('{{ route("locale.switch") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({ locale: lang })
+      }).catch(() => {});
+    }
+
     openToast(i18n[lang].toast_lang_switched);
   }
 

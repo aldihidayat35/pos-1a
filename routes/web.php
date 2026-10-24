@@ -7,6 +7,7 @@ use App\Http\Controllers\B2b\B2bOrderController;
 use App\Http\Controllers\B2b\B2bPickupController;
 use App\Http\Controllers\B2bController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LocationSwitchController;
 use App\Http\Controllers\Master\CategoryController;
 use App\Http\Controllers\Master\LocationMasterController;
@@ -34,6 +35,10 @@ use Illuminate\Support\Facades\Route;
 | Web Routes - PasarHub Sistem Operasional Pasar Terpadu
 |--------------------------------------------------------------------------
 */
+
+// Language / Locale Switcher (Public / Guest & Auth)
+Route::post('/locale/switch', [LocaleController::class, 'switch'])->name('locale.switch');
+Route::get('/locale/{locale}', [LocaleController::class, 'set'])->name('locale.set');
 
 // Guest Authentication Routes
 Route::middleware('guest')->group(function () {

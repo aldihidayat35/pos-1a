@@ -24,12 +24,29 @@ class Product extends Model
         'is_active',
     ];
 
+    protected $appends = [
+        'price',
+    ];
+
     protected function casts(): array
     {
         return [
             'track_stock' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function getPriceAttribute(): float
+    {
+        $rule = PriceRule::where('product_id', $this->id)
+            ->where('is_active', true)
+            ->first();
+
+        if ($rule && $rule->list_price > 0) {
+            return (float) $rule->list_price;
+        }
+
+        return (float) ($this->inventoryBalances()->value('avg_unit_cost') ?? 0.0);
     }
 
     public function category(): BelongsTo

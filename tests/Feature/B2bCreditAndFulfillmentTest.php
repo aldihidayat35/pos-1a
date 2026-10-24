@@ -59,6 +59,15 @@ class B2bCreditAndFulfillmentTest extends TestCase
         $response->assertSee('Pemantauan Plafon Kredit', false);
     }
 
+    public function test_b2b_order_create_form_renders_successfully(): void
+    {
+        $response = $this->actingAs($this->salesUser)->get(route('b2b.orders.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Formulir Pemesanan Grosir &amp; Reservasi Stok B2B', false);
+        $response->assertSee($this->b2bMember->name);
+    }
+
     public function test_b2b_order_placement_reserves_stock_and_issues_qr_ticket(): void
     {
         // Ensure starting stock balance

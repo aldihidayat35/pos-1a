@@ -73,7 +73,7 @@ class B2bOrderController extends Controller
             ->get();
 
         $products = Product::where('is_active', true)
-            ->with(['baseUom', 'uoms.uom', 'balances'])
+            ->with(['baseUom', 'productUoms.uom'])
             ->orderBy('name')
             ->get();
 

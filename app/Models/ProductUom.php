@@ -20,6 +20,10 @@ class ProductUom extends Model
         'is_base',
     ];
 
+    protected $appends = [
+        'conversion_factor',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -38,5 +42,10 @@ class ProductUom extends Model
     public function uom(): BelongsTo
     {
         return $this->belongsTo(Uom::class, 'uom_id');
+    }
+
+    public function getConversionFactorAttribute(): float
+    {
+        return (float) ($this->factor_to_base ?: 1.0);
     }
 }

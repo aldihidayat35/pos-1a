@@ -345,10 +345,12 @@
     const baseUomName = product.base_uom ? product.base_uom.name : 'Satuan Dasar';
     let options = `<option value="" data-factor="1">${baseUomName} (1.0)</option>`;
 
-    if (product.uoms && product.uoms.length > 0) {
-      product.uoms.forEach(pu => {
-        const uName = pu.uom ? pu.uom.name : 'UOM';
-        options += `<option value="${pu.id}" data-factor="${pu.conversion_factor}">${uName} (${pu.conversion_factor})</option>`;
+    const uomList = product.product_uoms || product.uoms || [];
+    if (uomList && uomList.length > 0) {
+      uomList.forEach(pu => {
+        const uName = pu.uom ? pu.uom.name : (pu.name || 'Satuan');
+        const factor = parseFloat(pu.factor_to_base || pu.conversion_factor || 1);
+        options += `<option value="${pu.id}" data-factor="${factor}">${uName} (${factor})</option>`;
       });
     }
     uomSelect.innerHTML = options;
@@ -358,6 +360,20 @@
   }
 
   function handleUomChange(rowId) {
+    const uomSelect = document.getElementById(`uom-select-${rowId}`);
+    const selectedOption = uomSelect?.options[uomSelect.selectedIndex];
+    const factor = parseFloat(selectedOption?.dataset?.factor || 1);
+
+    const productSelect = document.querySelector(`select[name="items[${rowId}][product_id]"]`);
+    const productId = productSelect?.value;
+    const product = productsCatalog.find(p => p.id == productId);
+    const basePrice = parseFloat(product?.price || 0);
+
+    const priceInput = document.getElementById(`price-${rowId}`);
+    if (priceInput && basePrice > 0) {
+      priceInput.value = Math.round(basePrice * factor);
+    }
+
     calculateRowSubtotal(rowId);
   }
 

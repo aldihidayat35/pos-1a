@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             DevUserSeeder::class,
             MasterDataSeeder::class,
+            InventoryAndPOSeeder::class,
         ]);
     }
 }

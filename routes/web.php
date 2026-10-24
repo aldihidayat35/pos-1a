@@ -12,6 +12,9 @@ use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\Master\SupplierController;
 use App\Http\Controllers\Master\UomController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\Warehouse\GoodsReceiptController;
+use App\Http\Controllers\Warehouse\PurchaseOrderController;
+use App\Http\Controllers\Warehouse\StockLedgerController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,8 +38,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    // 1. Operasional Gudang Pusat (Modular Monolith)
-    Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
+    // 1. Operasional Gudang Pusat & Rantai Pasok (Fase 3 Modular Monolith)
+    Route::prefix('warehouse')->name('warehouse.')->group(function () {
+        Route::get('/', [WarehouseController::class, 'index'])->name('index');
+
+        // Purchase Orders
+        Route::get('/po', [PurchaseOrderController::class, 'index'])->name('po.index');
+        Route::get('/po/create', [PurchaseOrderController::class, 'create'])->name('po.create');
+        Route::post('/po', [PurchaseOrderController::class, 'store'])->name('po.store');
+        Route::get('/po/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('po.show');
+
+        // Goods Receipts (Inbound Receiving)
+        Route::get('/po/{purchaseOrder}/receive', [GoodsReceiptController::class, 'create'])->name('receipts.create');
+        Route::post('/po/{purchaseOrder}/receive', [GoodsReceiptController::class, 'store'])->name('receipts.store');
+        Route::get('/receipts/{goodsReceipt}', [GoodsReceiptController::class, 'show'])->name('receipts.show');
+
+        // Kartu Stok & Audit Ledger
+        Route::get('/ledger', [StockLedgerController::class, 'index'])->name('ledger.index');
+    });
 
     // 2. Operasional Toko & Kasir POS (Modular Monolith)
     Route::get('/store', [StoreController::class, 'index'])->name('store.index');

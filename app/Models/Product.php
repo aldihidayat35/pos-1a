@@ -59,6 +59,26 @@ class Product extends Model
             ->withTimestamps();
     }
 
+    public function inventoryBalances(): HasMany
+    {
+        return $this->hasMany(InventoryBalance::class, 'product_id');
+    }
+
+    public function stockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class, 'product_id');
+    }
+
+    public function stockBatches(): HasMany
+    {
+        return $this->hasMany(StockBatch::class, 'product_id');
+    }
+
+    public function getBalanceAt(int $locationId): ?InventoryBalance
+    {
+        return $this->inventoryBalances()->where('location_id', $locationId)->first();
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

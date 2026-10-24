@@ -300,8 +300,8 @@
 </div>
 
 <!-- DESKTOP ONLY: Contextual Sub-Menu Bar with Dynamic Overflow Arrow Dropdown -->
-<div id="desktopSubMenuWrapper" class="hidden md:flex items-center relative min-w-0">
-  <div id="desktopSubMenuContainer" class="inline-flex items-center gap-1 bg-panelBg p-1 rounded-xl text-xs font-semibold text-textMuted border border-[#ECEBF4] min-w-0">
+<div id="desktopSubMenuWrapper" class="hidden md:flex items-center relative min-w-0 max-w-full">
+  <div id="desktopSubMenuContainer" class="inline-flex items-center gap-1 bg-panelBg p-1 rounded-xl text-xs font-semibold text-textMuted border border-[#ECEBF4] min-w-0 max-w-full">
     @foreach($subMenus as $idx => $item)
       <a href="{{ $item['route'] }}" 
          data-submenu-index="{{ $idx }}"

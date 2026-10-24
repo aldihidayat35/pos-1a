@@ -636,7 +636,7 @@
     let maxAllowedWidth = 600;
 
     if (header && rightHeader) {
-      maxAllowedWidth = Math.max(160, header.clientWidth - rightHeader.offsetWidth - 48);
+      maxAllowedWidth = Math.max(160, header.clientWidth - rightHeader.getBoundingClientRect().width - 36);
     }
 
     let totalWidth = 0;
@@ -713,6 +713,8 @@
       overflowWrapper.classList.add('hidden');
     }
   }
+
+  window.calculateDesktopSubMenuOverflow = calculateDesktopSubMenuOverflow;
 
   document.addEventListener('click', (e) => {
     const mobileWrapper = document.getElementById('mobileMenuWrapper');

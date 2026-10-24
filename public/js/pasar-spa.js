@@ -214,6 +214,9 @@ const PasarNav = {
       const currentHeaderSub = document.getElementById('headerSubMenuContainer');
       if (incomingHeaderSub && currentHeaderSub) {
         currentHeaderSub.innerHTML = incomingHeaderSub.innerHTML;
+        if (typeof window.calculateDesktopSubMenuOverflow === 'function') {
+          window.calculateDesktopSubMenuOverflow();
+        }
       }
 
       // 3. Swap Workspace Content with bottom-to-top entrance animation
@@ -269,6 +272,14 @@ const PasarNav = {
       // 8. Re-trigger auxiliary helpers if present
       if (typeof renderSubMenus === 'function') renderSubMenus();
       if (typeof renderMovementStream === 'function') renderMovementStream();
+      if (typeof window.calculateDesktopSubMenuOverflow === 'function') {
+        window.calculateDesktopSubMenuOverflow();
+        setTimeout(() => {
+          if (typeof window.calculateDesktopSubMenuOverflow === 'function') {
+            window.calculateDesktopSubMenuOverflow();
+          }
+        }, 50);
+      }
 
       // 9. Dispatch custom event for modules (e.g. POS terminal scanner init)
       window.dispatchEvent(new CustomEvent('pasar:page-loaded', { detail: { url } }));

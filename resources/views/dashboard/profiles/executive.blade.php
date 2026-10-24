@@ -7,10 +7,10 @@
   <!-- 1. HERO BANNER EKSEKUTIF (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
+      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
         Halo, {{ $user->name }}!
       </h1>
-      <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
+      <p class="text-white/95 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         {{ $stats['user_role_label'] }} @if($user->isOwner()) <span class="bg-white text-sidebar text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-1">Owner (Read-Only)</span> @endif • Cakupan Pemantauan: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
     </div>
@@ -20,77 +20,77 @@
   <div class="space-y-3">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <h2 class="font-display font-bold text-lg text-textMain">Kesehatan Finansial & Aset Pasar</h2>
+        <h2 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain">Kesehatan Finansial & Aset Pasar</h2>
         @if($user->isOwner())
           <span class="text-[10px] font-bold text-sidebar bg-brandLavender px-2 py-0.5 rounded-full border border-[#D5D2E8]">
             Owner (Read-Only)
           </span>
         @endif
       </div>
-      <span class="text-xs text-textMuted font-medium">Diperbarui: Hari Ini (Real-Time)</span>
+      <span class="text-[11px] sm:text-xs text-textMuted font-medium">Diperbarui: Hari Ini (Real-Time)</span>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <!-- Card 1: Omzet Hari Ini -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Omzet Realisasi Hari Ini</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Omzet Realisasi Hari Ini</span>
           <div class="w-7 h-7 rounded-lg bg-movePurpleBg text-movePurple flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           Rp {{ number_format($financialSummary['revenue']['total'] ?? 0, 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Toko: Rp {{ number_format($financialSummary['revenue']['pos'] ?? 0, 0, ',', '.') }} • B2B: Rp {{ number_format($financialSummary['revenue']['b2b'] ?? 0, 0, ',', '.') }}
         </p>
       </div>
 
       <!-- Card 2: Estimasi Laba Kotor -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Laba Kotor Real-Time</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Laba Kotor Real-Time</span>
           <div class="w-7 h-7 rounded-lg bg-moveGreenBg text-moveGreen flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-moveGreen mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-moveGreen mt-2 sm:mt-3 truncate">
           Rp {{ number_format($financialSummary['profit']['gross_profit'] ?? 0, 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Margin: +{{ $financialSummary['profit']['margin_percent'] ?? 0 }}% dari omzet
         </p>
       </div>
 
       <!-- Card 3: Nilai Aset Stok -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Nilai Aset Persediaan</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Nilai Aset Persediaan</span>
           <div class="w-7 h-7 rounded-lg bg-amber-50 text-brandOrange flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           Rp {{ number_format($financialSummary['inventory']['total_valuation'] ?? 0, 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Total: {{ $financialSummary['inventory']['total_sku'] ?? 0 }} SKU (Valuasi HPP)
         </p>
       </div>
 
       <!-- Card 4: Piutang B2B -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Piutang B2B Berjalan</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Piutang B2B Berjalan</span>
           <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           Rp {{ number_format($financialSummary['receivables']['total_ar'] ?? 0, 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-rose-600 font-semibold mt-1">
+        <p class="text-[10px] sm:text-[11px] text-rose-600 font-semibold mt-1 truncate">
           Overdue: Rp {{ number_format($financialSummary['receivables']['overdue_ar'] ?? 0, 0, ',', '.') }}
         </p>
       </div>

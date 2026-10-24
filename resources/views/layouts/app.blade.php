@@ -62,6 +62,14 @@
     * {
       font-family: 'Poppins', sans-serif;
     }
+    html {
+      font-size: 16px;
+    }
+    @media (max-width: 639px) {
+      html {
+        font-size: 13.5px;
+      }
+    }
     body {
       background: #FFFFFF;
       color: #382E6B;

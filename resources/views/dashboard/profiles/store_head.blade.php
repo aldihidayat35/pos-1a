@@ -7,10 +7,10 @@
   <!-- 1. HERO BANNER KEPALA TOKO (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
+      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
         Halo, {{ $user->name }}!
       </h1>
-      <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
+      <p class="text-white/95 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         Kepala Toko • Unit Kerja: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
     </div>
@@ -19,71 +19,71 @@
   <!-- 2. KARTU METRIK KEPALA TOKO -->
   <div class="space-y-3">
     <div class="flex items-center justify-between">
-      <h2 class="font-display font-bold text-lg text-textMain">Performa Ritel Toko Hari Ini</h2>
-      <span class="text-xs text-textMuted font-medium">Diperbarui Real-Time</span>
+      <h2 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain">Performa Ritel Toko Hari Ini</h2>
+      <span class="text-[11px] sm:text-xs text-textMuted font-medium">Diperbarui Real-Time</span>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <!-- Card 1: Omzet Toko -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Penjualan Kasir Hari Ini</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Penjualan Kasir Hari Ini</span>
           <div class="w-7 h-7 rounded-lg bg-movePurpleBg text-movePurple flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           Rp {{ number_format($profileData['today_sales_total'], 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Total: {{ $profileData['today_sales_count'] }} Struk Terbit Hari Ini
         </p>
       </div>
 
       <!-- Card 2: Kasir Aktif Buka Shift -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Kasir Aktif (Shift Laci)</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Kasir Aktif (Shift Laci)</span>
           <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-emerald-600 mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-emerald-600 mt-2 sm:mt-3 truncate">
           {{ $profileData['active_cashiers_count'] }} Kasir
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Laci kasir beroperasi melayani ritel
         </p>
       </div>
 
       <!-- Card 3: Belanja Emergency Bulan Ini -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Belanja Emergency Bulan Ini</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Belanja Emergency Bulan Ini</span>
           <div class="w-7 h-7 rounded-lg bg-amber-50 text-brandOrange flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           Rp {{ number_format($profileData['emergency_month_total'], 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Barang darurat dibeli langsung di pasar
         </p>
       </div>
 
       <!-- Card 4: Transfer Masuk (Transit) -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Transfer Masuk (Transit)</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Transfer Masuk (Transit)</span>
           <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-blue-600 mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-blue-600 mt-2 sm:mt-3 truncate">
           {{ $profileData['inbound_transfers_count'] }} Pengiriman
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Sedang dalam perjalanan dari gudang
         </p>
       </div>

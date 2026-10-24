@@ -7,10 +7,10 @@
   <!-- 1. HERO BANNER KASIR (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-xl">
-      <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
+      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
         Semangat Bekerja, {{ $user->name }}!
       </h1>
-      <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
+      <p class="text-white/95 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         Operator Kasir POS • Toko: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
     </div>
@@ -19,71 +19,71 @@
   <!-- 2. KARTU KINERJA PERSONAL KASIR -->
   <div class="space-y-3">
     <div class="flex items-center justify-between">
-      <h2 class="font-display font-bold text-lg text-textMain">Kinerja & Kehadiran Kasir (Bulan Ini)</h2>
-      <span class="text-xs text-textMuted font-medium">Bulan: {{ now()->translatedFormat('F Y') }}</span>
+      <h2 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain">Kinerja & Kehadiran Kasir (Bulan Ini)</h2>
+      <span class="text-[11px] sm:text-xs text-textMuted font-medium">Bulan: {{ now()->translatedFormat('F Y') }}</span>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <!-- Card 1: Kehadiran Shift Laci -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Kehadiran (Shift Buka)</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Kehadiran (Shift Buka)</span>
           <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-emerald-600 mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-emerald-600 mt-2 sm:mt-3 truncate">
           {{ $profileData['shifts_attended_count'] }} Hari
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Target: {{ $profileData['target_work_days'] }} Hari Kerja ({{ $profileData['attendance_progress'] }}%)
         </p>
       </div>
 
       <!-- Card 2: Total Struk Pribadi -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Total Transaksi Selesai</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Total Transaksi Selesai</span>
           <div class="w-7 h-7 rounded-lg bg-movePurpleBg text-movePurple flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           {{ $profileData['monthly_sales_count'] }} Struk
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Pelanggan dilayani oleh Anda
         </p>
       </div>
 
       <!-- Card 3: Total Nominal Penjualan Pribadi -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Akumulasi Omzet Kasir</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Akumulasi Omzet Kasir</span>
           <div class="w-7 h-7 rounded-lg bg-amber-50 text-brandOrange flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-sidebar mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-sidebar mt-2 sm:mt-3 truncate">
           Rp {{ number_format($profileData['monthly_sales_total'], 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Progress: {{ $profileData['sales_progress'] }}% dari target
         </p>
       </div>
 
       <!-- Card 4: Rata-Rata Nilai Struk -->
-      <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] shadow-xs">
+      <div class="bg-white rounded-[22px] p-4 sm:p-5 border border-[#ECEBF4] shadow-xs">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted">Rata-Rata Struk (Basket)</span>
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-textMuted">Rata-Rata Struk (Basket)</span>
           <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
           </div>
         </div>
-        <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+        <p class="font-display text-base sm:text-xl md:text-2xl font-extrabold text-textMain mt-2 sm:mt-3 truncate">
           Rp {{ number_format($profileData['avg_basket_size'], 0, ',', '.') }}
         </p>
-        <p class="text-[11px] text-textMuted mt-1">
+        <p class="text-[10px] sm:text-[11px] text-textMuted mt-1 truncate">
           Rata-rata belanja per pelanggan
         </p>
       </div>
@@ -91,13 +91,13 @@
   </div>
 
   <!-- 3. INDIKATOR TARGET KINERJA KASIR (PROGRESS BARS) -->
-  <div class="bg-white rounded-[24px] p-6 border border-[#ECEBF4] shadow-xs space-y-5">
+  <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBF4] shadow-xs space-y-4 sm:space-y-5">
     <div class="flex items-center justify-between">
       <div>
-        <h3 class="font-display font-bold text-base text-textMain">Pencapaian Target Bulanan Kasir</h3>
-        <p class="text-xs text-textMuted mt-0.5">Pantau target penjualan dan kedisiplinan shift kerja Anda</p>
+        <h3 class="font-display font-bold text-sm sm:text-base text-textMain">Pencapaian Target Bulanan Kasir</h3>
+        <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">Pantau target penjualan dan kedisiplinan shift kerja Anda</p>
       </div>
-      <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+      <span class="text-[10px] sm:text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 sm:px-3 py-1 rounded-full">
         {{ $profileData['sales_progress'] >= 80 ? 'Kinerja Sangat Baik' : 'Terus Semangat' }}
       </span>
     </div>
@@ -105,7 +105,7 @@
     <div class="space-y-4">
       <!-- Target Omzet -->
       <div>
-        <div class="flex items-center justify-between text-xs mb-1.5 font-bold">
+        <div class="flex items-center justify-between text-[11px] sm:text-xs mb-1.5 font-bold">
           <span class="text-textMain">Target Penjualan Ritel Kasir</span>
           <span class="text-sidebar">Rp {{ number_format($profileData['monthly_sales_total'], 0, ',', '.') }} / Rp {{ number_format($profileData['target_sales'], 0, ',', '.') }} ({{ $profileData['sales_progress'] }}%)</span>
         </div>
@@ -116,7 +116,7 @@
 
       <!-- Target Kehadiran Shift -->
       <div>
-        <div class="flex items-center justify-between text-xs mb-1.5 font-bold">
+        <div class="flex items-center justify-between text-[11px] sm:text-xs mb-1.5 font-bold">
           <span class="text-textMain">Target Kehadiran Kerja (Shift Buka)</span>
           <span class="text-emerald-600">{{ $profileData['shifts_attended_count'] }} / {{ $profileData['target_work_days'] }} Hari ({{ $profileData['attendance_progress'] }}%)</span>
         </div>
@@ -128,19 +128,19 @@
   </div>
 
   <!-- 4. TABEL 5 TRANSAKSI TERAKHIR YANG DILAYANI OLEH KASIR INI -->
-  <div class="bg-white rounded-[24px] p-6 border border-[#ECEBF4] shadow-xs space-y-4">
+  <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBF4] shadow-xs space-y-4">
     <div class="flex items-center justify-between">
       <div>
-        <h3 class="font-display font-bold text-base text-textMain">Transaksi Terakhir yang Anda Layani</h3>
-        <p class="text-xs text-textMuted mt-0.5">5 struk penjualan terakhir pada sesi kasir Anda</p>
+        <h3 class="font-display font-bold text-sm sm:text-base text-textMain">Transaksi Terakhir yang Anda Layani</h3>
+        <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">5 struk penjualan terakhir pada sesi kasir Anda</p>
       </div>
-      <a href="{{ route('store.pos.history') }}" class="text-xs font-bold text-brandOrange hover:underline">Riwayat Penjualan →</a>
+      <a href="{{ route('store.pos.history') }}" class="text-[11px] sm:text-xs font-bold text-brandOrange hover:underline">Riwayat Penjualan →</a>
     </div>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table class="w-full text-left text-[11px] sm:text-xs">
         <thead>
-          <tr class="border-b border-[#ECEBF4] text-textMuted uppercase text-[10px] tracking-wider">
+          <tr class="border-b border-[#ECEBF4] text-textMuted uppercase text-[9px] sm:text-[10px] tracking-wider">
             <th class="pb-3 font-bold">No. Invoice</th>
             <th class="pb-3 font-bold">Waktu</th>
             <th class="pb-3 font-bold">Metode Bayar</th>
@@ -154,7 +154,7 @@
               <td class="py-3 font-mono font-bold text-sidebar whitespace-nowrap">{{ $sale->invoice_number }}</td>
               <td class="py-3 text-textMuted whitespace-nowrap">{{ $sale->posted_at?->format('d M, H:i') ?? '-' }} WIB</td>
               <td class="py-3 whitespace-nowrap">
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-panelBg text-sidebar">
+                <span class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-panelBg text-sidebar">
                   {{ $sale->payment_method ?? 'TUNAI' }}
                 </span>
               </td>
@@ -162,7 +162,7 @@
                 Rp {{ number_format($sale->total_amount, 0, ',', '.') }}
               </td>
               <td class="py-3 text-center whitespace-nowrap">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-50 text-emerald-600">
                   SELESAI
                 </span>
               </td>

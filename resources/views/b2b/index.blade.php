@@ -20,57 +20,57 @@
   <!-- 1. SOLID HERO BANNER (Clean) -->
   <div class="relative bg-sidebar rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-2xl sm:text-[30px] font-bold tracking-tight leading-tight">
+      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
         Kemitraan B2B & Plafon Piutang
       </h1>
-      <p class="text-white/85 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
+      <p class="text-white/85 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         Pusat kendali pesanan grosir, reservasi fisik stok otomatis, penguncian plafon kredit server-side, tiket serah terima QR, dan pembukuan piutang tempo.
       </p>
     </div>
   </div>
 
   <!-- 2. 4 KEY METRIC CARDS -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
-      <span class="text-[11px] font-bold text-textMuted uppercase tracking-wider">Mitra B2B Aktif</span>
-      <h3 class="font-display font-extrabold text-2xl text-textMain mt-2">{{ $stats['total_b2b_members'] }}</h3>
-      <p class="text-xs text-textMuted mt-1">Akun grosir resmi berbadan usaha</p>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <div class="p-4 sm:p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
+      <span class="text-[10px] sm:text-[11px] font-bold text-textMuted uppercase tracking-wider">Mitra B2B Aktif</span>
+      <h3 class="font-display font-extrabold text-base sm:text-xl md:text-2xl text-textMain mt-2 truncate">{{ $stats['total_b2b_members'] }}</h3>
+      <p class="text-[10px] sm:text-xs text-textMuted mt-1 truncate">Akun grosir resmi berbadan usaha</p>
     </div>
 
-    <div class="p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
-      <span class="text-[11px] font-bold text-textMuted uppercase tracking-wider">Pesanan Aktif (Reserved)</span>
-      <h3 class="font-display font-extrabold text-2xl text-purple-600 mt-2">{{ $stats['active_orders_count'] }} Order</h3>
-      <p class="text-xs text-textMuted mt-1">Stok fisik teralokasi &amp; terkunci</p>
+    <div class="p-4 sm:p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
+      <span class="text-[10px] sm:text-[11px] font-bold text-textMuted uppercase tracking-wider">Pesanan Aktif (Reserved)</span>
+      <h3 class="font-display font-extrabold text-base sm:text-xl md:text-2xl text-purple-600 mt-2 truncate">{{ $stats['active_orders_count'] }} Order</h3>
+      <p class="text-[10px] sm:text-xs text-textMuted mt-1 truncate">Stok fisik teralokasi &amp; terkunci</p>
     </div>
 
-    <div class="p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
-      <span class="text-[11px] font-bold text-textMuted uppercase tracking-wider">Piutang B2B Berjalan</span>
-      <h3 class="font-display font-extrabold text-2xl text-sidebar mt-2">Rp {{ number_format($stats['total_outstanding_debt'], 0, ',', '.') }}</h3>
-      <p class="text-xs text-textMuted mt-1">Faktur tempo belum terbayar</p>
+    <div class="p-4 sm:p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
+      <span class="text-[10px] sm:text-[11px] font-bold text-textMuted uppercase tracking-wider">Piutang B2B Berjalan</span>
+      <h3 class="font-display font-extrabold text-base sm:text-xl md:text-2xl text-sidebar mt-2 truncate">Rp {{ number_format($stats['total_outstanding_debt'], 0, ',', '.') }}</h3>
+      <p class="text-[10px] sm:text-xs text-textMuted mt-1 truncate">Faktur tempo belum terbayar</p>
     </div>
 
-    <div class="p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
+    <div class="p-4 sm:p-5 rounded-[22px] bg-panelBg border border-[#ECEBF4] hover:bg-white transition duration-200">
       @if($stats['overdue_count'] > 0)
-        <span class="text-[11px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full inline-block">Piutang Overdue!</span>
-        <h3 class="font-display font-extrabold text-2xl text-red-600 mt-2">{{ $stats['overdue_count'] }} Faktur</h3>
-        <p class="text-xs text-red-500 font-semibold mt-1">Rp {{ number_format($stats['total_overdue_debt'], 0, ',', '.') }} melewati jatuh tempo</p>
+        <span class="text-[9px] sm:text-[11px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full inline-block">Piutang Overdue!</span>
+        <h3 class="font-display font-extrabold text-base sm:text-xl md:text-2xl text-red-600 mt-2 truncate">{{ $stats['overdue_count'] }} Faktur</h3>
+        <p class="text-[10px] sm:text-xs text-red-500 font-semibold mt-1 truncate">Rp {{ number_format($stats['total_overdue_debt'], 0, ',', '.') }} melewati jatuh tempo</p>
       @else
-        <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block">Kolektibilitas Bersih</span>
-        <h3 class="font-display font-extrabold text-2xl text-emerald-600 mt-2">0 Overdue</h3>
-        <p class="text-xs text-textMuted mt-1">Seluruh tagihan tempo lancar</p>
+        <span class="text-[9px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block">Kolektibilitas Bersih</span>
+        <h3 class="font-display font-extrabold text-base sm:text-xl md:text-2xl text-emerald-600 mt-2 truncate">0 Overdue</h3>
+        <p class="text-[10px] sm:text-xs text-textMuted mt-1 truncate">Seluruh tagihan tempo lancar</p>
       @endif
     </div>
   </div>
 
   <!-- 3. RECENT B2B ORDERS & FULFILLMENT STATUS -->
-  <div class="bg-white rounded-[26px] p-6 border border-[#ECEBF4] space-y-4">
+  <div class="bg-white rounded-[26px] p-5 sm:p-6 border border-[#ECEBF4] space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h3 class="font-display font-bold text-lg text-textMain">Pesanan Grosir B2B Terbaru</h3>
-        <p class="text-xs text-textMuted mt-0.5">Monitoring pemesanan, alokasi stok, tiket QR pickup, dan penerbitan faktur</p>
+        <h3 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain">Pesanan Grosir B2B Terbaru</h3>
+        <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">Monitoring pemesanan, alokasi stok, tiket QR pickup, dan penerbitan faktur</p>
       </div>
       <div class="flex items-center gap-2">
-        <a href="{{ route('b2b.orders.index') }}" class="text-xs font-bold text-sidebar hover:text-sidebarDark underline">
+        <a href="{{ route('b2b.orders.index') }}" class="text-[11px] sm:text-xs font-bold text-sidebar hover:text-sidebarDark underline">
           Lihat Semua Pesanan B2B →
         </a>
       </div>

@@ -24,26 +24,26 @@
   @endif
 
   <!-- Header Banner (Clean) -->
-  <div class="bg-panelBg p-6 sm:p-7 rounded-[26px] border border-[#ECEBF4]">
-    <h1 class="font-display text-2xl font-bold text-textMain">Operasional Toko & Kasir</h1>
-    <p class="text-xs text-textMuted mt-1 max-w-2xl">
+  <div class="bg-panelBg p-5 sm:p-7 rounded-[26px] border border-[#ECEBF4]">
+    <h1 class="font-display text-lg sm:text-2xl font-bold text-textMain">Operasional Toko & Kasir</h1>
+    <p class="text-[11px] sm:text-xs text-textMuted mt-1 max-w-2xl">
       {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
     </p>
   </div>
 
   <!-- Incoming Transfers Alert / Table -->
-  <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm space-y-4">
+  <div class="bg-white rounded-3xl p-5 sm:p-6 border border-[#ECEBF4] shadow-sm space-y-4">
     <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-4">
       <div>
-        <h3 class="font-bold text-base text-textMain flex items-center gap-2">
+        <h3 class="font-bold text-sm sm:text-base text-textMain flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
           <span>Barang Masuk dari Gudang (Menunggu Diterima di Toko)</span>
         </h3>
-        <p class="text-xs text-textMuted mt-0.5">
+        <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">
           Stok saat ini berada di lokasi virtual <code>LOC-TRANSIT</code>. Klik tombol Terima untuk membukukan stok ke rak toko dan mengupdate Moving Average HPP.
         </p>
       </div>
-      <a href="{{ route('store.transfers.index') }}" class="text-xs font-bold text-sidebar hover:underline">
+      <a href="{{ route('store.transfers.index') }}" class="text-[11px] sm:text-xs font-bold text-sidebar hover:underline">
         Lihat Semua Transfer Masuk →
       </a>
     </div>

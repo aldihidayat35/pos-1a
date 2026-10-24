@@ -37,12 +37,12 @@
   @endif
 
   <!-- 1. SOFT SOLID ORANGE HERO BANNER (Clean) -->
-  <div class="relative bg-brandOrange rounded-[24px] p-7 sm:p-8 text-white overflow-hidden">
+  <div class="relative bg-brandOrange rounded-[24px] p-6 sm:p-8 text-white overflow-hidden">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-2xl sm:text-[30px] font-bold tracking-tight leading-tight">
+      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
         Operasional Gudang Pusat
       </h1>
-      <p class="text-white/95 text-sm sm:text-[15px] mt-1.5 font-medium">
+      <p class="text-white/95 text-[11px] sm:text-xs md:text-[15px] mt-1.5 font-medium">
         {{ $activeLocation?->name ?? 'Gudang Pusat Sentral' }} • Rantai Pasok Inbound & Saldo Stok Real-time
       </p>
     </div>
@@ -51,64 +51,64 @@
   <!-- 2. QUICK AUTOMATION FUNCTION SHORTCUTS -->
   <div class="space-y-4">
     <div class="flex items-center justify-between">
-      <h2 class="font-display font-bold text-lg text-textMain tracking-tight">Fungsi Alur Logistik</h2>
-      <div class="flex items-center gap-3">
-        <a href="{{ route('warehouse.po.index') }}" class="text-xs font-semibold text-brandCoral hover:underline">Semua PO ({{ $stats['pending_po_count'] }}) →</a>
+      <h2 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain tracking-tight">Fungsi Alur Logistik</h2>
+      <div class="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
+        <a href="{{ route('warehouse.po.index') }}" class="font-semibold text-brandCoral hover:underline">Semua PO ({{ $stats['pending_po_count'] }}) →</a>
         <span class="text-gray-300">|</span>
-        <a href="{{ route('warehouse.ledger.index') }}" class="text-xs font-semibold text-brandOrange hover:underline">Kartu Stok & Audit →</a>
+        <a href="{{ route('warehouse.ledger.index') }}" class="font-semibold text-brandOrange hover:underline">Kartu Stok & Audit →</a>
       </div>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-3.5">
       <!-- Feature 1: Pesanan PO -->
-      <a href="{{ route('warehouse.po.index') }}" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-4 rounded-[20px] transition flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <a href="{{ route('warehouse.po.index') }}" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-3 sm:p-4 rounded-[20px] transition flex items-center gap-2.5 sm:gap-3 group">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
           </svg>
         </div>
         <div>
-          <h4 class="font-bold text-xs text-textMain leading-snug">Penerimaan PO</h4>
-          <span class="text-[11px] text-textMuted">Inbound Suplayer</span>
+          <h4 class="font-bold text-[11px] sm:text-xs text-textMain leading-snug">Penerimaan PO</h4>
+          <span class="text-[9px] sm:text-[11px] text-textMuted">Inbound Suplayer</span>
         </div>
       </a>
 
       <!-- Feature 2: Kartu Stok & Ledger -->
-      <a href="{{ route('warehouse.ledger.index') }}" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-4 rounded-[20px] transition flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <a href="{{ route('warehouse.ledger.index') }}" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-3 sm:p-4 rounded-[20px] transition flex items-center gap-2.5 sm:gap-3 group">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
           </svg>
         </div>
         <div>
-          <h4 class="font-bold text-xs text-textMain leading-snug">Kartu Stok</h4>
-          <span class="text-[11px] text-textMuted">Audit & HPP Rata-rata</span>
+          <h4 class="font-bold text-[11px] sm:text-xs text-textMain leading-snug">Kartu Stok</h4>
+          <span class="text-[9px] sm:text-[11px] text-textMuted">Audit & HPP Rata-rata</span>
         </div>
       </a>
 
       <!-- Feature 3: Kirim Transfer Toko -->
-      <div onclick="openToast('Kirim Transfer Toko: Modul aktif penuh pada alur mutasi Fase 4!')" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-4 rounded-[20px] cursor-pointer transition flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div onclick="openToast('Kirim Transfer Toko: Modul aktif penuh pada alur mutasi Fase 4!')" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-3 sm:p-4 rounded-[20px] cursor-pointer transition flex items-center gap-2.5 sm:gap-3">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
           </svg>
         </div>
         <div>
-          <h4 class="font-bold text-xs text-textMain leading-snug">Kirim Transfer</h4>
-          <span class="text-[11px] text-textMuted">Gudang → Toko</span>
+          <h4 class="font-bold text-[11px] sm:text-xs text-textMain leading-snug">Kirim Transfer</h4>
+          <span class="text-[9px] sm:text-[11px] text-textMuted">Gudang → Toko</span>
         </div>
       </div>
 
       <!-- Feature 4: Blind Count Opname -->
-      <div onclick="openToast('Blind Opname Gudang Sentral: Modul aktif penuh pada Fase 7!')" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-4 rounded-[20px] cursor-pointer transition flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div onclick="openToast('Blind Opname Gudang Sentral: Modul aktif penuh pada Fase 7!')" class="bg-panelBg hover:bg-white border border-[#ECEBF4] hover:border-gray-300 p-3 sm:p-4 rounded-[20px] cursor-pointer transition flex items-center gap-2.5 sm:gap-3">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
         <div>
-          <h4 class="font-bold text-xs text-textMain leading-snug">Blind Opname</h4>
-          <span class="text-[11px] text-textMuted">Hitung Fisik Stok</span>
+          <h4 class="font-bold text-[11px] sm:text-xs text-textMain leading-snug">Blind Opname</h4>
+          <span class="text-[9px] sm:text-[11px] text-textMuted">Hitung Fisik Stok</span>
         </div>
       </div>
     </div>

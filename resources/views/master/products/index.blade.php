@@ -112,6 +112,7 @@
             <table class="w-full text-left text-xs">
                 <thead class="bg-panelBg/80 border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
                     <tr>
+                        <th class="py-3.5 px-4 w-16 text-center">Foto</th>
                         <th class="py-3.5 px-4">SKU & Barcode</th>
                         <th class="py-3.5 px-4">Nama Produk & Kategori</th>
                         <th class="py-3.5 px-4">Satuan Dasar (Base UOM)</th>
@@ -123,6 +124,11 @@
                 <tbody class="divide-y divide-[#ECEBF4]">
                     @forelse($products as $p)
                         <tr class="hover:bg-panelBg/40 transition">
+                            <!-- Foto Produk (Click to Enlarge Modal) -->
+                            <td class="py-3 px-4 text-center align-middle">
+                                <x-product-thumbnail :product="$p" size="md" />
+                            </td>
+
                             <!-- SKU & Barcode -->
                             <td class="py-3.5 px-4 font-mono">
                                 <span class="font-bold text-sidebar bg-sidebar/5 px-2 py-0.5 rounded border border-sidebar/10">{{ $p->sku }}</span>
@@ -215,7 +221,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-12 text-center text-textMuted">
+                            <td colspan="7" class="py-12 text-center text-textMuted">
                                 <div class="w-12 h-12 rounded-2xl bg-panelBg mx-auto flex items-center justify-center text-textMuted mb-2">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
@@ -234,13 +240,16 @@
         <div class="block md:hidden p-3.5 space-y-3">
             @forelse($products as $p)
                 <div class="bg-panelBg/40 border border-[#ECEBF4] rounded-2xl p-4 space-y-3">
-                    <div class="flex items-start justify-between gap-2">
-                        <div>
-                            <span class="font-mono font-bold text-xs text-sidebar bg-sidebar/5 px-2 py-0.5 rounded border border-sidebar/10">{{ $p->sku }}</span>
-                            <h4 class="font-bold text-textMain text-sm mt-1">{{ $p->name }}</h4>
-                            <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white text-textMuted border border-[#ECEBF4]">
-                                {{ $p->category->name ?? 'Tanpa Kategori' }}
-                            </span>
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <x-product-thumbnail :product="$p" size="lg" />
+                            <div class="min-w-0">
+                                <span class="font-mono font-bold text-xs text-sidebar bg-sidebar/5 px-2 py-0.5 rounded border border-sidebar/10">{{ $p->sku }}</span>
+                                <h4 class="font-bold text-textMain text-sm mt-1 truncate">{{ $p->name }}</h4>
+                                <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white text-textMuted border border-[#ECEBF4]">
+                                    {{ $p->category->name ?? 'Tanpa Kategori' }}
+                                </span>
+                            </div>
                         </div>
                         <div>
                             @if($p->is_active)

@@ -21,7 +21,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('master.products.store') }}" id="productForm" class="space-y-6">
+        <form method="POST" action="{{ route('master.products.store') }}" id="productForm" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <!-- Fuzzy Duplicate Matching Warning Box (PRD 4.2 >= 75%) -->
@@ -141,6 +141,59 @@
                     <p id="noConversionText" class="text-xs text-textMuted italic py-3 text-center bg-panelBg rounded-xl border border-dashed border-[#ECEBF4]">
                         Belum ada konversi tambahan. Produk ini hanya akan ditransaksikan dalam satuan dasar.
                     </p>
+                </div>
+            </div>
+
+            <!-- Upload Foto Produk -->
+            <div class="p-5 bg-panelBg rounded-2xl border border-[#ECEBF4] space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="block text-xs font-bold text-textMain uppercase tracking-wider">
+                            Foto Produk (Opsional)
+                        </label>
+                        <p class="text-[11px] text-textMuted mt-0.5">Format: JPG, PNG, atau WEBP. Maksimal ukuran 2MB.</p>
+                    </div>
+                    <span class="text-[10px] font-semibold text-textMuted px-2 py-0.5 bg-white rounded-md border border-[#ECEBF4]">2MB Maks</span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <!-- Preview Box -->
+                    <div id="imagePreviewContainer" class="relative w-28 h-28 rounded-2xl bg-white border-2 border-dashed border-[#D5D3E3] flex items-center justify-center overflow-hidden shrink-0 group">
+                        <img id="imagePreview" src="" alt="Preview Foto" class="hidden w-full h-full object-cover rounded-xl" />
+                        <div id="imagePlaceholder" class="flex flex-col items-center justify-center p-2 text-center text-textMuted">
+                            <svg class="w-8 h-8 opacity-40 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span class="text-[9px] font-medium leading-tight">Belum ada foto</span>
+                        </div>
+                        <button type="button" id="btnRemoveImage" onclick="clearProductImage()" class="hidden absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition shadow-sm" title="Hapus foto">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- File Input & Drag/Drop trigger -->
+                    <div class="flex-1 w-full">
+                        <label for="productImageInput" class="flex flex-col items-center justify-center px-4 py-5 bg-white border border-[#E6E4F0] border-dashed rounded-2xl cursor-pointer hover:border-sidebar hover:bg-white/80 transition group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-sidebar/5 group-hover:bg-sidebar/10 text-sidebar flex items-center justify-center shrink-0 transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-sidebar group-hover:underline">Pilih file foto produk</span>
+                                    <span class="text-xs text-textMuted"> atau seret & lepaskan ke sini</span>
+                                    <p class="text-[10px] text-textMuted mt-0.5" id="selectedFileName">Foto akan ditampilkan di kasir POS, katalog, dan laporan.</p>
+                                </div>
+                            </div>
+                            <input type="file" name="image" id="productImageInput" accept="image/png,image/jpeg,image/webp" class="hidden" onchange="previewProductImage(this)">
+                        </label>
+                        @error('image')
+                            <p class="text-xs text-red-500 font-semibold mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
@@ -290,6 +343,51 @@
 
         conversionContainer.appendChild(row);
     });
+
+    // 3. Image Upload Preview & Clear Handler
+    function previewProductImage(input) {
+        const preview = document.getElementById('imagePreview');
+        const placeholder = document.getElementById('imagePlaceholder');
+        const removeBtn = document.getElementById('btnRemoveImage');
+        const fileNameLabel = document.getElementById('selectedFileName');
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                removeBtn.classList.remove('hidden');
+                fileNameLabel.textContent = `Terpilih: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                fileNameLabel.classList.add('font-semibold', 'text-sidebar');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function clearProductImage() {
+        const input = document.getElementById('productImageInput');
+        const preview = document.getElementById('imagePreview');
+        const placeholder = document.getElementById('imagePlaceholder');
+        const removeBtn = document.getElementById('btnRemoveImage');
+        const fileNameLabel = document.getElementById('selectedFileName');
+
+        input.value = '';
+        preview.src = '';
+        preview.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        removeBtn.classList.add('hidden');
+        fileNameLabel.textContent = 'Foto akan ditampilkan di kasir POS, katalog, dan laporan.';
+        fileNameLabel.classList.remove('font-semibold', 'text-sidebar');
+    }
 </script>
 @endpush
 @endsection

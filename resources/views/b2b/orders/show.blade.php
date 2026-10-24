@@ -188,8 +188,13 @@
               @foreach($order->items as $it)
                 <tr class="hover:bg-panelBg/50 transition">
                   <td class="py-3 px-3">
-                    <span class="font-bold text-textMain block">{{ $it->product->name }}</span>
-                    <span class="text-[10px] font-mono text-textMuted">{{ $it->product->sku }}</span>
+                    <div class="flex items-center gap-2.5">
+                      <x-product-thumbnail :product="$it->product" size="sm" />
+                      <div>
+                        <span class="font-bold text-textMain block">{{ $it->product->name }}</span>
+                        <span class="text-[10px] font-mono text-textMuted">{{ $it->product->sku }}</span>
+                      </div>
+                    </div>
                   </td>
                   <td class="py-3 px-3">
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#F3F0FA] text-sidebar border border-[#ECEBF4]">

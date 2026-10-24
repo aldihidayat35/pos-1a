@@ -305,6 +305,9 @@
   <!-- FLOATING CUSTOM MESSAGE TOAST -->
   @include('partials.toast')
 
+  <!-- GLOBAL PRODUCT IMAGE LIGHTBOX MODAL -->
+  @include('partials.product-image-modal')
+
   <!-- APPLICATION LOGIC & INTERACTIVE SCRIPTS -->
   @include('partials.scripts')
   @stack('scripts')

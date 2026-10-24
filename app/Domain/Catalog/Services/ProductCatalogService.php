@@ -78,6 +78,7 @@ class ProductCatalogService
                 'category_id' => $data['category_id'],
                 'base_uom_id' => $baseUom->id,
                 'description' => $data['description'] ?? null,
+                'image_path' => $data['image_path'] ?? null,
                 'track_stock' => $data['track_stock'] ?? true,
                 'is_active' => $data['is_active'] ?? true,
             ]);
@@ -137,7 +138,7 @@ class ProductCatalogService
         return DB::transaction(function () use ($product, $data) {
             $baseUom = Uom::findOrFail($data['base_uom_id'] ?? $product->base_uom_id);
 
-            $product->update([
+            $updateData = [
                 'sku' => strtoupper(trim($data['sku'] ?? $product->sku)),
                 'name' => trim($data['name'] ?? $product->name),
                 'normalized_name' => Product::normalizeName($data['name'] ?? $product->name),
@@ -146,7 +147,13 @@ class ProductCatalogService
                 'description' => $data['description'] ?? $product->description,
                 'track_stock' => isset($data['track_stock']) ? (bool) $data['track_stock'] : $product->track_stock,
                 'is_active' => isset($data['is_active']) ? (bool) $data['is_active'] : $product->is_active,
-            ]);
+            ];
+
+            if (array_key_exists('image_path', $data)) {
+                $updateData['image_path'] = $data['image_path'];
+            }
+
+            $product->update($updateData);
 
             // Update base UOM barcode
             $baseProductUom = $product->productUoms()->where('is_base', true)->first();

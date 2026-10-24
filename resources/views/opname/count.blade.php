@@ -104,12 +104,17 @@
                   {{ $index + 1 }}
                 </td>
                 <td class="py-3.5 px-4 font-semibold text-sidebar">
-                  <div class="font-bold text-textMain text-sm">{{ $item->product->name }}</div>
-                  <div class="flex items-center gap-2 mt-0.5 text-[10px] text-textMuted font-mono">
-                    <span>SKU: {{ $item->product->sku }}</span>
-                    @if($item->product->primary_barcode)
-                      <span>• Barcode: {{ $item->product->primary_barcode }}</span>
-                    @endif
+                  <div class="flex items-center gap-2.5">
+                    <x-product-thumbnail :product="$item->product" size="sm" />
+                    <div>
+                      <div class="font-bold text-textMain text-sm">{{ $item->product->name }}</div>
+                      <div class="flex items-center gap-2 mt-0.5 text-[10px] text-textMuted font-mono">
+                        <span>SKU: {{ $item->product->sku }}</span>
+                        @if($item->product->primary_barcode)
+                          <span>• Barcode: {{ $item->product->primary_barcode }}</span>
+                        @endif
+                      </div>
+                    </div>
                   </div>
                 </td>
                 <td class="py-3.5 px-4 text-textMuted whitespace-nowrap">

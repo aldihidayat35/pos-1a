@@ -20,6 +20,7 @@ class StoreProductRequest extends FormRequest
             'base_uom_id' => ['required', 'exists:uoms,id'],
             'base_barcode' => ['nullable', 'string', 'max:80', 'unique:product_uoms,barcode'],
             'description' => ['nullable', 'string', 'max:1000'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'track_stock' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'conversions' => ['nullable', 'array'],

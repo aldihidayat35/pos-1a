@@ -189,8 +189,13 @@
                 {{ $index + 1 }}
               </td>
               <td class="py-3.5 px-4 font-semibold text-sidebar">
-                <div class="font-bold text-textMain text-sm">{{ $item->product->name }}</div>
-                <span class="text-[10px] text-textMuted font-mono">SKU: {{ $item->product->sku }}</span>
+                <div class="flex items-center gap-2.5">
+                  <x-product-thumbnail :product="$item->product" size="sm" />
+                  <div>
+                    <div class="font-bold text-textMain text-sm">{{ $item->product->name }}</div>
+                    <span class="text-[10px] text-textMuted font-mono">SKU: {{ $item->product->sku }}</span>
+                  </div>
+                </div>
               </td>
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
                 <span class="text-[11px] font-bold text-textMuted">{{ $item->product->baseUom?->code ?? 'PCS' }}</span>

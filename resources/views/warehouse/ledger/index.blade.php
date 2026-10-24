@@ -207,8 +207,13 @@
                 </td>
 
                 <td class="py-3 px-3">
-                  <span class="font-bold text-textMain block">{{ $m->product->name }}</span>
-                  <span class="text-[10px] text-brandOrange font-mono">{{ $m->product->sku }}</span>
+                  <div class="flex items-center gap-2.5">
+                    <x-product-thumbnail :product="$m->product" size="sm" />
+                    <div>
+                      <span class="font-bold text-textMain block">{{ $m->product->name }}</span>
+                      <span class="text-[10px] text-brandOrange font-mono">{{ $m->product->sku }}</span>
+                    </div>
+                  </div>
                 </td>
 
                 <td class="py-3 px-3 font-mono text-[11px]">

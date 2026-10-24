@@ -98,32 +98,37 @@
       <!-- Catalog Cards Grid -->
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="catalogGrid">
         @forelse($catalog as $item)
-          <div class="product-card bg-white rounded-2xl border border-[#ECEBF4] p-3.5 shadow-sm hover:border-sidebar hover:shadow transition cursor-pointer flex flex-col justify-between"
+          <div class="product-card bg-white rounded-2xl border border-[#ECEBF4] p-3 shadow-sm hover:border-sidebar hover:shadow transition cursor-pointer flex flex-col justify-between"
                data-id="{{ $item['id'] }}"
                data-name="{{ strtolower($item['name']) }}"
                data-sku="{{ strtolower($item['sku']) }}"
                data-cat="{{ $item['category_id'] }}"
                onclick="addToCart({{ json_encode($item) }})">
             <div>
-              <div class="flex items-center justify-between text-[10px] text-textMuted mb-1 font-mono">
-                <span>{{ $item['sku'] }}</span>
-                <span class="px-1.5 py-0.5 rounded font-bold bg-panelBg text-sidebar">
-                  Stok: {{ number_format($item['on_hand_qty'], 1) }}
-                </span>
+              <div class="flex items-start gap-2.5 mb-2">
+                <x-product-thumbnail :product="null" :imageUrl="$item['image_url'] ?? null" :name="$item['name']" :sku="$item['sku']" :category="$item['category_name'] ?? null" size="md" />
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center justify-between text-[10px] text-textMuted font-mono">
+                    <span class="truncate">{{ $item['sku'] }}</span>
+                    <span class="px-1.5 py-0.5 rounded font-bold bg-panelBg text-sidebar shrink-0 text-[10px]">
+                      {{ number_format($item['on_hand_qty'], 0) }}
+                    </span>
+                  </div>
+                  <h3 class="font-bold text-xs text-textMain line-clamp-2 leading-snug mt-0.5">
+                    {{ $item['name'] }}
+                  </h3>
+                </div>
               </div>
-              <h3 class="font-bold text-xs text-textMain line-clamp-2 leading-snug">
-                {{ $item['name'] }}
-              </h3>
             </div>
 
-            <div class="mt-3 pt-2 border-t border-[#ECEBF4] flex items-center justify-between">
+            <div class="mt-2 pt-2 border-t border-[#ECEBF4] flex items-center justify-between">
               <div>
-                <span class="text-[9px] text-textMuted uppercase font-bold block">Harga Jual:</span>
+                <span class="text-[9px] text-textMuted uppercase font-bold block">Harga:</span>
                 <span class="font-black text-sidebar font-mono text-xs">
                   Rp {{ number_format($item['list_price'], 0, ',', '.') }}
                 </span>
               </div>
-              <span class="w-6 h-6 rounded-lg bg-panelBg group-hover:bg-sidebar text-sidebar flex items-center justify-center font-bold text-xs">
+              <span class="w-6 h-6 rounded-lg bg-panelBg group-hover:bg-sidebar text-sidebar flex items-center justify-center font-bold text-xs" title="Tambah ke keranjang">
                 +
               </span>
             </div>
@@ -343,6 +348,8 @@
         product_id: item.id,
         name: item.name,
         sku: item.sku,
+        category: item.category_name || item.category || '',
+        image_url: item.image_url || null,
         product_uom_id: chosenUom.id,
         uom_name: chosenUom.name,
         uom_symbol: chosenUom.symbol,
@@ -409,14 +416,24 @@
         uomOptions += `<option value="${u.id}" ${u.id === item.product_uom_id ? 'selected' : ''}>${u.symbol} (Rp ${Math.round(u.calculated_price).toLocaleString('id-ID')})</option>`;
       });
 
+      const safeName = (item.name || '').replace(/'/g, "\\'");
+      const safeSku = (item.sku || '').replace(/'/g, "\\'");
+      const safeCat = (item.category || '').replace(/'/g, "\\'");
+      const imgThumbHtml = item.image_url 
+        ? `<img src="${item.image_url}" alt="${item.name}" class="w-8 h-8 rounded-lg object-cover cursor-pointer border border-slate-200 shrink-0 hover:scale-105 transition" onclick="event.stopPropagation(); openProductImageModal({name: '${safeName}', sku: '${safeSku}', category: '${safeCat}', imageUrl: '${item.image_url}'})" title="Lihat foto produk" />`
+        : `<div class="w-8 h-8 rounded-lg bg-sidebar/5 border border-sidebar/10 flex items-center justify-center text-sidebar font-mono font-bold text-[9px] shrink-0 cursor-pointer" onclick="event.stopPropagation(); openProductImageModal({name: '${safeName}', sku: '${safeSku}', category: '${safeCat}', imageUrl: null})" title="Detail produk">${safeSku.substring(0,3) || 'PRD'}</div>`;
+
       html += `
-        <div class="p-3 rounded-2xl bg-panelBg/70 border border-[#ECEBF4] space-y-2">
+        <div class="p-2.5 rounded-2xl bg-panelBg/70 border border-[#ECEBF4] space-y-2">
           <div class="flex items-start justify-between gap-2">
-            <div>
-              <h4 class="font-bold text-xs text-textMain line-clamp-1">${item.name}</h4>
-              <span class="text-[10px] text-textMuted font-mono">${item.sku}</span>
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              ${imgThumbHtml}
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-xs text-textMain truncate leading-tight">${item.name}</h4>
+                <span class="text-[10px] text-textMuted font-mono block">${item.sku}</span>
+              </div>
             </div>
-            <button type="button" onclick="removeCartItem(${idx})" class="text-textMuted hover:text-rose-600 p-0.5 text-xs font-bold" title="Hapus">
+            <button type="button" onclick="removeCartItem(${idx})" class="text-textMuted hover:text-rose-600 p-0.5 text-xs font-bold shrink-0" title="Hapus">
               ✕
             </button>
           </div>

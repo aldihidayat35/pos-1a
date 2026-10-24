@@ -74,7 +74,12 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         try {
-            $product = $this->catalogService->createProduct($request->validated());
+            $data = $request->validated();
+            if ($request->hasFile('image')) {
+                $data['image_path'] = $request->file('image')->store('products', 'public');
+            }
+
+            $product = $this->catalogService->createProduct($data);
 
             return redirect()->route('master.products.index')
                 ->with('success', "Produk [{$product->name}] dengan SKU {$product->sku} berhasil ditambahkan!");
@@ -101,7 +106,21 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         try {
-            $this->catalogService->updateProduct($product, $request->validated());
+            $data = $request->validated();
+
+            if ($request->boolean('remove_image')) {
+                if ($product->image_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image_path)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+                }
+                $data['image_path'] = null;
+            } elseif ($request->hasFile('image')) {
+                if ($product->image_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image_path)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+                }
+                $data['image_path'] = $request->file('image')->store('products', 'public');
+            }
+
+            $this->catalogService->updateProduct($product, $data);
 
             return redirect()->route('master.products.index')
                 ->with('success', "Produk [{$product->name}] berhasil diperbarui!");

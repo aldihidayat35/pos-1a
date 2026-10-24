@@ -137,10 +137,15 @@
                 <input type="hidden" name="items[{{ $idx }}][purchase_order_item_id]" value="{{ $item->id }}">
 
                 <td class="py-3.5 px-3">
-                  <span class="font-bold text-textMain block">{{ $item->product->name }}</span>
-                  <div class="flex items-center gap-2 text-[10px] mt-0.5">
-                    <span class="text-brandOrange font-mono">{{ $item->product->sku }}</span>
-                    <span class="text-textMuted">• Satuan: {{ $item->productUom?->uom?->name }} [{{ $item->productUom?->uom?->symbol }}]</span>
+                  <div class="flex items-center gap-2.5">
+                    <x-product-thumbnail :product="$item->product" size="sm" />
+                    <div>
+                      <span class="font-bold text-textMain block">{{ $item->product->name }}</span>
+                      <div class="flex items-center gap-2 text-[10px] mt-0.5">
+                        <span class="text-brandOrange font-mono">{{ $item->product->sku }}</span>
+                        <span class="text-textMuted">• Satuan: {{ $item->productUom?->uom?->name }} [{{ $item->productUom?->uom?->symbol }}]</span>
+                      </div>
+                    </div>
                   </div>
                 </td>
 

@@ -30,6 +30,8 @@ class UpdateProductRequest extends FormRequest
             'base_uom_id' => ['required', 'exists:uoms,id'],
             'base_barcode' => ['nullable', 'string', 'max:80', Rule::unique('product_uoms', 'barcode')->ignore($baseProductUomId)],
             'description' => ['nullable', 'string', 'max:1000'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'remove_image' => ['nullable', 'boolean'],
             'track_stock' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
             'conversions' => ['nullable', 'array'],

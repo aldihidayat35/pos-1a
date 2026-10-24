@@ -20,12 +20,14 @@ class Product extends Model
         'category_id',
         'base_uom_id',
         'description',
+        'image_path',
         'track_stock',
         'is_active',
     ];
 
     protected $appends = [
         'price',
+        'image_url',
     ];
 
     protected function casts(): array
@@ -47,6 +49,14 @@ class Product extends Model
         }
 
         return (float) ($this->inventoryBalances()->value('avg_unit_cost') ?? 0.0);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if ($this->image_path) {
+            return asset('storage/' . $this->image_path);
+        }
+        return null;
     }
 
     public function category(): BelongsTo

@@ -117,8 +117,13 @@
           @foreach($goodsReceipt->items as $item)
             <tr class="hover:bg-panelBg/40 transition">
               <td class="py-3 px-3">
-                <span class="font-bold text-textMain block">{{ $item->product->name }}</span>
-                <span class="text-[10px] text-brandOrange font-mono">{{ $item->product->sku }}</span>
+                <div class="flex items-center gap-2.5">
+                  <x-product-thumbnail :product="$item->product" size="sm" />
+                  <div>
+                    <span class="font-bold text-textMain block">{{ $item->product->name }}</span>
+                    <span class="text-[10px] text-brandOrange font-mono">{{ $item->product->sku }}</span>
+                  </div>
+                </div>
               </td>
               <td class="py-3 px-3 text-right font-extrabold text-sidebar">
                 {{ number_format($item->qty_input, 1) }}

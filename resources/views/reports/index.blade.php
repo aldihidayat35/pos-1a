@@ -5,43 +5,77 @@
 @section('content')
 <main class="flex-1 w-full space-y-6">
   <!-- Top Bar & Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+  <!-- Top Bar & Header (Clean UI with Mobile Tooltip) -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative">
     <div>
       <div class="flex items-center gap-2 text-xs font-semibold text-textMuted mb-1">
         <span>Pengawasan &amp; Tata Kelola</span>
         <span>/</span>
-        <span class="text-sidebar font-bold">Laporan Finansial Eksekutif</span>
+        <span class="text-sidebar font-bold">Laporan Finansial</span>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 flex-wrap">
         <h1 class="font-display text-2xl font-bold text-textMain tracking-tight">
-          Dasbor Finansial &amp; Pengawasan Owner
+          Dasbor Finansial & Owner
         </h1>
         @if($user->isOwner())
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brandLavender text-sidebar border border-[#D5D2E8]">
-            <span class="w-2 h-2 rounded-full bg-sidebar"></span>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brandLavender text-sidebar border border-[#D5D2E8]">
+            <span class="w-1.5 h-1.5 rounded-full bg-sidebar"></span>
             <span>Owner Read-Only</span>
           </span>
         @endif
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('reportsHeaderPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="reportsHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi Dasbor Finansial</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('reportsHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Visibilitas penuh arus omzet terealisasi, laba kotor, valuasi aset persediaan, risiko piutang B2B, dan pengeluaran darurat.
+            </p>
+          </div>
+        </div>
       </div>
-      <p class="text-xs text-textMuted mt-0.5">
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-xs text-textMuted mt-0.5">
         Visibilitas penuh arus omzet terealisasi, laba kotor, valuasi aset persediaan, risiko piutang B2B, dan pengeluaran darurat.
       </p>
     </div>
 
     <!-- Export Action Dropdown / Buttons -->
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-2 shrink-0 flex-wrap">
       @if($user->hasPermission('reports.export') || $user->isOwner() || $user->isSuperAdmin())
         <div class="relative inline-block text-left" id="exportDropdownContainer">
-          <a href="{{ route('reports.export.financial', request()->query()) }}" class="px-4 py-2.5 bg-sidebar hover:bg-slate-800 text-white text-xs font-bold rounded-2xl transition flex items-center gap-2 shadow-sm">
-            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <span>Ekspor Ringkasan (CSV)</span>
+          <a href="{{ route('reports.export.financial', request()->query()) }}" class="px-3.5 py-2 bg-sidebar hover:bg-slate-800 text-white text-xs font-bold rounded-2xl transition inline-flex items-center gap-1.5 shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Ekspor CSV</span>
           </a>
         </div>
       @endif
 
-      <a href="{{ route('audit.index') }}" class="px-4 py-2.5 bg-white hover:bg-panelBg text-sidebar text-xs font-bold rounded-2xl border border-[#ECEBF4] transition flex items-center gap-2 shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-brandOrange animate-pulse"></span>
-        <span>Accountability Board</span>
+      <a href="{{ route('audit.index') }}" class="px-3.5 py-2 bg-white hover:bg-panelBg text-sidebar text-xs font-bold rounded-2xl border border-[#ECEBF4] transition inline-flex items-center gap-1.5 shadow-xs">
+        <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+        </svg>
+        <span>Audit Board</span>
       </a>
     </div>
   </div>

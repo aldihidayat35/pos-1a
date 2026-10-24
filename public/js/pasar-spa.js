@@ -355,4 +355,27 @@ if (document.readyState === 'loading') {
   PasarNav.init();
 }
 
+// Global Clean UI Header Tooltip & Popover Handlers
+window.toggleHeaderTooltip = function(id, event) {
+  if (event) event.stopPropagation();
+  const el = document.getElementById(id);
+  if (!el) return;
+  const isHidden = el.classList.contains('hidden');
+  document.querySelectorAll('.header-popover').forEach(p => p.classList.add('hidden'));
+  if (isHidden) {
+    el.classList.remove('hidden');
+  }
+};
+
+window.closeHeaderTooltip = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('hidden');
+};
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.header-popover') && !e.target.closest('[onclick*="toggleHeaderTooltip"]')) {
+    document.querySelectorAll('.header-popover').forEach(p => p.classList.add('hidden'));
+  }
+});
+
 window.PasarNav = PasarNav;

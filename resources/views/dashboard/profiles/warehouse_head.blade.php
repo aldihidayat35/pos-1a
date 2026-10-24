@@ -4,13 +4,46 @@
      ======================================================= -->
 <div class="space-y-7">
 
-  <!-- 1. HERO BANNER KEPALA GUDANG (BERSIH) -->
+  <!-- 1. HERO BANNER KEPALA GUDANG (Clean UI with Mobile Tooltip) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
-        Halo, {{ $user->name }}!
-      </h1>
-      <p class="text-white/95 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
+          Halo, {{ $user->name }}!
+        </h1>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('warehouseHeadHeroPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-white/20 hover:bg-white text-white hover:text-brandOrange flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="warehouseHeadHeroPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi Fasilitas Gudang</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('warehouseHeadHeroPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Kepala Gudang • Fasilitas Pergudangan: {{ $stats['active_location_name'] }} ({{ $stats['active_location_code'] }})
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-white/95 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         Kepala Gudang • Fasilitas Pergudangan: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
     </div>

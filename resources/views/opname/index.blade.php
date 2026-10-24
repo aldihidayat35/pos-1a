@@ -5,30 +5,64 @@
 @section('content')
 <main class="flex-1 w-full space-y-6">
   <!-- Top Bar & Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+  <!-- Top Bar & Header (Clean UI with Mobile Tooltip) -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative">
     <div>
       <div class="flex items-center gap-2 text-xs font-semibold text-textMuted mb-1">
         <span>Operasional Pasar</span>
         <span>/</span>
-        <span class="text-sidebar font-bold">Stok Opname Mandiri</span>
+        <span class="text-sidebar font-bold">Stok Opname</span>
       </div>
-      <h1 class="font-display text-2xl font-bold text-textMain tracking-tight">
-        Sesi Stok Opname &amp; Rekonsiliasi Audit
-      </h1>
-      <p class="text-xs text-textMuted mt-0.5">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h1 class="font-display text-2xl font-bold text-textMain tracking-tight">
+          Sesi Stok Opname & Audit
+        </h1>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('opnameHeaderPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="opnameHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi Stok Opname</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('opnameHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Manajemen sesi hitung fisik buta (Blind Count), rekonsiliasi selisih, alasan variansi, dan koreksi saldo fisik atomik.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-xs text-textMuted mt-0.5">
         Manajemen sesi hitung fisik buta (Blind Count), rekonsiliasi selisih, alasan variansi, dan koreksi saldo fisik atomik.
       </p>
     </div>
 
-    <div class="flex items-center gap-2.5">
-      <a href="{{ route('audit.index', ['severity' => 'RED']) }}" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-2xl border border-rose-200 transition flex items-center gap-2 shadow-sm">
+    <div class="flex items-center gap-2 shrink-0 flex-wrap">
+      <a href="{{ route('audit.index', ['severity' => 'RED']) }}" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-2xl border border-rose-200 transition inline-flex items-center gap-2 shadow-xs">
         <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-        <span>Log Selisih Opname (Merah)</span>
+        <span>Selisih Merah</span>
       </a>
       @if($user->hasAnyPermission(['opname.reconcile', 'opname.finalize']) || $user->isSuperAdmin())
-        <a href="{{ route('opname.create') }}" class="px-4 py-2.5 bg-brandOrange hover:bg-orange-600 text-white text-xs font-bold rounded-2xl transition flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-          <span>+ Buka Sesi Opname</span>
+        <a href="{{ route('opname.create') }}" class="px-3.5 py-2 bg-brandOrange hover:bg-orange-600 text-white text-xs font-bold rounded-2xl transition inline-flex items-center gap-1.5 shadow-sm">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          <span>Buka Sesi</span>
         </a>
       @endif
     </div>

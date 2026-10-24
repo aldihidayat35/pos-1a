@@ -4,39 +4,72 @@
 
 @section('content')
 <main class="flex-1 w-full space-y-6">
-  <!-- 1. HEADER BANNER -->
-  <div class="bg-sidebar text-white p-6 sm:p-7 rounded-[26px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+  <!-- 1. HEADER BANNER (Clean UI with Mobile Tooltip) -->
+  <div class="bg-sidebar text-white p-6 sm:p-7 rounded-[26px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm relative">
     <div>
       <div class="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold mb-2">
         <span class="w-2 h-2 rounded-full bg-brandOrange animate-pulse"></span>
-        <span>Zero-Bottleneck Accountability Board</span>
+        <span>Accountability Board</span>
         @if($user->isOwner())
           <span class="ml-2 bg-brandCoral text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-            Mode Owner Read-Only
+            Owner (Read-Only)
           </span>
         @endif
       </div>
-      <h1 class="font-display text-2xl font-bold tracking-tight">
-        Audit Trail & Notifikasi Anomali Terpadu
-      </h1>
-      <p class="text-white/85 text-xs sm:text-sm mt-1 max-w-2xl font-medium">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h1 class="font-display text-2xl font-bold tracking-tight">
+          Audit Trail & Anomali
+        </h1>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('auditHeaderPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-white/20 hover:bg-white text-white hover:text-sidebar flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="auditHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi Audit Trail</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('auditHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Audit transparan tanpa bottleneck: Setiap aksi mengikat operator, lokasi, timestamp, dan dokumen bukti secara permanen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-white/85 text-xs sm:text-sm mt-1 max-w-2xl font-medium">
         Audit transparan tanpa botol persetujuan: Setiap aksi krusial mengikat operator, lokasi, timestamp, dan dokumen bukti secara permanen.
       </p>
     </div>
 
     <!-- Severity Filter Pills -->
-    <div class="flex items-center gap-2 shrink-0">
+    <div class="flex items-center gap-2 shrink-0 flex-wrap">
       <a href="{{ route('audit.index') }}"
-         class="px-3.5 py-2 rounded-xl text-xs font-bold transition {{ !request('severity') ? 'bg-white text-sidebar shadow-sm' : 'bg-white/15 text-white hover:bg-white/25' }}">
+         class="px-3 py-1.5 rounded-xl text-xs font-bold transition {{ !request('severity') ? 'bg-white text-sidebar shadow-sm' : 'bg-white/15 text-white hover:bg-white/25' }}">
         Semua ({{ $counts['ALL'] }})
       </a>
       <a href="{{ route('audit.index', ['severity' => 'ORANGE']) }}"
-         class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 {{ request('severity') === 'ORANGE' ? 'bg-brandOrange text-white shadow-sm' : 'bg-white/15 text-white hover:bg-white/25' }}">
+         class="px-3 py-1.5 rounded-xl text-xs font-bold transition inline-flex items-center gap-1.5 {{ request('severity') === 'ORANGE' ? 'bg-brandOrange text-white shadow-sm' : 'bg-white/15 text-white hover:bg-white/25' }}">
         <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
         <span>Oranye ({{ $counts['ORANGE'] }})</span>
       </a>
       <a href="{{ route('audit.index', ['severity' => 'RED']) }}"
-         class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 {{ request('severity') === 'RED' ? 'bg-rose-600 text-white shadow-sm' : 'bg-white/15 text-white hover:bg-white/25' }}">
+         class="px-3 py-1.5 rounded-xl text-xs font-bold transition inline-flex items-center gap-1.5 {{ request('severity') === 'RED' ? 'bg-rose-600 text-white shadow-sm' : 'bg-white/15 text-white hover:bg-white/25' }}">
         <span class="w-2 h-2 rounded-full bg-rose-400"></span>
         <span>Merah ({{ $counts['RED'] }})</span>
       </a>

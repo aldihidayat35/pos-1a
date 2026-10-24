@@ -23,10 +23,46 @@
     </div>
   @endif
 
-  <!-- Header Banner (Clean) -->
-  <div class="bg-panelBg p-5 sm:p-7 rounded-[26px] border border-[#ECEBF4]">
-    <h1 class="font-display text-lg sm:text-2xl font-bold text-textMain">Operasional Toko & Kasir</h1>
-    <p class="text-[11px] sm:text-xs text-textMuted mt-1 max-w-2xl">
+  <!-- Header Banner (Clean UI with Mobile Tooltip) -->
+  <div class="bg-panelBg p-5 sm:p-7 rounded-[26px] border border-[#ECEBF4] relative">
+    <div class="flex items-center gap-2 flex-wrap">
+      <h1 class="font-display text-lg sm:text-2xl font-bold text-textMain tracking-tight">Operasional Toko & Kasir</h1>
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase shrink-0 bg-sidebar text-white">
+        {{ $activeLocation?->code ?? 'STR-PASAR-1' }}
+      </span>
+
+      <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+      <div class="relative md:hidden inline-flex items-center">
+        <button type="button" 
+                onclick="toggleHeaderTooltip('storeHeaderPopover', event)" 
+                class="w-6 h-6 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-1 shadow-xs"
+                title="Lihat Keterangan Halaman"
+                aria-label="Info Halaman">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+          </svg>
+        </button>
+
+        <!-- Mobile Popover Floating Bubble -->
+        <div id="storeHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs">
+          <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+            <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+              <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+              <span>Informasi Toko</span>
+            </div>
+            <button type="button" onclick="closeHeaderTooltip('storeHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+          </div>
+          <p class="text-[11px] text-textMuted leading-relaxed">
+            {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Subtitle (Hidden on Mobile) -->
+    <p class="hidden md:block text-[11px] sm:text-xs text-textMuted mt-1 max-w-2xl leading-normal">
       {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
     </p>
   </div>
@@ -43,8 +79,11 @@
           Stok saat ini berada di lokasi virtual <code>LOC-TRANSIT</code>. Klik tombol Terima untuk membukukan stok ke rak toko dan mengupdate Moving Average HPP.
         </p>
       </div>
-      <a href="{{ route('store.transfers.index') }}" class="text-[11px] sm:text-xs font-bold text-sidebar hover:underline">
-        Lihat Semua Transfer Masuk →
+      <a href="{{ route('store.transfers.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-xs font-semibold transition shrink-0">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+        </svg>
+        <span>Transfer Masuk</span>
       </a>
     </div>
 
@@ -184,8 +223,11 @@
           </h3>
           <p class="text-xs text-textMuted mt-0.5">Pengadaan darurat pasar dengan foto nota.</p>
         </div>
-        <a href="{{ route('store.emergency.index') }}" class="text-xs font-bold text-sidebar hover:underline">
-          Lihat Semua →
+        <a href="{{ route('store.emergency.index') }}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-[11px] font-semibold transition shrink-0">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Riwayat</span>
         </a>
       </div>
 
@@ -209,8 +251,11 @@
               <span class="text-xs font-extrabold text-amber-700 block font-mono">
                 Rp {{ number_format($emg->total_amount, 0, ',', '.') }}
               </span>
-              <a href="{{ route('store.emergency.show', $emg->id) }}" class="text-[11px] font-bold text-sidebar hover:underline">
-                Lihat Nota →
+              <a href="{{ route('store.emergency.show', $emg->id) }}" class="inline-flex items-center gap-1 text-[11px] font-bold text-sidebar hover:underline mt-0.5">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+                </svg>
+                <span>Nota</span>
               </a>
             </div>
           </div>

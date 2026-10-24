@@ -17,13 +17,46 @@
     </div>
   @endif
 
-  <!-- 1. SOLID HERO BANNER (Clean) -->
+  <!-- 1. SOLID HERO BANNER (Clean UI with Mobile Tooltip) -->
   <div class="relative bg-sidebar rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
-        Kemitraan B2B & Plafon Piutang
-      </h1>
-      <p class="text-white/85 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
+          Kemitraan B2B & Plafon Piutang
+        </h1>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('b2bHeroPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-white/20 hover:bg-white text-white hover:text-sidebar flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="b2bHeroPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi B2B</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('b2bHeroPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Pusat kendali pesanan grosir, reservasi fisik stok otomatis, penguncian plafon kredit server-side, tiket serah terima QR, dan pembukuan piutang tempo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-white/85 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         Pusat kendali pesanan grosir, reservasi fisik stok otomatis, penguncian plafon kredit server-side, tiket serah terima QR, dan pembukuan piutang tempo.
       </p>
     </div>
@@ -70,8 +103,11 @@
         <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">Monitoring pemesanan, alokasi stok, tiket QR pickup, dan penerbitan faktur</p>
       </div>
       <div class="flex items-center gap-2">
-        <a href="{{ route('b2b.orders.index') }}" class="text-[11px] sm:text-xs font-bold text-sidebar hover:text-sidebarDark underline">
-          Lihat Semua Pesanan B2B →
+        <a href="{{ route('b2b.orders.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-xs font-semibold transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+          </svg>
+          <span>Semua Pesanan</span>
         </a>
       </div>
     </div>

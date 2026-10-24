@@ -14,32 +14,68 @@
     </div>
   @endif
 
-  <!-- Top Breadcrumb & Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+  <!-- Top Breadcrumb & Header (Clean UI with Mobile Tooltip) -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative">
     <div>
       <div class="flex items-center gap-2 text-xs font-semibold text-textMuted mb-1">
         <a href="{{ route('store.index') }}" class="hover:underline">Operasional Toko</a>
         <span>/</span>
         <span class="text-textMain font-bold">Pembelian Emergency</span>
       </div>
-      <h1 class="font-display text-xl sm:text-2xl font-bold text-textMain tracking-tight">
-        Pengadaan Darurat Toko (+Foto Nota)
-      </h1>
-      <p class="text-xs text-textMuted mt-0.5">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h1 class="font-display text-xl sm:text-2xl font-bold text-textMain tracking-tight">
+          Pengadaan Darurat (+Foto Nota)
+        </h1>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('storeEmergencyHeaderPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="storeEmergencyHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi Pembelian Emergency</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('storeEmergencyHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Pembelian mendesak saat stok toko habis mendadak tanpa bottleneck persetujuan Owner.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-xs text-textMuted mt-0.5">
         Pembelian mendesak saat stok toko habis mendadak tanpa bottleneck persetujuan Owner.
       </p>
     </div>
 
-    <div class="flex items-center gap-2.5">
-      <a href="{{ route('store.index') }}" class="px-3.5 py-2 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4]">
-        ← Kembali ke Toko
+    <div class="flex items-center gap-2 shrink-0 flex-wrap">
+      <a href="{{ route('store.index') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4]">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+        </svg>
+        <span>Kembali</span>
       </a>
       @if($user->hasPermission('emergency.input') || $user->isSuperAdmin())
-        <a href="{{ route('store.emergency.create') }}" class="px-4 py-2 bg-brandOrange hover:bg-brandOrange/90 text-white font-bold text-xs rounded-xl transition flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <a href="{{ route('store.emergency.create') }}" class="px-3.5 py-2 bg-brandOrange hover:bg-brandOrange/90 text-white font-bold text-xs rounded-xl transition inline-flex items-center gap-1.5 shadow-sm">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
           </svg>
-          <span>Input Belanja Emergency</span>
+          <span>Belanja Baru</span>
         </a>
       @endif
     </div>

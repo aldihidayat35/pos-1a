@@ -36,13 +36,46 @@
     </div>
   @endif
 
-  <!-- 1. SOFT SOLID ORANGE HERO BANNER (Clean) -->
-  <div class="relative bg-brandOrange rounded-[24px] p-6 sm:p-8 text-white overflow-hidden">
+  <!-- 1. SOFT SOLID ORANGE HERO BANNER (Clean UI with Mobile Tooltip) -->
+  <div class="relative bg-brandOrange rounded-[24px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
-        Operasional Gudang Pusat
-      </h1>
-      <p class="text-white/95 text-[11px] sm:text-xs md:text-[15px] mt-1.5 font-medium">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
+          Operasional Gudang Pusat
+        </h1>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('warehouseHeroPopover', event)" 
+                  class="w-6 h-6 rounded-full bg-white/20 hover:bg-white text-white hover:text-brandOrange flex items-center justify-center transition p-1 shadow-xs"
+                  title="Lihat Keterangan Halaman"
+                  aria-label="Info Halaman">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <!-- Mobile Popover Floating Bubble -->
+          <div id="warehouseHeroPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                <span>Informasi Gudang Sentral</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('warehouseHeroPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              {{ $activeLocation?->name ?? 'Gudang Pusat Sentral' }} • Rantai Pasok Inbound & Saldo Stok Real-time
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Subtitle (Hidden on Mobile) -->
+      <p class="hidden md:block text-white/95 text-[11px] sm:text-xs md:text-[15px] mt-1.5 font-medium">
         {{ $activeLocation?->name ?? 'Gudang Pusat Sentral' }} • Rantai Pasok Inbound & Saldo Stok Real-time
       </p>
     </div>
@@ -50,12 +83,21 @@
 
   <!-- 2. QUICK AUTOMATION FUNCTION SHORTCUTS -->
   <div class="space-y-4">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-2 flex-wrap">
       <h2 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain tracking-tight">Fungsi Alur Logistik</h2>
-      <div class="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
-        <a href="{{ route('warehouse.po.index') }}" class="font-semibold text-brandCoral hover:underline">Semua PO ({{ $stats['pending_po_count'] }}) →</a>
-        <span class="text-gray-300">|</span>
-        <a href="{{ route('warehouse.ledger.index') }}" class="font-semibold text-brandOrange hover:underline">Kartu Stok & Audit →</a>
+      <div class="flex items-center gap-2">
+        <a href="{{ route('warehouse.po.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brandCoral/10 hover:bg-brandCoral text-brandCoral hover:text-white text-xs font-bold transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/>
+          </svg>
+          <span>PO ({{ $stats['pending_po_count'] }})</span>
+        </a>
+        <a href="{{ route('warehouse.ledger.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-white text-xs font-bold transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+          </svg>
+          <span>Kartu Stok</span>
+        </a>
       </div>
     </div>
 

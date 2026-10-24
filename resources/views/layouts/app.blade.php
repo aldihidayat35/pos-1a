@@ -249,13 +249,17 @@
 
       <!-- SCROLLABLE WORKSPACE CONTENT (Scrolls independently below Header) -->
       <div id="scrollableWorkspace" class="flex-1 overflow-y-auto px-4 md:px-0 pt-5 pb-32 md:pb-6">
-        <div class="flex flex-col lg:flex-row gap-6 xl:gap-10 items-start">
+        <div class="flex flex-col lg:flex-row gap-6 xl:gap-10 items-start w-full">
 
           <!-- MAIN DYNAMIC CONTENT AREA -->
-          @yield('content')
+          <div class="@hasSection('right_panel') flex-1 w-full min-w-0 @else w-full @endif">
+            @yield('content')
+          </div>
 
-          <!-- RIGHT SIDE PANEL -->
-          @include('partials.right-panel')
+          <!-- RIGHT SIDE PANEL (CONTEXTUAL) -->
+          @hasSection('right_panel')
+            @yield('right_panel')
+          @endif
 
         </div>
       </div>

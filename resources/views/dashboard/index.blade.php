@@ -35,3 +35,7 @@
 
 </main>
 @endsection
+
+@section('right_panel')
+  @include('partials.right-panel')
+@endsection

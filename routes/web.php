@@ -13,7 +13,9 @@ use App\Http\Controllers\Master\SupplierController;
 use App\Http\Controllers\Master\UomController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\Master\PricingController;
+use App\Http\Controllers\Store\CashShiftController;
 use App\Http\Controllers\Store\EmergencyPurchaseController;
+use App\Http\Controllers\Store\PosController;
 use App\Http\Controllers\Store\StoreTransferController;
 use App\Http\Controllers\Warehouse\GoodsReceiptController;
 use App\Http\Controllers\Warehouse\PurchaseOrderController;
@@ -81,6 +83,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/emergency/create', [EmergencyPurchaseController::class, 'create'])->name('emergency.create');
         Route::post('/emergency', [EmergencyPurchaseController::class, 'store'])->name('emergency.store');
         Route::get('/emergency/{emergencyPurchase}', [EmergencyPurchaseController::class, 'show'])->name('emergency.show');
+
+        // Terminal POS Kasir & Transaksi Ritel (Fase 5)
+        Route::get('/pos', [PosController::class, 'terminal'])->name('pos.terminal');
+        Route::get('/pos/search', [PosController::class, 'searchProducts'])->name('pos.search');
+        Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.checkout');
+        Route::get('/pos/receipt/{sale}', [PosController::class, 'receipt'])->name('pos.receipt');
+        Route::get('/pos/history', [PosController::class, 'history'])->name('pos.history');
+        Route::post('/pos/{sale}/void', [PosController::class, 'void'])->name('pos.void');
+
+        // Shift Laci Kasir (Fase 5)
+        Route::get('/shifts', [CashShiftController::class, 'index'])->name('shifts.index');
+        Route::post('/shifts/open', [CashShiftController::class, 'open'])->name('shifts.open');
+        Route::post('/shifts/{shift}/close', [CashShiftController::class, 'close'])->name('shifts.close');
+        Route::post('/shifts/{shift}/validate', [CashShiftController::class, 'validateShift'])->name('shifts.validate');
     });
 
     // 3. Kemitraan B2B & Sales (Modular Monolith)

@@ -37,17 +37,35 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-2 shrink-0">
+      @if($user->hasPermission('pos.access') || $user->isSuperAdmin())
+        <a href="{{ route('store.pos.terminal') }}" class="px-4 py-2.5 bg-sidebar hover:bg-sidebar/95 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span>Terminal Kasir POS</span>
+        </a>
+      @endif
+
+      @if($user->hasPermission('pos.cash_shift') || $user->isSuperAdmin())
+        <a href="{{ route('store.shifts.index') }}" class="px-4 py-2.5 bg-white hover:bg-panelBg text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4] flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <span>Shift Laci</span>
+        </a>
+      @endif
+
       @if($user->hasPermission('emergency.input') || $user->isSuperAdmin())
         <a href="{{ route('store.emergency.create') }}" class="px-4 py-2.5 bg-brandOrange hover:bg-brandOrange/90 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
           </svg>
-          <span>+ Input Belanja Emergency</span>
+          <span>+ Belanja Emergency</span>
         </a>
       @endif
 
-      <a href="{{ route('store.transfers.index') }}" class="px-4 py-2.5 bg-sidebar hover:bg-sidebar/95 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
-        <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <a href="{{ route('store.transfers.index') }}" class="px-4 py-2.5 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition flex items-center gap-2 border border-[#ECEBF4]">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
         </svg>
         <span>Transfer Masuk ({{ $stats['incoming_transfers_count'] }})</span>

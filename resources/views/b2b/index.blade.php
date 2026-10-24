@@ -99,8 +99,38 @@
   <div class="bg-white rounded-[26px] p-5 sm:p-6 border border-[#ECEBF4] space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h3 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain">Pesanan Grosir B2B Terbaru</h3>
-        <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">Monitoring pemesanan, alokasi stok, tiket QR pickup, dan penerbitan faktur</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-display font-bold text-sm sm:text-base md:text-lg text-textMain">Pesanan Grosir B2B Terbaru</h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('b2bOrdersCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan Pesanan B2B"
+                    aria-label="Info Pesanan B2B">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <div id="b2bOrdersCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                  </svg>
+                  <span>Pesanan Grosir B2B</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('b2bOrdersCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Monitoring pemesanan, alokasi stok, tiket QR pickup, dan penerbitan faktur.
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="hidden md:block text-[11px] sm:text-xs text-textMuted mt-0.5">Monitoring pemesanan, alokasi stok, tiket QR pickup, dan penerbitan faktur</p>
       </div>
       <div class="flex items-center gap-2">
         <a href="{{ route('b2b.orders.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-xs font-semibold transition">
@@ -194,13 +224,43 @@
   <div class="bg-white rounded-[26px] p-6 border border-[#ECEBF4] space-y-5">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h3 class="font-display font-bold text-lg text-textMain">Mitra Grosir &amp; Pemantauan Plafon Kredit</h3>
-        <p class="text-xs text-textMuted mt-0.5">Kalkulasi eksposur kredit real-time, status jatuh tempo, dan kunci otomatis kasir/sales</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-display font-bold text-lg text-textMain">Mitra Grosir &amp; Pemantauan Plafon Kredit</h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('b2bPartnersCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan Mitra & Plafon"
+                    aria-label="Info Mitra & Plafon">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <div id="b2bPartnersCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  <span>Mitra &amp; Plafon Kredit</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('b2bPartnersCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Kalkulasi eksposur kredit real-time, status jatuh tempo, dan kunci otomatis kasir/sales.
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="hidden md:block text-xs text-textMuted mt-0.5">Kalkulasi eksposur kredit real-time, status jatuh tempo, dan kunci otomatis kasir/sales</p>
       </div>
       <div class="flex items-center gap-2">
-        <a href="{{ route('b2b.invoices.index') }}" class="px-4 py-2 bg-panelBg hover:bg-[#E6E4F0] text-sidebar text-xs font-bold rounded-xl transition inline-flex items-center gap-1.5 border border-[#ECEBF4]">
+        <a href="{{ route('b2b.invoices.index') }}" class="px-3.5 py-1.5 bg-panelBg hover:bg-[#E6E4F0] text-sidebar text-xs font-bold rounded-xl transition inline-flex items-center gap-1.5 border border-[#ECEBF4]">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>Buku Piutang &amp; Faktur</span>
+          <span>Buku Piutang</span>
         </a>
       </div>
     </div>

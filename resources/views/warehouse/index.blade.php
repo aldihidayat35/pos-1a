@@ -160,26 +160,59 @@
   <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#ECEBF4] pb-4">
       <div>
-        <h3 class="font-bold text-base text-textMain flex items-center gap-2">
-          <span>Pesanan Pembelian Aktif (Inbound Buffer)</span>
-          <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[11px] font-bold border border-blue-200">
-            {{ $pendingPos->count() }} Menunggu Pengiriman
-          </span>
-        </h3>
-        <p class="text-xs text-textMuted mt-0.5">PO yang diterbitkan ke suplayer dan siap diterima fisik di dermaga bongkar muat.</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-bold text-base text-textMain">
+            Pesanan Pembelian Aktif
+          </h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('warehousePoCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan"
+                    aria-label="Info Card">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <!-- Mobile Popover Floating Bubble -->
+            <div id="warehousePoCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                  </svg>
+                  <span>Keterangan Pesanan Pembelian</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('warehousePoCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                PO yang diterbitkan ke suplayer dan siap diterima fisik di dermaga bongkar muat.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Subtitle (Hidden on Mobile) -->
+        <p class="hidden md:block text-xs text-textMuted mt-0.5">PO yang diterbitkan ke suplayer dan siap diterima fisik di dermaga bongkar muat.</p>
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 shrink-0">
         @if($user->hasPermission('purchasing.po') || $user->hasPermission('inventory.manage') || $user->isSuperAdmin())
-          <a href="{{ route('warehouse.po.create') }}" class="px-3.5 py-1.5 bg-sidebar text-white text-xs font-bold rounded-xl hover:bg-sidebar/90 transition flex items-center gap-1.5">
+          <a href="{{ route('warehouse.po.create') }}" class="px-3 py-1.5 bg-sidebar text-white text-xs font-bold rounded-xl hover:bg-sidebar/90 transition inline-flex items-center gap-1.5 shadow-sm">
             <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
             </svg>
             <span>PO Baru</span>
           </a>
         @endif
-        <a href="{{ route('warehouse.po.index') }}" class="px-3 py-1.5 bg-panelBg text-sidebar text-xs font-bold rounded-xl hover:bg-[#EAE8F2] transition border border-[#ECEBF4]">
-          Lihat Semua PO
+        <a href="{{ route('warehouse.po.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-xs font-semibold rounded-xl transition border border-[#ECEBF4]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/>
+          </svg>
+          <span>Semua PO</span>
         </a>
       </div>
     </div>
@@ -242,11 +275,11 @@
                 </td>
                 <td class="py-3 px-3 text-center">
                   @if($user->hasPermission('purchasing.receive') || $user->isSuperAdmin())
-                    <a href="{{ route('warehouse.receipts.create', $po->id) }}" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-lg transition inline-flex items-center gap-1 shadow-sm">
+                    <a href="{{ route('warehouse.receipts.create', $po->id) }}" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-lg transition inline-flex items-center gap-1 shadow-xs">
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
                       </svg>
-                      <span>Terima Barang</span>
+                      <span>Terima</span>
                     </a>
                   @else
                     <a href="{{ route('warehouse.po.show', $po->id) }}" class="text-xs font-semibold text-sidebar hover:underline">
@@ -266,17 +299,50 @@
   <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#ECEBF4] pb-4">
       <div>
-        <h3 class="font-bold text-base text-textMain flex items-center gap-2">
-          <span>Saldo Fisik Stok & Moving Average HPP</span>
-          <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold border border-emerald-200">
-            {{ $activeLocation?->name ?? 'Gudang Pusat' }}
-          </span>
-        </h3>
-        <p class="text-xs text-textMuted mt-0.5">Saldo fisik dihitung otomatis dari append-only stock movement ledger per lokasi.</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-bold text-base text-textMain">
+            Saldo Fisik & HPP Rata-rata
+          </h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('warehouseBalanceCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan"
+                    aria-label="Info Card">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <!-- Mobile Popover Floating Bubble -->
+            <div id="warehouseBalanceCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                  </svg>
+                  <span>Keterangan Saldo Fisik</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('warehouseBalanceCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Saldo fisik dihitung otomatis dari append-only stock movement ledger per lokasi.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Subtitle (Hidden on Mobile) -->
+        <p class="hidden md:block text-xs text-textMuted mt-0.5">Saldo fisik dihitung otomatis dari append-only stock movement ledger per lokasi.</p>
       </div>
 
-      <a href="{{ route('warehouse.ledger.index') }}" class="text-xs font-bold text-brandCoral hover:underline self-start sm:self-auto">
-        Buka Buku Kartu Stok Lengkap →
+      <a href="{{ route('warehouse.ledger.index') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-xs font-semibold transition shrink-0">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+        </svg>
+        <span>Kartu Stok</span>
       </a>
     </div>
 
@@ -329,14 +395,44 @@
 
   <!-- 5. RECENT INBOUND GOODS RECEIPTS (Surat Jalan Digital) -->
   <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm space-y-4">
-    <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#ECEBF4] pb-4">
       <div>
-        <h3 class="font-bold text-base text-textMain">Bukti Penerimaan Barang Terakhir (GRN)</h3>
-        <p class="text-xs text-textMuted mt-0.5">Surat jalan vendor dan pencatatan fisik yang telah diverifikasi oleh tim dermaga gudang.</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-bold text-base text-textMain">Bukti Penerimaan Barang (GRN)</h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('warehouseGrnCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan"
+                    aria-label="Info Card">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <!-- Mobile Popover Floating Bubble -->
+            <div id="warehouseGrnCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                  </svg>
+                  <span>Keterangan Penerimaan GRN</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('warehouseGrnCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Surat jalan vendor dan pencatatan fisik yang telah diverifikasi oleh tim dermaga gudang.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Subtitle (Hidden on Mobile) -->
+        <p class="hidden md:block text-xs text-textMuted mt-0.5">Surat jalan vendor dan pencatatan fisik yang telah diverifikasi oleh tim dermaga gudang.</p>
       </div>
-      <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-bold">
-        {{ $recentReceipts->count() }} Surat Masuk
-      </span>
     </div>
 
     @if($recentReceipts->isEmpty())

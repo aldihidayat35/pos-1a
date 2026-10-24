@@ -219,11 +219,42 @@
     <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm space-y-4">
       <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
         <div>
-          <h3 class="font-bold text-sm text-sidebar">Realisasi Omzet &amp; Beban Pokok (COGS)</h3>
-          <p class="text-[11px] text-textMuted mt-0.5">Hanya mencakup barang yang telah diserahkan fisik</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="font-bold text-sm text-sidebar">Realisasi Omzet &amp; Beban Pokok (COGS)</h3>
+
+            <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+            <div class="relative md:hidden inline-flex items-center">
+              <button type="button" 
+                      onclick="toggleHeaderTooltip('reportsRevenueCardPopover', event)" 
+                      class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                      title="Lihat Keterangan Omzet & Beban"
+                      aria-label="Info Omzet & Beban">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+              </button>
+
+              <div id="reportsRevenueCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+                <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                  <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                    <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Realisasi Omzet & Beban</span>
+                  </div>
+                  <button type="button" onclick="closeHeaderTooltip('reportsRevenueCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+                </div>
+                <p class="text-[11px] text-textMuted leading-relaxed">
+                  Hanya mencakup barang yang telah diserahkan fisik secara sah.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p class="hidden md:block text-[11px] text-textMuted mt-0.5">Hanya mencakup barang yang telah diserahkan fisik</p>
         </div>
-        <a href="{{ route('reports.sales', request()->query()) }}" class="text-xs text-sidebar font-bold hover:underline">
-          Lihat Semua &rarr;
+        <a href="{{ route('reports.sales', request()->query()) }}" class="text-xs text-sidebar font-bold hover:underline inline-flex items-center gap-1">
+          <span>Semua</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
       </div>
 
@@ -284,11 +315,42 @@
     <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm space-y-4">
       <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
         <div>
-          <h3 class="font-bold text-sm text-sidebar">Struktur Penuaan Piutang &amp; Beban Anomali</h3>
-          <p class="text-[11px] text-textMuted mt-0.5">Pemantauan risiko kredit dan kebocoran persediaan</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="font-bold text-sm text-sidebar">Struktur Penuaan Piutang &amp; Beban Anomali</h3>
+
+            <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+            <div class="relative md:hidden inline-flex items-center">
+              <button type="button" 
+                      onclick="toggleHeaderTooltip('reportsReceivablesCardPopover', event)" 
+                      class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                      title="Lihat Keterangan Penuaan Piutang"
+                      aria-label="Info Penuaan Piutang">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+              </button>
+
+              <div id="reportsReceivablesCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+                <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                  <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                    <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>Penuaan Piutang & Beban Anomali</span>
+                  </div>
+                  <button type="button" onclick="closeHeaderTooltip('reportsReceivablesCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+                </div>
+                <p class="text-[11px] text-textMuted leading-relaxed">
+                  Pemantauan risiko kredit dan kebocoran persediaan.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p class="hidden md:block text-[11px] text-textMuted mt-0.5">Pemantauan risiko kredit dan kebocoran persediaan</p>
         </div>
-        <a href="{{ route('reports.receivables') }}" class="text-xs text-sidebar font-bold hover:underline">
-          Buku Piutang &rarr;
+        <a href="{{ route('reports.receivables') }}" class="text-xs text-sidebar font-bold hover:underline inline-flex items-center gap-1">
+          <span>Piutang</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
       </div>
 

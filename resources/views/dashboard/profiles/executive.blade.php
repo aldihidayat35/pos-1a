@@ -139,8 +139,38 @@
   <div class="bg-white rounded-[24px] p-6 border border-[#ECEBF4] shadow-xs space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
       <div>
-        <h3 class="font-display font-bold text-base text-textMain">Tren Omzet & Laba Kotor 7 Hari Terakhir</h3>
-        <p class="text-xs text-textMuted mt-0.5">Analisis performa pendapatan pasar terintegrasi (POS Ritel + Grosir B2B)</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-display font-bold text-base text-textMain">Tren Omzet & Laba Kotor 7 Hari Terakhir</h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('execChartCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan Grafik"
+                    aria-label="Info Grafik">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <div id="execChartCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+                  </svg>
+                  <span>Tren Finansial Terintegrasi</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('execChartCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Analisis performa pendapatan pasar terintegrasi (POS Ritel + Grosir B2B).
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="hidden md:block text-xs text-textMuted mt-0.5">Analisis performa pendapatan pasar terintegrasi (POS Ritel + Grosir B2B)</p>
       </div>
       <div class="flex items-center gap-3 text-xs font-semibold">
         <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-brandOrange"></span> Omzet</span>
@@ -157,10 +187,43 @@
   <div class="bg-white rounded-[24px] p-6 border border-[#ECEBF4] shadow-xs space-y-4">
     <div class="flex items-center justify-between">
       <div>
-        <h3 class="font-display font-bold text-base text-textMain">Aktivitas Transaksi & Mutasi Pasar Terkini</h3>
-        <p class="text-xs text-textMuted mt-0.5">Catatan live audit seluruh pergerakan persediaan</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-display font-bold text-base text-textMain">Aktivitas Transaksi & Mutasi Pasar Terkini</h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('execAuditCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan Mutasi"
+                    aria-label="Info Mutasi">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <div id="execAuditCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  <span>Aktivitas Transaksi Terkini</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('execAuditCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Catatan live audit seluruh pergerakan persediaan.
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="hidden md:block text-xs text-textMuted mt-0.5">Catatan live audit seluruh pergerakan persediaan</p>
       </div>
-      <a href="{{ route('audit.index') }}" class="text-xs font-bold text-brandOrange hover:underline">Lihat Semua Audit →</a>
+      <a href="{{ route('audit.index') }}" class="text-xs font-bold text-brandOrange hover:underline inline-flex items-center gap-1">
+        <span>Semua Audit</span>
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
     </div>
 
     <div class="overflow-x-auto">

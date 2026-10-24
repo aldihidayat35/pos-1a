@@ -85,20 +85,38 @@
   <!-- Active Shift Highlight Card -->
   <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm space-y-4">
     <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
-      <div class="flex items-center gap-2.5">
-        <span class="w-3 h-3 rounded-full {{ $activeShift ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400' }}"></span>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="w-2.5 h-2.5 rounded-full {{ $activeShift ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400' }}"></span>
         <h3 class="font-bold text-sm text-textMain">Status Laci Kasir Saat Ini</h3>
-      </div>
 
-      @if($activeShift)
-        <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-          Shift Aktif: {{ $activeShift->shift_number }}
-        </span>
-      @else
-        <span class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700 border border-gray-200">
-          Laci Kasir Terkunci
-        </span>
-      @endif
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('storeActiveShiftCardPopover', event)" 
+                  class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                  title="Lihat Keterangan Status Shift"
+                  aria-label="Info Status Shift">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <div id="storeActiveShiftCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                <span>Status Laci Kasir</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('storeActiveShiftCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Monitoring kondisi modal laci uang kasir aktif dan kesiapan melayani transaksi POS.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     @if($activeShift)
@@ -144,11 +162,11 @@
 
         @if($canManage)
           <button type="button" onclick="openCloseShiftModal({{ $activeShift->id }}, '{{ $activeShift->shift_number }}')"
-                  class="px-5 py-2.5 bg-brandOrange hover:bg-brandOrange/90 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-2 self-start sm:self-auto">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  class="px-3.5 py-2 bg-brandOrange hover:bg-brandOrange/90 text-white font-bold text-xs rounded-xl shadow-sm transition inline-flex items-center gap-1.5 self-start sm:self-auto">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
-            <span>Tutup Shift Kasir (Blind Cash Count)</span>
+            <span>Tutup Shift</span>
           </button>
         @endif
       </div>
@@ -159,11 +177,11 @@
         </p>
         @if($canManage)
           <button type="button" onclick="openStartShiftModal()"
-                  class="px-5 py-2.5 bg-sidebar hover:bg-sidebar/95 text-white font-bold text-xs rounded-xl shadow-md transition inline-flex items-center gap-2">
-            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  class="px-3.5 py-2 bg-sidebar hover:bg-sidebar/95 text-white font-bold text-xs rounded-xl shadow-sm transition inline-flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
             </svg>
-            <span>Buka Shift Laci Kasir Baru</span>
+            <span>Buka Shift Baru</span>
           </button>
         @endif
       </div>
@@ -173,8 +191,38 @@
   <!-- Historical Shifts Table -->
   <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm space-y-4">
     <div class="border-b border-[#ECEBF4] pb-3">
-      <h3 class="font-bold text-sm text-textMain">Riwayat Sesi Shift & Rekonsiliasi Kas</h3>
-      <p class="text-xs text-textMuted mt-0.5">Catatan seluruh penutupan shift dan verifikasi selisih kas fisik laci.</p>
+      <div class="flex items-center gap-2 flex-wrap">
+        <h3 class="font-bold text-sm text-textMain">Riwayat Sesi Shift & Rekonsiliasi Kas</h3>
+
+        <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+        <div class="relative md:hidden inline-flex items-center">
+          <button type="button" 
+                  onclick="toggleHeaderTooltip('storeShiftHistoryCardPopover', event)" 
+                  class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                  title="Lihat Keterangan Riwayat Shift"
+                  aria-label="Info Riwayat Shift">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+          </button>
+
+          <div id="storeShiftHistoryCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+            <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+              <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Riwayat Sesi Shift</span>
+              </div>
+              <button type="button" onclick="closeHeaderTooltip('storeShiftHistoryCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+            </div>
+            <p class="text-[11px] text-textMuted leading-relaxed">
+              Catatan seluruh penutupan shift dan verifikasi selisih kas fisik laci.
+            </p>
+          </div>
+        </div>
+      </div>
+      <p class="hidden md:block text-xs text-textMuted mt-0.5">Catatan seluruh penutupan shift dan verifikasi selisih kas fisik laci.</p>
     </div>
 
     @if($shifts->isEmpty())

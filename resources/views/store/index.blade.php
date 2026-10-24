@@ -71,11 +71,44 @@
   <div class="bg-white rounded-3xl p-5 sm:p-6 border border-[#ECEBF4] shadow-sm space-y-4">
     <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-4">
       <div>
-        <h3 class="font-bold text-sm sm:text-base text-textMain flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-          <span>Barang Masuk dari Gudang (Menunggu Diterima di Toko)</span>
-        </h3>
-        <p class="text-[11px] sm:text-xs text-textMuted mt-0.5">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-bold text-sm sm:text-base text-textMain flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+            <span>Barang Masuk dari Gudang</span>
+          </h3>
+
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('storeIncomingCardPopover', event)" 
+                    class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                    title="Lihat Keterangan"
+                    aria-label="Info Card">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+            </button>
+
+            <!-- Mobile Popover Floating Bubble -->
+            <div id="storeIncomingCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                  </svg>
+                  <span>Keterangan Transfer Masuk</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('storeIncomingCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                Stok saat ini berada di lokasi transit virtual. Klik Terima untuk membukukan stok ke rak toko dan mengupdate HPP.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Subtitle (Hidden on Mobile) -->
+        <p class="hidden md:block text-[11px] sm:text-xs text-textMuted mt-0.5">
           Stok saat ini berada di lokasi virtual <code>LOC-TRANSIT</code>. Klik tombol Terima untuk membukukan stok ke rak toko dan mengupdate Moving Average HPP.
         </p>
       </div>
@@ -133,11 +166,11 @@
                 </td>
                 <td class="py-3 px-3 text-center">
                   @if($user->hasPermission('transfer.receive') || $user->isSuperAdmin())
-                    <a href="{{ route('store.transfers.show', $trf->id) }}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition inline-flex items-center gap-1.5">
-                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    <a href="{{ route('store.transfers.show', $trf->id) }}" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-lg shadow-xs transition inline-flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
                       </svg>
-                      <span>Terima di Toko</span>
+                      <span>Terima</span>
                     </a>
                   @else
                     <span class="text-[11px] text-textMuted">Hanya Kasir / PIC</span>
@@ -157,11 +190,44 @@
     <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm space-y-4">
       <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
         <div>
-          <h3 class="font-bold text-sm text-textMain flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-sidebar"></span>
-            <span>Saldo Fisik di Rak Toko</span>
-          </h3>
-          <p class="text-xs text-textMuted mt-0.5">Stok on-hand siap jual untuk pelanggan.</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="font-bold text-sm text-textMain flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-sidebar"></span>
+              <span>Saldo Fisik di Rak Toko</span>
+            </h3>
+
+            <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+            <div class="relative md:hidden inline-flex items-center">
+              <button type="button" 
+                      onclick="toggleHeaderTooltip('storeShelfCardPopover', event)" 
+                      class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                      title="Lihat Keterangan"
+                      aria-label="Info Card">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+              </button>
+
+              <!-- Mobile Popover Floating Bubble -->
+              <div id="storeShelfCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+                <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                  <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                    <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                    </svg>
+                    <span>Keterangan Saldo Rak</span>
+                  </div>
+                  <button type="button" onclick="closeHeaderTooltip('storeShelfCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+                </div>
+                <p class="text-[11px] text-textMuted leading-relaxed">
+                  Stok on-hand siap jual untuk pelanggan.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop Subtitle (Hidden on Mobile) -->
+          <p class="hidden md:block text-xs text-textMuted mt-0.5">Stok on-hand siap jual untuk pelanggan.</p>
         </div>
       </div>
 
@@ -217,11 +283,44 @@
     <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm space-y-4">
       <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
         <div>
-          <h3 class="font-bold text-sm text-textMain flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
-            <span>Pembelian Emergency Terbaru</span>
-          </h3>
-          <p class="text-xs text-textMuted mt-0.5">Pengadaan darurat pasar dengan foto nota.</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="font-bold text-sm text-textMain flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
+              <span>Pembelian Emergency Terbaru</span>
+            </h3>
+
+            <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+            <div class="relative md:hidden inline-flex items-center">
+              <button type="button" 
+                      onclick="toggleHeaderTooltip('storeEmergencyCardPopover', event)" 
+                      class="w-5 h-5 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-0.5 shadow-xs"
+                      title="Lihat Keterangan"
+                      aria-label="Info Card">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+              </button>
+
+              <!-- Mobile Popover Floating Bubble -->
+              <div id="storeEmergencyCardPopover" class="header-popover hidden fixed inset-x-4 top-24 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs text-textMain">
+                <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                  <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                    <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                    </svg>
+                    <span>Keterangan Pembelian Emergency</span>
+                  </div>
+                  <button type="button" onclick="closeHeaderTooltip('storeEmergencyCardPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+                </div>
+                <p class="text-[11px] text-textMuted leading-relaxed">
+                  Pengadaan darurat pasar dengan foto nota.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop Subtitle (Hidden on Mobile) -->
+          <p class="hidden md:block text-xs text-textMuted mt-0.5">Pengadaan darurat pasar dengan foto nota.</p>
         </div>
         <a href="{{ route('store.emergency.index') }}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-sidebar/5 hover:bg-sidebar text-sidebar hover:text-white text-[11px] font-semibold transition shrink-0">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

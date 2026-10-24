@@ -500,47 +500,36 @@
   };
 
   function renderSubMenus() {
-    const container = document.getElementById('subMenuContainer');
-    const mobileList = document.getElementById('mobileSubMenuList');
+    const pills = document.querySelectorAll('#desktopSubMenuContainer a');
+    if (pills && pills.length > 0) {
+      pills.forEach((p, idx) => {
+        if (p.getAttribute('onclick') && p.getAttribute('onclick').includes('selectSubMenu')) {
+          if (idx === currentSubMenuIndex) {
+            p.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition whitespace-nowrap bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm';
+          } else {
+            p.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition whitespace-nowrap text-textMuted hover:text-textMain hover:bg-white/60';
+          }
+        }
+      });
+    }
+
+    const mobilePills = document.querySelectorAll('#mobileSubMenuList a');
+    if (mobilePills && mobilePills.length > 0) {
+      mobilePills.forEach((mBtn, idx) => {
+        if (mBtn.getAttribute('onclick') && mBtn.getAttribute('onclick').includes('selectSubMenu')) {
+          if (idx === currentSubMenuIndex) {
+            mBtn.className = 'flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs transition bg-panelBg text-sidebar font-bold border border-[#E6E4F0]';
+          } else {
+            mBtn.className = 'flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs transition text-textMuted hover:text-textMain hover:bg-[#FAF9FD]';
+          }
+        }
+      });
+    }
+
     const mobileLabel = document.getElementById('mobileActiveSubMenuLabel');
-    const list = moduleSubMenus[currentModuleIndex] || [];
-
-    if (container) {
-      container.innerHTML = '';
-      list.forEach((sub, idx) => {
-        const btn = document.createElement('button');
-        const isActive = idx === currentSubMenuIndex;
-        const labelText = sub.label[currentLang] || sub.label.id;
-        btn.onclick = () => selectSubMenu(idx);
-        btn.className = isActive
-          ? 'px-3 py-1 rounded-lg bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm transition'
-          : 'px-3 py-1 rounded-lg text-textMuted hover:text-textMain transition';
-        btn.innerText = labelText;
-        container.appendChild(btn);
-      });
-    }
-
-    if (mobileList) {
-      mobileList.innerHTML = '';
-      list.forEach((sub, idx) => {
-        const mBtn = document.createElement('button');
-        const isActive = idx === currentSubMenuIndex;
-        const labelText = sub.label[currentLang] || sub.label.id;
-        mBtn.onclick = (e) => {
-          e.stopPropagation();
-          selectSubMenu(idx);
-          closeMobileSubMenu();
-        };
-        mBtn.className = isActive
-          ? 'flex items-center justify-between w-full px-3 py-2 rounded-xl bg-panelBg text-sidebar font-bold text-xs transition border border-[#E6E4F0]'
-          : 'flex items-center justify-between w-full px-3 py-2 rounded-xl text-textMuted hover:text-textMain hover:bg-[#FAF9FD] text-xs transition';
-        mBtn.innerHTML = `<span>${labelText}</span>${isActive ? '<span class="w-2 h-2 rounded-full bg-brandOrange"></span>' : ''}`;
-        mobileList.appendChild(mBtn);
-      });
-    }
-
-    if (mobileLabel && list[currentSubMenuIndex]) {
-      mobileLabel.innerText = list[currentSubMenuIndex].label[currentLang] || list[currentSubMenuIndex].label.id;
+    if (mobileLabel && moduleSubMenus[currentModuleIndex] && moduleSubMenus[currentModuleIndex][currentSubMenuIndex]) {
+      const activeObj = moduleSubMenus[currentModuleIndex][currentSubMenuIndex];
+      mobileLabel.innerText = activeObj.label[currentLang] || activeObj.label.id;
     }
   }
 
@@ -587,7 +576,7 @@
     currentSubMenuIndex = subIdx;
     renderSubMenus();
 
-    const subObj = moduleSubMenus[currentModuleIndex][subIdx];
+    const subObj = moduleSubMenus[currentModuleIndex] ? moduleSubMenus[currentModuleIndex][subIdx] : null;
     const contextBox = document.getElementById('subMenuContextBox');
     const contextText = document.getElementById('subMenuContextText');
 
@@ -598,9 +587,11 @@
       } else {
         contextBox.classList.remove('hidden');
         contextBox.classList.add('flex');
-        const lTxt = subObj.label[currentLang] || subObj.label.id;
-        const dTxt = subObj.desc[currentLang] || subObj.desc.id;
-        contextText.innerText = `${lTxt} — ${dTxt}`;
+        if (subObj) {
+          const lTxt = subObj.label[currentLang] || subObj.label.id;
+          const dTxt = subObj.desc[currentLang] || subObj.desc.id;
+          contextText.innerText = `${lTxt} — ${dTxt}`;
+        }
       }
     }
 

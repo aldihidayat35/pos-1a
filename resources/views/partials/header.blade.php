@@ -4,41 +4,13 @@
      ========================================================== -->
 <header class="shrink-0 bg-white px-4 md:px-0 py-2.5 md:py-3 flex items-center justify-between gap-3 sm:gap-4 z-30">
   
-  <!-- Left Header: Mobile Hamburger Dropdown + Desktop Dynamic Pill Bar -->
+  <!-- Left Header: Contextual Sub-Menus (Mobile Dropdown & Desktop Dynamic Pill Bar) -->
   <div class="flex items-center gap-2">
-    
-    <!-- MOBILE ONLY: 3-Lines Hamburger Button with Animated Popup Dropdown -->
-    <div class="relative md:hidden" id="mobileMenuWrapper">
-      <button id="mobileMenuBtn" onclick="toggleMobileSubMenu(event)" class="min-h-[44px] flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0]" aria-label="Menu Sub-Modul">
-        <!-- 3-Lines Hamburger Icon -->
-        <svg id="hamburgerIcon" class="w-4 h-4 text-sidebar shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        <span id="mobileActiveSubMenuLabel" class="text-xs font-bold text-sidebar max-w-[130px] truncate">
-          Ringkasan Operasional
-        </span>
-        <!-- Small chevron indicator -->
-        <svg id="mobileMenuChevron" class="w-3.5 h-3.5 text-textMuted transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      <!-- Mobile Sub-Menu Popup Dropdown with Animation -->
-      <div id="mobileSubMenuDropdown" class="hidden absolute left-0 top-full mt-2 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#E8E6F2] p-2 z-50 transform origin-top-left transition-all duration-200 scale-95 opacity-0">
-        <div class="px-2.5 py-1 text-[10px] font-bold tracking-wider text-textMuted uppercase border-b border-[#F0EFF6] mb-1" data-i18n="header_sub_menu_title">
-          Sub-Modul Operasional
-        </div>
-        <div id="mobileSubMenuList" class="flex flex-col gap-1">
-          <!-- Populated dynamically by JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- DESKTOP ONLY: Dynamic Contextual Sub-Menu Pill Bar -->
-    <div id="subMenuContainer" class="hidden md:inline-flex flex-wrap items-center gap-1 bg-panelBg p-1 rounded-xl text-[11px] font-semibold text-textMuted">
-      <!-- Populated dynamically by JS based on current module -->
-    </div>
-
+    @hasSection('header_sub_menu')
+      @yield('header_sub_menu')
+    @else
+      @include('partials.header-sub-nav')
+    @endif
   </div>
 
   <!-- Right Header: Location Scope Selector, Language Switcher, Notifications & Profile Avatar -->

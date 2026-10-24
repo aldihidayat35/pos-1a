@@ -28,6 +28,8 @@ class ModularNavigationTest extends TestCase
             ->assertStatus(200)
             ->assertSee('PasarHub')
             ->assertSee('Halo,')
+            ->assertSee('Ringkasan Utama')
+            ->assertSee('Stream Masuk (Hijau)')
             ->assertDontSee('id="page-1"')
             ->assertDontSee('id="page-2"');
     }
@@ -39,6 +41,8 @@ class ModularNavigationTest extends TestCase
             ->get('/warehouse')
             ->assertStatus(200)
             ->assertSee('Operasional Gudang Pusat')
+            ->assertSee('Penerimaan PO')
+            ->assertSee('Konversi Satuan')
             ->assertSee('translateY(68px)');
     }
 
@@ -49,6 +53,8 @@ class ModularNavigationTest extends TestCase
             ->get('/store')
             ->assertStatus(200)
             ->assertSee('Operasional Toko & Kasir POS')
+            ->assertSee('Kasir POS Ritel')
+            ->assertSee('Stok Emergency')
             ->assertSee('translateY(136px)');
     }
 
@@ -59,6 +65,8 @@ class ModularNavigationTest extends TestCase
             ->get('/b2b')
             ->assertStatus(200)
             ->assertSee('Kemitraan B2B & Sales')
+            ->assertSee('Rekanan Grosir')
+            ->assertSee('Plafon Kredit')
             ->assertSee('translateY(204px)');
     }
 
@@ -70,6 +78,7 @@ class ModularNavigationTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Audit Trail')
             ->assertSee('Laporan Anomali')
+            ->assertSee('Semua Anomali')
             ->assertSee('translateY(272px)');
     }
 
@@ -80,6 +89,21 @@ class ModularNavigationTest extends TestCase
             ->get('/master/products')
             ->assertStatus(200)
             ->assertSee('Katalog Master Produk')
+            ->assertSee('Kategori')
+            ->assertSee('Satuan UOM')
+            ->assertSee('Suplayer')
+            ->assertSee('Member &amp; B2B', false)
             ->assertSee('translateY(340px)');
+    }
+
+    public function test_header_sub_menu_switches_active_item_on_master_categories(): void
+    {
+        $user = User::where('username', 'superadmin')->first();
+        $response = $this->actingAs($user)->get('/master/categories');
+        
+        $response->assertStatus(200);
+        $response->assertSee('Kategori Master Produk');
+        // Check that 'Kategori' is active in header
+        $response->assertSee('bg-white text-sidebar font-bold');
     }
 }

@@ -1,0 +1,256 @@
+@php
+  // Determine current active module and its sub-menu items
+  $subMenus = [];
+  $activeSubMenuLabel = 'Ringkasan';
+
+  if (request()->routeIs('master.*')) {
+      $subMenus = [
+          [
+              'label' => 'Katalog Produk',
+              'route' => route('master.products.index'),
+              'active' => request()->routeIs('master.products.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
+          ],
+          [
+              'label' => 'Kategori',
+              'route' => route('master.categories.index'),
+              'active' => request()->routeIs('master.categories.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/>',
+          ],
+          [
+              'label' => 'Satuan UOM',
+              'route' => route('master.uoms.index'),
+              'active' => request()->routeIs('master.uoms.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 18h12l3-18H3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',
+          ],
+          [
+              'label' => 'Suplayer',
+              'route' => route('master.suppliers.index'),
+              'active' => request()->routeIs('master.suppliers.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>',
+          ],
+          [
+              'label' => 'Member & B2B',
+              'route' => route('master.members.index'),
+              'active' => request()->routeIs('master.members.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>',
+          ],
+          [
+              'label' => 'Gudang & Toko',
+              'route' => route('master.locations.index'),
+              'active' => request()->routeIs('master.locations.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>',
+          ],
+      ];
+  } elseif (request()->routeIs('warehouse.*')) {
+      $subMenus = [
+          [
+              'label' => 'Penerimaan PO',
+              'route' => route('warehouse.index'),
+              'active' => true,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
+          ],
+          [
+              'label' => 'Konversi Satuan',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Konversi Multi-Satuan: Modul aktif penuh pada Fase 3!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>',
+          ],
+          [
+              'label' => 'Distribusi Toko',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Distribusi Toko Pasar: Modul aktif penuh pada alur mutasi Fase 3!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>',
+          ],
+          [
+              'label' => 'Blind Opname',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Blind Opname Gudang Sentral: Modul aktif penuh pada Fase 3!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
+          ],
+      ];
+  } elseif (request()->routeIs('store.*')) {
+      $subMenus = [
+          [
+              'label' => 'Kasir POS Ritel',
+              'route' => route('store.index'),
+              'active' => true,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>',
+          ],
+          [
+              'label' => 'Stok Emergency',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Input Stok Emergency Toko: Modul aktif penuh pada Fase 5!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>',
+          ],
+          [
+              'label' => 'Shift Kasir',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Validasi Shift & Laci Uang Kasir: Modul aktif penuh pada Fase 5!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>',
+          ],
+          [
+              'label' => 'Blind Opname Toko',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Blind Opname Rak Toko: Modul aktif penuh pada Fase 5!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
+          ],
+      ];
+  } elseif (request()->routeIs('b2b.*')) {
+      $subMenus = [
+          [
+              'label' => 'Rekanan Grosir',
+              'route' => route('b2b.index'),
+              'active' => true,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>',
+          ],
+          [
+              'label' => 'Plafon Kredit',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Plafon Kredit B2B: Kunci otomatis aktif saat piutang menembus batas!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>',
+          ],
+          [
+              'label' => 'Order Grosir B2B',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Order Grosir B2B: Modul aktif penuh pada alur transaksi Fase 5!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>',
+          ],
+      ];
+  } elseif (request()->routeIs('audit.*')) {
+      $subMenus = [
+          [
+              'label' => 'Semua Anomali',
+              'route' => route('audit.index'),
+              'active' => true,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
+          ],
+          [
+              'label' => 'Selisih Opname',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Filter: Menampilkan seluruh selisih opname minus (Merah)!')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+          ],
+          [
+              'label' => 'Accountability Board',
+              'route' => 'javascript:void(0)',
+              'onclick' => "openToast('Accountability Board: Log audit permanen mengikat user_id & role.')",
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
+          ],
+      ];
+  } else {
+      // Default: Dasbor Utama
+      $subMenus = [
+          [
+              'label' => 'Ringkasan Utama',
+              'route' => route('dashboard'),
+              'onclick' => 'selectSubMenu(0); if(typeof filterMovementStream===\'function\') filterMovementStream(\'all\');',
+              'active' => true,
+              'icon' => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+          ],
+          [
+              'label' => 'Stream Masuk (Hijau)',
+              'route' => 'javascript:void(0)',
+              'onclick' => 'selectSubMenu(1); if(typeof filterMovementStream===\'function\') filterMovementStream(\'green\');',
+              'active' => false,
+              'icon' => '<circle cx="12" cy="12" r="4" fill="#10B981"/><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>',
+          ],
+          [
+              'label' => 'Stream Transfer (Biru)',
+              'route' => 'javascript:void(0)',
+              'onclick' => 'selectSubMenu(2); if(typeof filterMovementStream===\'function\') filterMovementStream(\'blue\');',
+              'active' => false,
+              'icon' => '<circle cx="12" cy="12" r="4" fill="#3B82F6"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>',
+          ],
+          [
+              'label' => 'Stream Penjualan (Ungu)',
+              'route' => 'javascript:void(0)',
+              'onclick' => 'selectSubMenu(3); if(typeof filterMovementStream===\'function\') filterMovementStream(\'purple\');',
+              'active' => false,
+              'icon' => '<circle cx="12" cy="12" r="4" fill="#8B5CF6"/><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>',
+          ],
+          [
+              'label' => 'Stream Anomali (Merah)',
+              'route' => 'javascript:void(0)',
+              'onclick' => 'selectSubMenu(4); if(typeof filterMovementStream===\'function\') filterMovementStream(\'red\');',
+              'active' => false,
+              'icon' => '<circle cx="12" cy="12" r="4" fill="#EF4444"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>',
+          ],
+      ];
+  }
+
+  // Find active label for mobile header
+  foreach ($subMenus as $item) {
+      if ($item['active']) {
+          $activeSubMenuLabel = $item['label'];
+          break;
+      }
+  }
+@endphp
+
+<!-- MOBILE ONLY: Hamburger Dropdown for Sub-Menus -->
+<div class="relative md:hidden" id="mobileMenuWrapper">
+  <button id="mobileMenuBtn" onclick="toggleMobileSubMenu(event)" class="min-h-[44px] flex items-center gap-2 px-3 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0]" aria-label="Menu Sub-Modul">
+    <svg id="hamburgerIcon" class="w-4 h-4 text-sidebar shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+    <span id="mobileActiveSubMenuLabel" class="text-xs font-bold text-sidebar max-w-[140px] truncate">
+      {{ $activeSubMenuLabel }}
+    </span>
+    <svg id="mobileMenuChevron" class="w-3.5 h-3.5 text-textMuted transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Mobile Dropdown Menu -->
+  <div id="mobileSubMenuDropdown" class="hidden absolute left-0 top-full mt-2 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#E8E6F2] p-2 z-50 transform origin-top-left transition-all duration-200 scale-95 opacity-0">
+    <div class="px-2.5 py-1 text-[10px] font-bold tracking-wider text-textMuted uppercase border-b border-[#F0EFF6] mb-1">
+      Sub-Modul Operasional
+    </div>
+    <div class="flex flex-col gap-1">
+      @foreach($subMenus as $item)
+        <a href="{{ $item['route'] }}" 
+           @if(isset($item['onclick'])) onclick="{{ $item['onclick'] }}" @endif
+           class="flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs transition {{ $item['active'] ? 'bg-panelBg text-sidebar font-bold border border-[#E6E4F0]' : 'text-textMuted hover:text-textMain hover:bg-[#FAF9FD]' }}">
+           <div class="flex items-center gap-2">
+             @if(!empty($item['icon']))
+               <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                 {!! $item['icon'] !!}
+               </svg>
+             @endif
+             <span>{{ $item['label'] }}</span>
+           </div>
+           @if($item['active'])
+             <span class="w-2 h-2 rounded-full bg-brandOrange"></span>
+           @endif
+        </a>
+      @endforeach
+    </div>
+  </div>
+</div>
+
+<!-- DESKTOP ONLY: Dynamic Contextual Sub-Menu Pill Bar (Image 2 style with Image 1 icons) -->
+<div id="desktopSubMenuContainer" class="hidden md:inline-flex items-center gap-1 bg-panelBg p-1 rounded-xl text-xs font-semibold text-textMuted border border-[#ECEBF4] max-w-full overflow-x-auto">
+  @foreach($subMenus as $item)
+    <a href="{{ $item['route'] }}" 
+       @if(isset($item['onclick'])) onclick="{{ $item['onclick'] }}" @endif
+       class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition whitespace-nowrap {{ $item['active'] ? 'bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm' : 'text-textMuted hover:text-textMain hover:bg-white/60' }}">
+       @if(!empty($item['icon']))
+         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+           {!! $item['icon'] !!}
+         </svg>
+       @endif
+       <span>{{ $item['label'] }}</span>
+    </a>
+  @endforeach
+</div>

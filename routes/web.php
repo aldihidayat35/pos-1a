@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\B2b\B2bInvoiceController;
+use App\Http\Controllers\B2b\B2bOrderController;
+use App\Http\Controllers\B2b\B2bPickupController;
 use App\Http\Controllers\B2bController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationSwitchController;
@@ -99,8 +102,28 @@ Route::middleware('auth')->group(function () {
         Route::post('/shifts/{shift}/validate', [CashShiftController::class, 'validateShift'])->name('shifts.validate');
     });
 
-    // 3. Kemitraan B2B & Sales (Modular Monolith)
-    Route::get('/b2b', [B2bController::class, 'index'])->name('b2b.index');
+    // 3. Kemitraan B2B & Sales (Modular Monolith - Fase 6)
+    Route::prefix('b2b')->name('b2b.')->group(function () {
+        Route::get('/', [B2bController::class, 'index'])->name('index');
+        
+        // Orders & Credit Control
+        Route::get('/orders', [B2bOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/create', [B2bOrderController::class, 'create'])->name('orders.create');
+        Route::post('/orders', [B2bOrderController::class, 'store'])->name('orders.store');
+        Route::get('/orders/{order}', [B2bOrderController::class, 'show'])->name('orders.show');
+        Route::post('/orders/{order}/cancel', [B2bOrderController::class, 'cancel'])->name('orders.cancel');
+        Route::get('/credit-check/{member}', [B2bOrderController::class, 'creditCheck'])->name('credit_check');
+
+        // Fulfillment & One-Time QR Pickup
+        Route::get('/pickup/scan', [B2bPickupController::class, 'scan'])->name('pickup.scan');
+        Route::post('/pickup/verify', [B2bPickupController::class, 'verify'])->name('pickup.verify');
+        Route::post('/pickup/redeem', [B2bPickupController::class, 'redeem'])->name('pickup.redeem');
+
+        // Accounts Receivable & Invoices
+        Route::get('/invoices', [B2bInvoiceController::class, 'index'])->name('invoices.index');
+        Route::get('/invoices/{invoice}', [B2bInvoiceController::class, 'show'])->name('invoices.show');
+        Route::post('/invoices/{invoice}/pay', [B2bInvoiceController::class, 'pay'])->name('invoices.pay');
+    });
 
     // 4. Feed Pergerakan 5-Warna & Anomali (Modular Monolith)
     Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');

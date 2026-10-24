@@ -124,24 +124,34 @@
   } elseif (request()->routeIs('b2b.*')) {
       $subMenus = [
           [
-              'label' => 'Rekanan Grosir',
+              'label' => 'Dasbor & Mitra',
               'route' => route('b2b.index'),
-              'active' => true,
+              'active' => request()->routeIs('b2b.index'),
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>',
           ],
           [
-              'label' => 'Plafon Kredit',
-              'route' => 'javascript:void(0)',
-              'onclick' => "openToast('Plafon Kredit B2B: Kunci otomatis aktif saat piutang menembus batas!')",
-              'active' => false,
-              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>',
+              'label' => 'Buat Order B2B',
+              'route' => route('b2b.orders.create'),
+              'active' => request()->routeIs('b2b.orders.create'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>',
           ],
           [
-              'label' => 'Order Grosir B2B',
-              'route' => 'javascript:void(0)',
-              'onclick' => "openToast('Order Grosir B2B: Modul aktif penuh pada alur transaksi Fase 5!')",
-              'active' => false,
+              'label' => 'Daftar Pesanan & Reservasi',
+              'route' => route('b2b.orders.index'),
+              'active' => request()->routeIs('b2b.orders.index') || request()->routeIs('b2b.orders.show'),
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>',
+          ],
+          [
+              'label' => 'Scan Tiket Pickup QR',
+              'route' => route('b2b.pickup.scan'),
+              'active' => request()->routeIs('b2b.pickup.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>',
+          ],
+          [
+              'label' => 'Faktur & Piutang Tempo',
+              'route' => route('b2b.invoices.index'),
+              'active' => request()->routeIs('b2b.invoices.*'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>',
           ],
       ];
   } elseif (request()->routeIs('audit.*')) {

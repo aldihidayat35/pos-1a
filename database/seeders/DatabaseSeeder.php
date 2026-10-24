@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             InventoryAndPOSeeder::class,
             TransferEmergencyPricingSeeder::class,
             PosAndCashShiftSeeder::class,
+            B2bSeeder::class,
         ]);
     }
 }

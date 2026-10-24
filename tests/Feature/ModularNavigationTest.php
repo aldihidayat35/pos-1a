@@ -64,9 +64,9 @@ class ModularNavigationTest extends TestCase
         $this->actingAs($user)
             ->get('/b2b')
             ->assertStatus(200)
-            ->assertSee('Kemitraan B2B & Sales')
-            ->assertSee('Rekanan Grosir')
-            ->assertSee('Plafon Kredit')
+            ->assertSee('Kemitraan B2B &amp; Plafon Piutang', false)
+            ->assertSee('Dasbor &amp; Mitra', false)
+            ->assertSee('Buat Order B2B')
             ->assertSee('translateY(204px)');
     }
 

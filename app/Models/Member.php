@@ -52,6 +52,21 @@ class Member extends Model
             ->withTimestamps();
     }
 
+    public function b2bOrders(): HasMany
+    {
+        return $this->hasMany(B2bOrder::class, 'member_id');
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class, 'member_id');
+    }
+
+    public function invoicePayments(): HasMany
+    {
+        return $this->hasMany(InvoicePayment::class, 'member_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

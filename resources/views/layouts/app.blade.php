@@ -204,6 +204,23 @@
       }
     }
 
+    /* Bottom-to-top entrance animation (280ms snappy cubic-bezier) */
+    @keyframes contentSlideUpFade {
+      0% {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-content-enter {
+      animation: contentSlideUpFade 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+
     /* Completely hide scrollbars across the whole site while retaining smooth scrolling */
     html, body, #scrollableWorkspace, * {
       -ms-overflow-style: none; /* IE and Edge */
@@ -232,6 +249,11 @@
 </head>
 <body class="h-screen w-full bg-white select-none m-0 p-0 overflow-hidden">
 
+  <!-- TOP MICRO PROGRESS BAR (Smooth Page Loading Indicator) -->
+  <div id="topProgressBar" class="fixed top-0 left-0 right-0 h-[3px] z-[9999] pointer-events-none opacity-0 transition-opacity duration-200">
+    <div id="topProgressBarFill" class="h-full bg-gradient-to-r from-brandOrange via-[#F59E0B] to-movePurple w-0 shadow-[0_0_8px_#F29F3D]"></div>
+  </div>
+
   <!-- MAIN OUTER SHELL: Fixed Full Viewport Height (Sidebar & Header stay fixed while inner content scrolls) -->
   <div class="w-full h-screen bg-white p-0 md:p-4 lg:p-5 flex flex-col md:flex-row gap-0 relative overflow-hidden">
 
@@ -249,7 +271,7 @@
 
       <!-- SCROLLABLE WORKSPACE CONTENT (Scrolls independently below Header) -->
       <div id="scrollableWorkspace" class="flex-1 overflow-y-auto px-4 md:px-0 pt-5 pb-32 md:pb-6">
-        <div class="flex flex-col lg:flex-row gap-6 xl:gap-10 items-start w-full">
+        <div id="workspaceContentWrapper" class="animate-content-enter flex flex-col lg:flex-row gap-6 xl:gap-10 items-start w-full">
 
           <!-- MAIN DYNAMIC CONTENT AREA -->
           <div class="@hasSection('right_panel') flex-1 w-full min-w-0 @else w-full @endif">
@@ -273,6 +295,9 @@
   <!-- APPLICATION LOGIC & INTERACTIVE SCRIPTS -->
   @include('partials.scripts')
   @stack('scripts')
+
+  <!-- SPA-LITE NAVIGATION & SMOOTH TRANSITION ENGINE -->
+  <script src="{{ asset('js/pasar-spa.js') }}"></script>
 
 </body>
 </html>

@@ -5,7 +5,7 @@
      - Mobile & Tablet Priority Interactions
      - Liquid Curve Navigation & Dashboard Controls
      ============================================================ -->
-<script>
+<script data-global-scripts="true">
   // ============================================================
   // 1. MULTI-LANGUAGE (i18n) ENGINE & DICTIONARY
   // ============================================================

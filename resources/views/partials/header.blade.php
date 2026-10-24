@@ -5,7 +5,7 @@
 <header class="shrink-0 bg-white px-4 md:px-0 py-2.5 md:py-3 flex items-center justify-between gap-3 sm:gap-4 z-30 min-w-0">
   
   <!-- Left Header: Contextual Sub-Menus (Mobile Dropdown & Desktop Dynamic Pill Bar) -->
-  <div class="flex items-center gap-2 min-w-0 flex-1 mr-2">
+  <div id="headerSubMenuContainer" class="flex items-center gap-2 min-w-0 flex-1 mr-2">
     @hasSection('header_sub_menu')
       @yield('header_sub_menu')
     @else

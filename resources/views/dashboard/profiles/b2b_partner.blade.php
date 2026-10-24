@@ -7,23 +7,12 @@
   <!-- 1. HERO BANNER MITRA GROSIR (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>Portal Kemitraan Grosir Resmi PasarHub</span>
-      </div>
       <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
         Selamat Datang, {{ $profileData['member']?->name ?? $user->name }}!
       </h1>
       <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
         Kode Mitra: <strong class="font-bold underline">{{ $profileData['member']?->member_code ?? 'B2B-PARTNER' }}</strong> • Status: Terverifikasi Aktif
       </p>
-
-      <div class="mt-4 flex flex-wrap items-center gap-2">
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-          <span>{{ $profileData['active_tickets']->count() }} Tiket QR Siap Ambil</span>
-        </div>
-      </div>
     </div>
   </div>
 

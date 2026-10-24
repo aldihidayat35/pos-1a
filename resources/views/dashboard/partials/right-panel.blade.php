@@ -112,7 +112,50 @@
     </div>
   </div>
 
-  <!-- CARD 2: RINGKASAN FINANSIAL & ASET KONSOLIDASI -->
+  <!-- CARD 2: STATUS OPERASIONAL & PERINGATAN CEPAT (DIPINDAHKAN DARI HERO BANNER) -->
+  <div class="bg-panelBg rounded-[28px] p-5 border border-[#ECEBF4] space-y-3.5 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display font-bold text-sm text-textMain tracking-tight">Status Operasional</h2>
+      <span class="text-[10px] font-bold text-sidebar bg-white px-2 py-0.5 rounded-full border border-[#ECEBF4] uppercase tracking-wider">Terpadu</span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <!-- Gudang Sentral -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">Gudang Sentral</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-100">
+          {{ $stats['pending_pos_count'] ?? 0 }} PO Pending
+        </span>
+      </div>
+
+      <!-- Toko Ritel Pasar -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
+          <span class="text-xs font-bold text-textMain">Toko Pasar Raya</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-100">
+          {{ $stats['active_cashiers_count'] ?? 1 }} Kasir Aktif
+        </span>
+      </div>
+
+      <!-- Kemitraan B2B -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">Kemitraan Grosir</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-purple-700 bg-purple-50 px-2.5 py-1 rounded-xl border border-purple-100">
+          {{ $stats['ready_tickets_count'] ?? 0 }} Tiket QR
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: RINGKASAN FINANSIAL & ASET KONSOLIDASI -->
   @if(isset($financialSummary))
     <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-4 shadow-sm">
       <div class="flex items-center justify-between">

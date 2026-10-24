@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\B2bOrder;
 use App\Models\Invoice;
 use App\Models\Member;
+use App\Models\PickupTicket;
 use App\Services\CreditPolicyService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -51,13 +52,17 @@ class B2bController extends Controller
             ->take(6)
             ->get();
 
+        $readyTicketsCount = PickupTicket::where('status', PickupTicket::STATUS_ISSUED)->count();
+
         $stats = [
             'total_b2b_members' => $b2bMembers->where('is_active', true)->count(),
             'total_credit_limit' => (float) $b2bMembers->where('is_active', true)->sum('credit_limit'),
             'total_outstanding_debt' => $totalOutstandingDebt,
             'total_overdue_debt' => $totalOverdueDebt,
             'overdue_count' => $overdueCount,
+            'overdue_invoices_count' => $overdueCount,
             'active_orders_count' => $activeOrders,
+            'ready_tickets_count' => $readyTicketsCount,
             'active_location_name' => $activeLocation?->name ?? 'Semua Lokasi',
             'active_location_code' => $activeLocation?->code ?? 'ALL',
         ];

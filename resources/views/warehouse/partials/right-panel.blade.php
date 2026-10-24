@@ -74,7 +74,50 @@
     </div>
   </div>
 
-  <!-- CARD 2: RINGKASAN METRIK GUDANG PUSAT -->
+  <!-- CARD 2: STATUS OPERASIONAL & PERINGATAN CEPAT (DIPINDAHKAN DARI HERO BANNER) -->
+  <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-3.5 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display font-bold text-base text-textMain tracking-tight">Status Operasional</h2>
+      <span class="text-[10px] font-bold text-brandOrange bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100 uppercase tracking-wider">Live Gudang</span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <!-- 1. PO Menunggu Terima -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">PO Menunggu Terima</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-100">
+          {{ $stats['pending_po_count'] ?? $profileData['pending_pos_count'] ?? 0 }} PO
+        </span>
+      </div>
+
+      <!-- 2. SKU Mendekati Batas Kritis -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">SKU Menipis (&le; 10)</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-100">
+          {{ $stats['low_stock_count'] ?? $profileData['low_stock_count'] ?? 0 }} SKU
+        </span>
+      </div>
+
+      <!-- 3. Sesi Opname / Transfer Draft -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">Sesi Opname Aktif</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-purple-700 bg-purple-50 px-2.5 py-1 rounded-xl border border-purple-100">
+          {{ $stats['active_opnames_count'] ?? 0 }} Sesi
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: RINGKASAN METRIK GUDANG PUSAT -->
   <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-4 shadow-sm">
     <div class="flex items-center justify-between">
       <h2 class="font-display font-bold text-base text-textMain tracking-tight">Kapasitas & Valuasi</h2>

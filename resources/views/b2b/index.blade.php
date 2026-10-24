@@ -17,49 +17,15 @@
     </div>
   @endif
 
-  <!-- 1. SOLID HERO BANNER (Flat solid purple #342A6E, no gradient, no glow shadow) -->
-  <div class="relative bg-sidebar rounded-[26px] p-6 sm:p-8 text-white overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
-    <div class="relative z-10 max-w-xl">
-      <div class="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-        <span>Fase 6: Ekosistem Penjualan Grosir Tempo & Kemitraan</span>
-      </div>
+  <!-- 1. SOLID HERO BANNER (Clean) -->
+  <div class="relative bg-sidebar rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
+    <div class="relative z-10 max-w-2xl">
       <h1 class="font-display text-2xl sm:text-[30px] font-bold tracking-tight leading-tight">
         Kemitraan B2B & Plafon Piutang
       </h1>
       <p class="text-white/85 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
-        Pusat kendali pesanan grosir, reservasi fisik stok otomatis, penguncian plafon kredit server-side, tiket serah terima QR sekali pakai, dan pembukuan piutang tempo.
+        Pusat kendali pesanan grosir, reservasi fisik stok otomatis, penguncian plafon kredit server-side, tiket serah terima QR, dan pembukuan piutang tempo.
       </p>
-
-      <div class="mt-4 flex flex-wrap items-center gap-2.5">
-        <span class="bg-white/15 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-          <span>{{ $stats['total_b2b_members'] }} Mitra Grosir Aktif</span>
-        </span>
-        <span class="bg-white/15 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          <span>Total Plafon: Rp {{ number_format($stats['total_credit_limit'] ?? 0, 0, ',', '.') }}</span>
-        </span>
-      </div>
-    </div>
-
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0 w-full sm:w-auto">
-      <a href="{{ route('b2b.orders.create') }}" class="px-5 py-3 bg-brandOrange hover:bg-orange-600 text-white text-xs font-bold rounded-2xl transition flex items-center justify-center gap-2 shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-        </svg>
-        <span>Buat Order Grosir B2B</span>
-      </a>
-      <a href="{{ route('b2b.pickup.scan') }}" class="px-5 py-3 bg-white hover:bg-[#F2F1FA] text-sidebar text-xs font-bold rounded-2xl transition flex items-center justify-center gap-2 shadow-sm">
-        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-        </svg>
-        <span>Scan Tiket Pickup</span>
-      </a>
     </div>
   </div>
 

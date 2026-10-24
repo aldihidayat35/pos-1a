@@ -4,31 +4,15 @@
      ======================================================= -->
 <div class="space-y-7">
 
-  <!-- 1. HERO BANNER KEPALA TOKO (BERSIH TANPA TOMBOL) -->
+  <!-- 1. HERO BANNER KEPALA TOKO (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-        <span>Manajemen Toko Ritel • Operasional Pasar Aktif</span>
-      </div>
       <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
         Halo, {{ $user->name }}!
       </h1>
       <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
         Kepala Toko • Unit Kerja: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
-
-      <!-- Status Operasional Singkat -->
-      <div class="mt-4 flex flex-wrap items-center gap-2">
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>{{ $profileData['active_cashiers_count'] }} Kasir Sedang Buka Shift</span>
-        </div>
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-          <span>{{ $profileData['low_stock_count'] }} SKU Perlu Restock</span>
-        </div>
-      </div>
     </div>
   </div>
 

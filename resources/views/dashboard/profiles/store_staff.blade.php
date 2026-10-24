@@ -4,40 +4,15 @@
      ======================================================= -->
 <div class="space-y-7">
 
-  <!-- 1. HERO BANNER KASIR & STATUS SHIFT -->
-  <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+  <!-- 1. HERO BANNER KASIR (BERSIH) -->
+  <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-xl">
-      <div class="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full {{ $profileData['active_shift'] ? 'bg-emerald-400 animate-pulse' : 'bg-rose-300' }}"></span>
-        <span>Status Kasir: {{ $profileData['active_shift'] ? 'Shift Laci Aktif (Siap Transaksi)' : 'Shift Laci Tertutup' }}</span>
-      </div>
       <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
         Semangat Bekerja, {{ $user->name }}!
       </h1>
       <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
         Operator Kasir POS • Toko: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
-
-      <div class="mt-4 flex flex-wrap items-center gap-2">
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          <span>Kehadiran: {{ $profileData['shifts_attended_count'] }} / {{ $profileData['target_work_days'] }} Hari Shift</span>
-        </div>
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-          <span>{{ $profileData['monthly_sales_count'] }} Struk Terlayani Bulan Ini</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Touch Action to Terminal -->
-    <div class="relative z-10 w-full md:w-auto shrink-0">
-      <a href="{{ route('store.pos.terminal') }}" class="min-h-[48px] px-6 py-3.5 rounded-2xl bg-sidebar hover:bg-sidebarDark text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm active:scale-95">
-        <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-        </svg>
-        <span>Buka Terminal Kasir POS (F2)</span>
-      </a>
     </div>
   </div>
 

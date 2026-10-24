@@ -7,6 +7,8 @@ use App\Models\InventoryBalance;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
+use App\Models\StockOpname;
+use App\Models\StockTransfer;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -53,6 +55,9 @@ class WarehouseController extends Controller
             'pending_po_count' => (clone $poQuery)->whereIn('status', ['ISSUED', 'PARTIALLY_RECEIVED'])->count(),
             'total_receipts_count' => GoodsReceipt::count(),
             'total_valuation' => $totalValuation,
+            'low_stock_count' => InventoryBalance::when($activeLocation, fn($q) => $q->where('location_id', $activeLocation->id))->where('on_hand_qty', '<=', 10)->count(),
+            'draft_transfers_count' => StockTransfer::where('from_location_id', $activeLocation?->id)->where('status', 'DRAFT')->count(),
+            'active_opnames_count' => StockOpname::where('location_id', $activeLocation?->id)->whereIn('status', ['OPEN', 'COUNTING', 'RECONCILIATION'])->count(),
         ];
 
         return view('warehouse.index', compact(

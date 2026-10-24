@@ -59,6 +59,9 @@ class StoreController extends Controller
             'emergency_purchases_count' => $recentEmergencies->count(),
             'total_emergency_spent' => EmergencyPurchase::where('location_id', $activeLocation?->id)->sum('total_amount'),
             'active_shift' => $activeShift,
+            'active_cashiers_count' => CashShift::where('location_id', $activeLocation?->id)->where('status', 'OPEN')->count(),
+            'low_stock_count' => InventoryBalance::where('location_id', $activeLocation?->id)->where('on_hand_qty', '<=', 10)->count(),
+            'total_sku_shelf' => $balances->count(),
         ];
 
         return view('store.index', compact(

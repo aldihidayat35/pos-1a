@@ -4,38 +4,15 @@
      ======================================================= -->
 <div class="space-y-7">
 
-  <!-- 1. HERO BANNER EKSEKUTIF (BERSIH TANPA TOMBOL OPERASIONAL) -->
+  <!-- 1. HERO BANNER EKSEKUTIF (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-        <span>Ringkasan Eksekutif • Pasar Terpadu Real-Time</span>
-        @if($user->isOwner())
-          <span class="bg-white text-sidebar text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-1">Owner (Read-Only)</span>
-        @endif
-      </div>
       <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
         Halo, {{ $user->name }}!
       </h1>
       <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
-        {{ $stats['user_role_label'] }} • Cakupan Pemantauan: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
+        {{ $stats['user_role_label'] }} @if($user->isOwner()) <span class="bg-white text-sidebar text-[10px] font-extrabold px-2 py-0.5 rounded-full ml-1">Owner (Read-Only)</span> @endif • Cakupan Pemantauan: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong> ({{ $stats['active_location_code'] }})
       </p>
-
-      <!-- Multi-Pillar Monitoring Status Badges -->
-      <div class="mt-4 flex flex-wrap items-center gap-2">
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-          <span>Gudang: {{ $stats['active_location_type'] === 'WAREHOUSE' ? 'Aktif Terpilih' : 'Sentral Terhubung' }}</span>
-        </div>
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          <span>Toko: {{ $stats['active_location_type'] === 'STORE' ? 'Aktif Terpilih' : 'Pasar Raya Terhubung' }}</span>
-        </div>
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          <span>B2B: {{ $stats['total_users'] }} Akun Terdaftar</span>
-        </div>
-      </div>
     </div>
   </div>
 

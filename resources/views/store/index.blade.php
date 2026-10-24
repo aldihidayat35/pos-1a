@@ -23,25 +23,12 @@
     </div>
   @endif
 
-  <!-- Header Banner -->
-  <div class="bg-panelBg p-6 sm:p-7 rounded-[26px] border border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-    <div>
-      <div class="flex items-center gap-2">
-        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brandOrange text-white uppercase tracking-wider">GERAI TOKO PASAR</span>
-        <span class="text-xs text-textMuted">• {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }})</span>
-      </div>
-      <h1 class="font-display text-2xl font-bold text-textMain mt-1.5">Operasional Toko & Kasir</h1>
-      <p class="text-xs text-textMuted mt-1 max-w-2xl">
-        Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
-      </p>
-    </div>
-
-    <div class="flex items-center gap-2 shrink-0">
-      <span class="bg-white px-3.5 py-2 rounded-xl border border-[#ECEBF4] text-xs font-semibold text-sidebar inline-flex items-center gap-2 shadow-xs">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-        <span>{{ $balances->count() }} SKU di Rak Toko</span>
-      </span>
-    </div>
+  <!-- Header Banner (Clean) -->
+  <div class="bg-panelBg p-6 sm:p-7 rounded-[26px] border border-[#ECEBF4]">
+    <h1 class="font-display text-2xl font-bold text-textMain">Operasional Toko & Kasir</h1>
+    <p class="text-xs text-textMuted mt-1 max-w-2xl">
+      {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
+    </p>
   </div>
 
   <!-- Incoming Transfers Alert / Table -->

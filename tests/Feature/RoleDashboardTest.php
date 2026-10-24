@@ -14,7 +14,8 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($superadmin)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Ringkasan Eksekutif • Pasar Terpadu Real-Time');
+        $response->assertSee('Halo, Super Administrator!');
+        $response->assertDontSee('Ringkasan Eksekutif • Pasar Terpadu Real-Time');
         $response->assertSee('Kesehatan Finansial & Aset Pasar', false);
         $response->assertSee('Omzet Realisasi Hari Ini');
         $response->assertSee('Laba Kotor Real-Time');
@@ -44,14 +45,14 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($kepalatoko)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Manajemen Toko Ritel • Operasional Pasar Aktif');
+        $response->assertSee('Kepala Toko • Unit Kerja:');
+        $response->assertDontSee('Manajemen Toko Ritel • Operasional Pasar Aktif');
         $response->assertSee('Penjualan Kasir Hari Ini');
         $response->assertSee('Kasir Aktif (Shift Laci)');
         $response->assertSee('Belanja Emergency Bulan Ini');
         $response->assertSee('Transfer Masuk (Transit)');
         $response->assertSee('storeSalesChart');
         // Head must not see executive corporate profit margin
-        $response->assertDontSee('Ringkasan Eksekutif • Pasar Terpadu Real-Time');
         $response->assertDontSee('Laba Kotor Real-Time');
     }
 
@@ -62,7 +63,8 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($staftoko)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Status Kasir:');
+        $response->assertSee('Operator Kasir POS • Toko:');
+        $response->assertDontSee('Status Kasir: Shift Laci');
         $response->assertSee('Buka Terminal Kasir POS (F2)');
         $response->assertSee('Kehadiran (Shift Buka)');
         $response->assertSee('Total Transaksi Selesai');
@@ -70,7 +72,6 @@ class RoleDashboardTest extends TestCase
         $response->assertSee('Rata-Rata Struk (Basket)');
         $response->assertSee('Target Penjualan Ritel Kasir');
         // Cashier must NOT see executive gross profit margin or executive banners
-        $response->assertDontSee('Ringkasan Eksekutif • Pasar Terpadu Real-Time');
         $response->assertDontSee('Laba Kotor Real-Time');
         $response->assertDontSee('Nilai Aset Persediaan');
         $response->assertDontSee('Piutang B2B Berjalan');
@@ -83,7 +84,8 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($kepalagudang)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Rantai Pasok & Logistik Sentral • Real-Time', false);
+        $response->assertSee('Kepala Gudang • Fasilitas Pergudangan:');
+        $response->assertDontSee('Rantai Pasok & Logistik Sentral • Real-Time');
         $response->assertSee('PO Menunggu Terima');
         $response->assertSee('Transfer Keluar (Draft)');
         $response->assertSee('Stok Menipis');
@@ -99,7 +101,8 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($stafgudang)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Operator Logistik Fisik • Sentral Pergudangan');
+        $response->assertSee('Staf Gudang • Lokasi Kerja:');
+        $response->assertDontSee('Operator Logistik Fisik • Sentral Pergudangan');
         $response->assertSee('Penerimaan PO Diterima');
         $response->assertSee('Transfer Disiapkan (Picking)');
         $response->assertSee('Hitung Blind Count');
@@ -114,7 +117,7 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($sales)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Sales & Business Development B2B', false);
+        $response->assertSee('Sales Executive • Cakupan Pasar:');
         $response->assertSee('Realisasi Omzet B2B');
         $response->assertSee('Pesanan Dibuat');
         $response->assertSee('Mitra Grosir B2B');
@@ -129,7 +132,8 @@ class RoleDashboardTest extends TestCase
         $response = $this->actingAs($mitrab2b)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Portal Kemitraan Grosir Resmi PasarHub');
+        $response->assertSee('Kode Mitra:');
+        $response->assertDontSee('Portal Kemitraan Grosir Resmi PasarHub');
         $response->assertSee('Sisa Plafon Kredit');
         $response->assertSee('Tiket QR Siap Ambil');
         $response->assertSee('Tagihan Tempo Berjalan');

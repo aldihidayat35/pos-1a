@@ -75,7 +75,50 @@
     </div>
   </div>
 
-  <!-- CARD 2: RINGKASAN OPERASIONAL & METRIK TOKO -->
+  <!-- CARD 2: STATUS OPERASIONAL & PERINGATAN CEPAT (DIPINDAHKAN DARI HERO BANNER) -->
+  <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-3.5 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display font-bold text-base text-textMain tracking-tight">Status Operasional</h2>
+      <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 uppercase tracking-wider">Live Toko</span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <!-- 1. Kasir Sedang Buka Shift -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
+          <span class="text-xs font-bold text-textMain">Kasir Buka Shift</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-100">
+          {{ $profileData['active_cashiers_count'] ?? $stats['active_cashiers_count'] ?? ($currentShift ? 1 : 0) }} Kasir Aktif
+        </span>
+      </div>
+
+      <!-- 2. SKU Perlu Restock -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">SKU Perlu Restock</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-100">
+          {{ $profileData['low_stock_count'] ?? $stats['low_stock_count'] ?? 0 }} SKU
+        </span>
+      </div>
+
+      <!-- 3. Transfer Dalam Transit -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">Transfer Transit</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-100">
+          {{ $stats['incoming_transfers_count'] ?? 0 }} Pengiriman
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: RINGKASAN OPERASIONAL & METRIK TOKO -->
   <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-4 shadow-sm">
     <div class="flex items-center justify-between">
       <h2 class="font-display font-bold text-base text-textMain tracking-tight">Statistik Toko</h2>

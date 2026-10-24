@@ -74,7 +74,50 @@
     </div>
   </div>
 
-  <!-- CARD 2: RINGKASAN PLAFON & KREDIT B2B -->
+  <!-- CARD 2: STATUS KEMITRAAN & PERINGATAN CEPAT (DIPINDAHKAN DARI HERO BANNER) -->
+  <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-3.5 shadow-sm">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display font-bold text-base text-textMain tracking-tight">Status Kemitraan</h2>
+      <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-100 uppercase tracking-wider">Live B2B</span>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <!-- 1. Tiket QR Siap Ambil -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0 animate-pulse"></span>
+          <span class="text-xs font-bold text-textMain">Tiket QR Siap Ambil</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-purple-700 bg-purple-50 px-2.5 py-1 rounded-xl border border-purple-100">
+          {{ $stats['ready_tickets_count'] ?? (isset($profileData['active_tickets']) ? $profileData['active_tickets']->count() : 0) }} Tiket
+        </span>
+      </div>
+
+      <!-- 2. Pesanan Grosir Aktif -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">Pesanan Grosir Aktif</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-100">
+          {{ $stats['active_orders_count'] ?? ($profileData['pending_orders_count'] ?? 0) }} Order
+        </span>
+      </div>
+
+      <!-- 3. Tagihan Tempo Overdue -->
+      <div class="bg-white p-3 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span>
+          <span class="text-xs font-bold text-textMain">Faktur Tempo Overdue</span>
+        </div>
+        <span class="font-mono font-extrabold text-xs text-rose-700 bg-rose-50 px-2.5 py-1 rounded-xl border border-rose-100">
+          {{ $stats['overdue_count'] ?? $stats['overdue_invoices_count'] ?? 0 }} Faktur
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: RINGKASAN PLAFON & KREDIT B2B -->
   <div class="bg-panelBg rounded-[28px] p-6 border border-[#ECEBF4] space-y-4 shadow-sm">
     <div class="flex items-center justify-between">
       <h2 class="font-display font-bold text-base text-textMain tracking-tight">Plafon & Eksposur</h2>

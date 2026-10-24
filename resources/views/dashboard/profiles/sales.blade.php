@@ -7,23 +7,12 @@
   <!-- 1. HERO BANNER SALES (BERSIH) -->
   <div class="relative bg-brandOrange rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
     <div class="relative z-10 max-w-2xl">
-      <div class="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>Sales & Business Development B2B</span>
-      </div>
       <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
         Selamat Beraktivitas, {{ $user->name }}!
       </h1>
       <p class="text-white/95 text-xs sm:text-sm mt-1.5 font-medium leading-relaxed">
         Sales Executive • Cakupan Pasar: <strong class="font-bold underline">{{ $stats['active_location_name'] }}</strong>
       </p>
-
-      <div class="mt-4 flex flex-wrap items-center gap-2">
-        <div class="bg-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-          <span>Pencapaian Target: {{ $profileData['omzet_progress'] }}% Terpenuhi</span>
-        </div>
-      </div>
     </div>
   </div>
 

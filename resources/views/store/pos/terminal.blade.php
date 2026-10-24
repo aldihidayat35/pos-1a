@@ -63,151 +63,101 @@
     </div>
   </div>
 
-  <!-- Main POS Grid: Left Catalog (60%), Right Cart (40%) -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-    <!-- Left 7 Cols: Catalog & Search -->
-    <div class="lg:col-span-7 space-y-4">
-      <!-- Search & Barcode Input Bar -->
-      <div class="bg-white rounded-3xl p-4 border border-[#ECEBF4] shadow-sm space-y-3">
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-textMuted">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-          </div>
-          <input type="text" id="posSearchInput" placeholder="Scan Barcode atau ketik Nama / SKU Produk (Tekan Enter)..."
-                 autofocus oninput="filterCatalog()"
-                 class="w-full pl-10 pr-4 py-2.5 bg-panelBg rounded-2xl border border-[#ECEBF4] text-xs font-semibold text-textMain placeholder-textMuted focus:outline-none focus:border-sidebar focus:bg-white transition">
-        </div>
-
-        <!-- Category Filter Pills -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-          <button type="button" onclick="selectCategory('ALL')" id="cat-btn-all"
-                  class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-sidebar text-white shadow-sm transition whitespace-nowrap">
-            Semua ({{ count($catalog) }})
-          </button>
-          @foreach($categories as $cat)
-            <button type="button" onclick="selectCategory('{{ $cat->id }}')" id="cat-btn-{{ $cat->id }}"
-                    class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-panelBg hover:bg-[#EAE8F2] text-textMuted transition whitespace-nowrap border border-[#ECEBF4]">
-              {{ $cat->name }}
-            </button>
-          @endforeach
-        </div>
+  <!-- Search & Barcode Input Bar (Spacious Full Width) -->
+  <div class="bg-white rounded-3xl p-4 border border-[#ECEBF4] shadow-sm space-y-3">
+    <div class="relative">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-textMuted">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
       </div>
+      <input type="text" id="posSearchInput" placeholder="Scan Barcode atau ketik Nama / SKU Produk (Tekan Enter)..."
+             autofocus oninput="filterCatalog()"
+             class="w-full pl-10 pr-14 py-2.5 bg-panelBg rounded-2xl border border-[#ECEBF4] text-xs font-semibold text-textMain placeholder-textMuted focus:outline-none focus:border-sidebar focus:bg-white transition">
+      <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+        <kbd class="px-1.5 py-0.5 rounded bg-white text-textMuted text-[10px] font-mono border border-[#ECEBF4] shadow-xs">F2</kbd>
+      </div>
+    </div>
 
-      <!-- Catalog Cards Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="catalogGrid">
-        @forelse($catalog as $item)
-          <div class="product-card bg-white rounded-2xl border border-[#ECEBF4] p-3 shadow-sm hover:border-sidebar hover:shadow transition cursor-pointer flex flex-col justify-between"
-               data-id="{{ $item['id'] }}"
-               data-name="{{ strtolower($item['name']) }}"
-               data-sku="{{ strtolower($item['sku']) }}"
-               data-cat="{{ $item['category_id'] }}"
-               onclick="addToCart({{ json_encode($item) }})">
-            <div>
-              <div class="flex items-start gap-2.5 mb-2">
-                <x-product-thumbnail :product="null" :imageUrl="$item['image_url'] ?? null" :name="$item['name']" :sku="$item['sku']" :category="$item['category_name'] ?? null" size="md" />
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-center justify-between text-[10px] text-textMuted font-mono">
-                    <span class="truncate">{{ $item['sku'] }}</span>
-                    <span class="px-1.5 py-0.5 rounded font-bold bg-panelBg text-sidebar shrink-0 text-[10px]">
-                      {{ number_format($item['on_hand_qty'], 0) }}
-                    </span>
-                  </div>
-                  <h3 class="font-bold text-xs text-textMain line-clamp-2 leading-snug mt-0.5">
-                    {{ $item['name'] }}
-                  </h3>
-                </div>
-              </div>
-            </div>
+    <!-- Category Filter Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+      <button type="button" onclick="selectCategory('ALL')" id="cat-btn-all"
+              class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-sidebar text-white shadow-sm transition whitespace-nowrap">
+        Semua ({{ count($catalog) }})
+      </button>
+      @foreach($categories as $cat)
+        <button type="button" onclick="selectCategory('{{ $cat->id }}')" id="cat-btn-{{ $cat->id }}"
+                class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-panelBg hover:bg-[#EAE8F2] text-textMuted transition whitespace-nowrap border border-[#ECEBF4]">
+          {{ $cat->name }}
+        </button>
+      @endforeach
+    </div>
+  </div>
 
-            <div class="mt-2 pt-2 border-t border-[#ECEBF4] flex items-center justify-between">
-              <div>
-                <span class="text-[9px] text-textMuted uppercase font-bold block">Harga:</span>
-                <span class="font-black text-sidebar font-mono text-xs">
-                  Rp {{ number_format($item['list_price'], 0, ',', '.') }}
+  <!-- Catalog Cards Grid (Spacious 2 to 4 Columns) -->
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5" id="catalogGrid">
+    @forelse($catalog as $item)
+      <div class="product-card group bg-white rounded-2xl border border-[#ECEBF4] p-3 shadow-sm hover:border-sidebar hover:shadow-md transition cursor-pointer flex flex-col justify-between"
+           data-id="{{ $item['id'] }}"
+           data-name="{{ strtolower($item['name']) }}"
+           data-sku="{{ strtolower($item['sku']) }}"
+           data-cat="{{ $item['category_id'] }}"
+           onclick="addToCart({{ json_encode($item) }})">
+        <div>
+          <div class="flex items-start gap-2.5 mb-2">
+            <x-product-thumbnail :product="null" :imageUrl="$item['image_url'] ?? null" :name="$item['name']" :sku="$item['sku']" :category="$item['category_name'] ?? null" size="md" />
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between text-[10px] text-textMuted font-mono">
+                <span class="truncate font-semibold">{{ $item['sku'] }}</span>
+                <span class="px-1.5 py-0.5 rounded font-bold bg-panelBg text-sidebar shrink-0 text-[10px]">
+                  {{ number_format($item['on_hand_qty'], 0) }}
                 </span>
               </div>
-              <span class="w-6 h-6 rounded-lg bg-panelBg group-hover:bg-sidebar text-sidebar flex items-center justify-center font-bold text-xs" title="Tambah ke keranjang">
-                +
-              </span>
+              <h3 class="font-bold text-xs text-textMain line-clamp-2 leading-snug mt-0.5 group-hover:text-sidebar transition">
+                {{ $item['name'] }}
+              </h3>
             </div>
           </div>
-        @empty
-          <div class="col-span-full py-12 text-center text-xs text-textMuted bg-white rounded-3xl border border-dashed border-[#ECEBF4]">
-            Belum ada produk dengan saldo stok on-hand aktif di toko ini.
+        </div>
+
+        <div class="mt-2 pt-2 border-t border-[#ECEBF4] flex items-center justify-between">
+          <div>
+            <span class="text-[9px] text-textMuted uppercase font-bold block">Harga:</span>
+            <span class="font-black text-sidebar font-mono text-xs">
+              Rp {{ number_format($item['list_price'], 0, ',', '.') }}
+            </span>
           </div>
-        @endforelse
+          <span class="w-6 h-6 rounded-lg bg-panelBg group-hover:bg-sidebar group-hover:text-white text-sidebar flex items-center justify-center font-bold text-xs transition" title="Tambah ke keranjang">
+            +
+          </span>
+        </div>
+      </div>
+    @empty
+      <div class="col-span-full py-16 text-center text-xs text-textMuted bg-white rounded-3xl border border-dashed border-[#ECEBF4]">
+        Belum ada produk dengan saldo stok on-hand aktif di toko ini.
+      </div>
+    @endforelse
+  </div>
+
+  <!-- Mobile Floating Cart Bar (Visible on mobile/tablet only when cart has items) -->
+  <div id="mobileCartFloatingBar" class="lg:hidden fixed bottom-16 md:bottom-6 left-4 right-4 z-40 bg-sidebar text-white rounded-2xl p-3.5 shadow-2xl border border-white/10 flex items-center justify-between gap-3 transition-transform duration-300 translate-y-36">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-9 h-9 rounded-xl bg-brandOrange text-white flex items-center justify-center font-bold text-xs shrink-0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+      </div>
+      <div class="min-w-0">
+        <div class="text-xs font-bold text-white truncate" id="mobileCartItemCount">0 Item</div>
+        <div class="font-mono font-black text-sm text-brandOrange" id="mobileCartTotal">Rp 0</div>
       </div>
     </div>
-
-    <!-- Right 5 Cols: Active Cart & Checkout -->
-    <div class="lg:col-span-5 space-y-4">
-      <div class="bg-white rounded-3xl border border-[#ECEBF4] p-5 shadow-sm space-y-4">
-        <!-- Cart Header -->
-        <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-movePurple"></span>
-            <h2 class="font-bold text-sm text-textMain">Keranjang Belanja</h2>
-          </div>
-          <button type="button" onclick="clearCart()" class="text-[11px] font-bold text-rose-600 hover:underline">
-            Kosongkan
-          </button>
-        </div>
-
-        <!-- Customer / Member Selector -->
-        <div class="p-3 bg-panelBg/70 rounded-2xl border border-[#ECEBF4] space-y-2 text-xs">
-          <div class="flex items-center justify-between">
-            <span class="text-textMuted text-[10px] uppercase font-bold tracking-wider">Identitas Pelanggan:</span>
-            <span class="text-[10px] text-textMuted">Opsional</span>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <input type="text" id="customer_name_input" placeholder="Nama Pelanggan Umum"
-                   class="px-2.5 py-1.5 bg-white rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none">
-            <select id="member_id_select" class="px-2.5 py-1.5 bg-white rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none">
-              <option value="">-- Member Terdaftar --</option>
-              @foreach($members as $m)
-                <option value="{{ $m->id }}">{{ $m->name }} ({{ $m->member_code }})</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
-
-        <!-- Cart Line Items -->
-        <div id="cartItemsContainer" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
-          <!-- Populated by JavaScript -->
-          <div id="cartEmptyState" class="py-10 text-center text-textMuted text-xs">
-            Keranjang masih kosong. Klik produk di sebelah kiri atau scan barcode untuk menambah.
-          </div>
-        </div>
-
-        <!-- Price Breakdown -->
-        <div class="pt-3 border-t border-[#ECEBF4] space-y-2 text-xs">
-          <div class="flex items-center justify-between text-textMuted">
-            <span>Subtotal:</span>
-            <span class="font-bold text-textMain font-mono text-xs" id="cartSubtotal">Rp 0</span>
-          </div>
-          <div class="flex items-center justify-between text-textMuted">
-            <span>Diskon Nota:</span>
-            <input type="number" id="cartDiscount" value="0" min="0" oninput="calculateCartTotals()"
-                   class="w-24 px-2 py-0.5 bg-panelBg rounded-lg border border-[#ECEBF4] text-right font-mono font-bold text-xs text-textMain focus:outline-none">
-          </div>
-          <div class="flex items-center justify-between pt-2 border-t border-[#ECEBF4]">
-            <span class="text-xs font-bold text-sidebar uppercase tracking-wider">Total Belanja:</span>
-            <span class="text-xl sm:text-2xl font-black text-sidebar font-mono" id="cartGrandTotal">Rp 0</span>
-          </div>
-        </div>
-
-        <!-- Checkout Action Button -->
-        <button type="button" onclick="openPaymentModal()" id="btnOpenPayment"
-                class="w-full py-3.5 bg-sidebar hover:bg-sidebar/95 text-white font-bold text-xs rounded-2xl shadow-md transition flex items-center justify-center gap-2">
-          <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-          <span>Lanjut ke Pembayaran (Bayar)</span>
-        </button>
-      </div>
-    </div>
+    <a href="#posRightCartPanel" onclick="scrollToCart(event)" class="px-4 py-2 bg-white text-sidebar hover:bg-panelBg font-bold text-xs rounded-xl shadow transition shrink-0 flex items-center gap-1.5">
+      <span>Lihat Keranjang</span>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </a>
   </div>
 </main>
 
@@ -290,7 +240,7 @@
       <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
       </svg>
-      <span>Konfirmasi & Cetak Struk</span>
+      <span>Konfirmasi & Cetak Struk (Enter)</span>
     </button>
   </div>
 </div>
@@ -396,12 +346,52 @@
     renderCart();
   }
 
+  function confirmClearCart() {
+    if (cart.length === 0) return;
+    if (confirm('Kosongkan semua item di keranjang belanja?')) {
+      clearCart();
+    }
+  }
+
+  function scrollToCart(e) {
+    if (e) e.preventDefault();
+    const el = document.getElementById('posRightCartPanel');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
   function renderCart() {
     const container = document.getElementById('cartItemsContainer');
+    const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    // Update Counter Badges
+    const badgeCount = document.getElementById('cartBadgeCount');
+    if (badgeCount) {
+      badgeCount.textContent = `${totalQty} Item Dipilih`;
+    }
+
+    const mobileBar = document.getElementById('mobileCartFloatingBar');
+    const mobileCount = document.getElementById('mobileCartItemCount');
+    if (mobileBar) {
+      if (cart.length > 0) {
+        mobileBar.classList.remove('translate-y-36');
+        if (mobileCount) mobileCount.textContent = `${totalQty} Item`;
+      } else {
+        mobileBar.classList.add('translate-y-36');
+      }
+    }
+
     if (cart.length === 0) {
       container.innerHTML = `
-        <div id="cartEmptyState" class="py-10 text-center text-textMuted text-xs">
-          Keranjang masih kosong. Klik produk di sebelah kiri atau scan barcode untuk menambah.
+        <div id="cartEmptyState" class="py-12 text-center text-textMuted text-xs space-y-2">
+          <div class="w-12 h-12 rounded-2xl bg-panelBg mx-auto flex items-center justify-center text-textMuted/60">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+          </div>
+          <p class="font-semibold text-textMain">Keranjang Belanja Kosong</p>
+          <p class="text-[11px] text-textMuted max-w-[200px] mx-auto">Klik produk di katalog kiri atau scan barcode untuk menambahkan.</p>
         </div>
       `;
       calculateCartTotals();
@@ -474,6 +464,11 @@
 
     document.getElementById('cartSubtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
     document.getElementById('cartGrandTotal').textContent = 'Rp ' + grandTotal.toLocaleString('id-ID');
+
+    const mobileTotal = document.getElementById('mobileCartTotal');
+    if (mobileTotal) {
+      mobileTotal.textContent = 'Rp ' + grandTotal.toLocaleString('id-ID');
+    }
   }
 
   // 4. Payment Modal & Execution
@@ -493,6 +488,13 @@
     calculateChange();
 
     document.getElementById('paymentModal').classList.remove('hidden');
+    setTimeout(() => {
+      const paidInput = document.getElementById('paidAmountInput');
+      if (paidInput) {
+        paidInput.focus();
+        paidInput.select();
+      }
+    }, 100);
   }
 
   function closePaymentModal() {
@@ -590,16 +592,16 @@
       } else {
         alert(data.message || 'Gagal memproses transaksi kasir.');
         btn.disabled = false;
-        btn.innerHTML = 'Konfirmasi & Cetak Struk';
+        btn.innerHTML = 'Konfirmasi & Cetak Struk (Enter)';
       }
     } catch (err) {
       alert('Terjadi kesalahan jaringan: ' + err.message);
       btn.disabled = false;
-      btn.innerHTML = 'Konfirmasi & Cetak Struk';
+      btn.innerHTML = 'Konfirmasi & Cetak Struk (Enter)';
     }
   }
 
-  // 6. Fast Hardware Scanner & Keyboard Shortcut Engine
+  // 5. Fast Hardware Scanner & Keyboard Shortcut Engine
   document.addEventListener('keydown', function(e) {
     // F2: Focus scanner search box
     if (e.key === 'F2') {
@@ -607,17 +609,41 @@
       const input = document.getElementById('posSearchInput');
       if (input) { input.focus(); input.select(); }
     }
-    // F9: Open Checkout Modal
-    if (e.key === 'F9') {
+    // F4: Open Checkout Modal
+    if (e.key === 'F4') {
       e.preventDefault();
-      if (cart.length > 0) openCheckoutModal();
+      if (cart.length > 0) {
+        openPaymentModal();
+      } else {
+        if (typeof openToast === 'function') openToast('Keranjang masih kosong!');
+      }
+    }
+    // F8: Clear cart with confirmation
+    if (e.key === 'F8') {
+      e.preventDefault();
+      confirmClearCart();
     }
     // Escape: Close Modal
     if (e.key === 'Escape') {
-      closeCheckoutModal();
+      closePaymentModal();
+      if (typeof closeProductImageModal === 'function') {
+        closeProductImageModal();
+      }
     }
   });
 
+  // Enter to submit checkout on paid input
+  const paidInput = document.getElementById('paidAmountInput');
+  if (paidInput) {
+    paidInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitCheckout();
+      }
+    });
+  }
+
+  // Barcode / Search Enter Trigger
   const searchInput = document.getElementById('posSearchInput');
   if (searchInput) {
     searchInput.addEventListener('keydown', function(e) {
@@ -672,5 +698,106 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+<div id="posRightCartPanel" class="bg-white rounded-3xl border border-[#ECEBF4] p-5 shadow-sm space-y-4">
+  <!-- Cart Header -->
+  <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-xl bg-sidebar text-white flex items-center justify-center font-bold text-xs shadow-sm">
+        <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="font-bold text-sm text-textMain leading-tight">Keranjang Kasir</h2>
+        <span id="cartBadgeCount" class="text-[10px] text-textMuted font-semibold">0 Item Dipilih</span>
+      </div>
+    </div>
+    <button type="button" onclick="confirmClearCart()" class="text-[11px] font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-2 py-1 rounded-lg transition flex items-center gap-1" title="Kosongkan Keranjang (F8)">
+      <span>Kosongkan</span>
+      <kbd class="text-[9px] font-mono opacity-70 bg-white/60 px-1 py-0.2 rounded border border-rose-200">F8</kbd>
+    </button>
+  </div>
+
+  <!-- Customer / Member Selector -->
+  <div class="p-3 bg-panelBg/70 rounded-2xl border border-[#ECEBF4] space-y-2 text-xs">
+    <div class="flex items-center justify-between">
+      <span class="text-textMuted text-[10px] uppercase font-bold tracking-wider">Identitas Pembeli:</span>
+      <span class="text-[10px] text-textMuted">Opsional</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <input type="text" id="customer_name_input" placeholder="Pelanggan Umum"
+             class="px-2.5 py-1.5 bg-white rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none focus:border-sidebar transition">
+      <select id="member_id_select" class="px-2.5 py-1.5 bg-white rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none focus:border-sidebar transition truncate">
+        <option value="">-- Member Terdaftar --</option>
+        @foreach($members as $m)
+          <option value="{{ $m->id }}">{{ $m->name }} ({{ $m->member_code }})</option>
+        @endforeach
+      </select>
+    </div>
+  </div>
+
+  <!-- Cart Line Items Container (Scrollable) -->
+  <div id="cartItemsContainer" class="space-y-2.5 max-h-[360px] xl:max-h-[420px] overflow-y-auto pr-1">
+    <!-- Populated by JavaScript -->
+    <div id="cartEmptyState" class="py-12 text-center text-textMuted text-xs space-y-2">
+      <div class="w-12 h-12 rounded-2xl bg-panelBg mx-auto flex items-center justify-center text-textMuted/60">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+      </div>
+      <p class="font-semibold text-textMain">Keranjang Belanja Kosong</p>
+      <p class="text-[11px] text-textMuted max-w-[200px] mx-auto">Klik produk di katalog kiri atau scan barcode untuk menambahkan.</p>
+    </div>
+  </div>
+
+  <!-- Price Breakdown -->
+  <div class="pt-3 border-t border-[#ECEBF4] space-y-2 text-xs">
+    <div class="flex items-center justify-between text-textMuted">
+      <span class="font-medium">Subtotal Item:</span>
+      <span class="font-bold text-textMain font-mono text-xs" id="cartSubtotal">Rp 0</span>
+    </div>
+    <div class="flex items-center justify-between text-textMuted">
+      <span class="font-medium">Diskon Nota (Rp):</span>
+      <input type="number" id="cartDiscount" value="0" min="0" oninput="calculateCartTotals()"
+             class="w-24 px-2 py-0.5 bg-panelBg rounded-lg border border-[#ECEBF4] text-right font-mono font-bold text-xs text-textMain focus:outline-none focus:border-sidebar focus:bg-white transition">
+    </div>
+    <div class="flex items-center justify-between pt-2 border-t border-[#ECEBF4]">
+      <div>
+        <span class="text-[11px] font-bold text-sidebar uppercase tracking-wider block">Total Belanja</span>
+        <span class="text-[10px] text-textMuted">Sudah termasuk PPN</span>
+      </div>
+      <span class="text-xl sm:text-2xl font-black text-sidebar font-mono" id="cartGrandTotal">Rp 0</span>
+    </div>
+  </div>
+
+  <!-- Checkout Action Button -->
+  <button type="button" onclick="openPaymentModal()" id="btnOpenPayment"
+          class="w-full py-3.5 bg-sidebar hover:bg-sidebar/95 text-white font-bold text-xs rounded-2xl shadow-md transition flex items-center justify-center gap-2 group">
+    <svg class="w-4 h-4 text-brandOrange group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+    </svg>
+    <span>Bayar Sekarang</span>
+    <kbd class="px-1.5 py-0.5 rounded bg-white/20 text-white font-mono text-[10px] ml-1">F4</kbd>
+  </button>
+
+  <!-- POS Keyboard Shortcuts Cheat Sheet -->
+  <div class="pt-3 border-t border-[#ECEBF4] grid grid-cols-2 gap-2 text-[10px] text-textMuted">
+    <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-panelBg/70 border border-[#ECEBF4]">
+      <kbd class="px-1 py-0.5 rounded bg-white text-sidebar font-mono font-bold text-[9px] border border-[#ECEBF4] shadow-xs">F2</kbd>
+      <span class="truncate">Fokus Barcode</span>
+    </div>
+    <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-panelBg/70 border border-[#ECEBF4]">
+      <kbd class="px-1 py-0.5 rounded bg-white text-sidebar font-mono font-bold text-[9px] border border-[#ECEBF4] shadow-xs">F4</kbd>
+      <span class="truncate">Buka Bayar</span>
+    </div>
+    <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-panelBg/70 border border-[#ECEBF4]">
+      <kbd class="px-1 py-0.5 rounded bg-white text-sidebar font-mono font-bold text-[9px] border border-[#ECEBF4] shadow-xs">F8</kbd>
+      <span class="truncate">Kosongkan</span>
+    </div>
+    <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-panelBg/70 border border-[#ECEBF4]">
+      <kbd class="px-1 py-0.5 rounded bg-white text-sidebar font-mono font-bold text-[9px] border border-[#ECEBF4] shadow-xs">ESC</kbd>
+      <span class="truncate">Tutup Modal</span>
+    </div>
+  </div>
+</div>
 @endsection

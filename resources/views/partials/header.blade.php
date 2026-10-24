@@ -84,7 +84,7 @@
     </div>
 
     <!-- Live Color Codes Quick Legend Pill (PRD Movement Color Standard) -->
-    <button onclick="switchPage(4)" title="Lihat Standar 5 Indikator Warna Pergerakan" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0] text-xs font-bold">
+    <a href="{{ route('audit.index') }}" title="Lihat Standar 5 Indikator Warna Pergerakan" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0] text-xs font-bold">
       <span class="flex items-center gap-1">
         <span class="w-2 h-2 rounded-full bg-moveGreen"></span>
         <span class="w-2 h-2 rounded-full bg-moveBlue"></span>
@@ -93,7 +93,7 @@
         <span class="w-2 h-2 rounded-full bg-moveRed"></span>
       </span>
       <span class="hidden xl:inline" data-i18n="header_color_legend">Warna Pergerakan</span>
-    </button>
+    </a>
 
     <!-- Notification Bell with Coral Dot -->
     <button onclick="openNotificationModal()" title="Notifikasi Anomali & Peringatan Sistem" class="relative w-9 h-9 rounded-xl flex items-center justify-center text-textMain/70 hover:text-sidebar hover:bg-panelBg transition border border-transparent hover:border-[#E6E4F0]">

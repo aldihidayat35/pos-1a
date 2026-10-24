@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\B2bController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationSwitchController;
 use App\Http\Controllers\Master\CategoryController;
@@ -9,6 +11,8 @@ use App\Http\Controllers\Master\MemberController;
 use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\Master\SupplierController;
 use App\Http\Controllers\Master\UomController;
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,9 +31,21 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // Dashboard Shell (Accessible to all authenticated roles, content filtered by permissions)
+    // 0. Dashboard Shell (Dasbor Utama & Kesehatan Finansial)
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // 1. Operasional Gudang Pusat (Modular Monolith)
+    Route::get('/warehouse', [WarehouseController::class, 'index'])->name('warehouse.index');
+
+    // 2. Operasional Toko & Kasir POS (Modular Monolith)
+    Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+
+    // 3. Kemitraan B2B & Sales (Modular Monolith)
+    Route::get('/b2b', [B2bController::class, 'index'])->name('b2b.index');
+
+    // 4. Feed Pergerakan 5-Warna & Anomali (Modular Monolith)
+    Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
 
     // Location Scope Switcher
     Route::post('/location/switch', [LocationSwitchController::class, 'switch'])->name('location.switch');

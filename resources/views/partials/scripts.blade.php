@@ -693,6 +693,9 @@
           </div>
           ${isActive ? '<span class="w-2 h-2 rounded-full bg-brandOrange"></span>' : ''}
         `;
+        clone.addEventListener('click', () => {
+          closeDesktopOverflowMenu();
+        });
         overflowList.appendChild(clone);
       });
 

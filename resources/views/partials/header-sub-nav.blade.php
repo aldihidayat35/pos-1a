@@ -239,18 +239,42 @@
   </div>
 </div>
 
-<!-- DESKTOP ONLY: Dynamic Contextual Sub-Menu Pill Bar (Image 2 style with Image 1 icons) -->
-<div id="desktopSubMenuContainer" class="hidden md:inline-flex items-center gap-1 bg-panelBg p-1 rounded-xl text-xs font-semibold text-textMuted border border-[#ECEBF4] max-w-full overflow-x-auto">
-  @foreach($subMenus as $item)
-    <a href="{{ $item['route'] }}" 
-       @if(isset($item['onclick'])) onclick="{{ $item['onclick'] }}" @endif
-       class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition whitespace-nowrap {{ $item['active'] ? 'bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm' : 'text-textMuted hover:text-textMain hover:bg-white/60' }}">
-       @if(!empty($item['icon']))
-         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-           {!! $item['icon'] !!}
-         </svg>
-       @endif
-       <span>{{ $item['label'] }}</span>
-    </a>
-  @endforeach
+<!-- DESKTOP ONLY: Contextual Sub-Menu Bar with Dynamic Overflow Arrow Dropdown -->
+<div id="desktopSubMenuWrapper" class="hidden md:flex items-center relative min-w-0">
+  <div id="desktopSubMenuContainer" class="inline-flex items-center gap-1 bg-panelBg p-1 rounded-xl text-xs font-semibold text-textMuted border border-[#ECEBF4] min-w-0">
+    @foreach($subMenus as $idx => $item)
+      <a href="{{ $item['route'] }}" 
+         data-submenu-index="{{ $idx }}"
+         data-submenu-active="{{ $item['active'] ? '1' : '0' }}"
+         @if(isset($item['onclick'])) onclick="{{ $item['onclick'] }}" @endif
+         class="submenu-desktop-item flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition whitespace-nowrap {{ $item['active'] ? 'bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm' : 'text-textMuted hover:text-textMain hover:bg-white/60' }}">
+         @if(!empty($item['icon']))
+           <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+             {!! $item['icon'] !!}
+           </svg>
+         @endif
+         <span>{{ $item['label'] }}</span>
+      </a>
+    @endforeach
+
+    <!-- Desktop Overflow Arrow Button (Appears when items are hidden/overflowing) -->
+    <div class="relative hidden shrink-0" id="desktopOverflowWrapper">
+      <button id="desktopOverflowBtn" onclick="toggleDesktopOverflowMenu(event)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm hover:bg-[#FAF9FD]" title="Menu Tambahan">
+        <span id="desktopOverflowCountBadge" class="text-[11px] font-extrabold text-sidebar"></span>
+        <svg id="desktopOverflowChevron" class="w-3.5 h-3.5 text-sidebar transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <!-- Desktop Overflow Dropdown Popup -->
+      <div id="desktopOverflowDropdown" class="hidden absolute right-0 top-full mt-2 w-56 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#E8E6F2] p-2 z-50 transform origin-top-right transition-all duration-200 scale-95 opacity-0">
+        <div class="px-2.5 py-1 text-[10px] font-bold tracking-wider text-textMuted uppercase border-b border-[#F0EFF6] mb-1">
+          Menu Tambahan
+        </div>
+        <div id="desktopOverflowList" class="flex flex-col gap-1">
+          <!-- Dynamically filled with overflow items -->
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

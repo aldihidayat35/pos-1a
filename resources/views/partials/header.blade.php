@@ -2,10 +2,10 @@
      FIXED HEADER (Clean borderless header, does not move when scrolling)
      Contains: Contextual Sub-Menus (Mobile Dropdown & Desktop Pills) + Location Scope + Language Switcher & Profile
      ========================================================== -->
-<header class="shrink-0 bg-white px-4 md:px-0 py-2.5 md:py-3 flex items-center justify-between gap-3 sm:gap-4 z-30">
+<header class="shrink-0 bg-white px-4 md:px-0 py-2.5 md:py-3 flex items-center justify-between gap-3 sm:gap-4 z-30 min-w-0">
   
   <!-- Left Header: Contextual Sub-Menus (Mobile Dropdown & Desktop Dynamic Pill Bar) -->
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-2 min-w-0 flex-1 mr-2">
     @hasSection('header_sub_menu')
       @yield('header_sub_menu')
     @else
@@ -55,33 +55,13 @@
       </button>
     </div>
 
-    <!-- Live Color Codes Quick Legend Pill (PRD Movement Color Standard) -->
-    <a href="{{ route('audit.index') }}" title="Lihat Standar 5 Indikator Warna Pergerakan" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0] text-xs font-bold">
-      <span class="flex items-center gap-1">
-        <span class="w-2 h-2 rounded-full bg-moveGreen"></span>
-        <span class="w-2 h-2 rounded-full bg-moveBlue"></span>
-        <span class="w-2 h-2 rounded-full bg-movePurple"></span>
-        <span class="w-2 h-2 rounded-full bg-moveOrange"></span>
-        <span class="w-2 h-2 rounded-full bg-moveRed"></span>
-      </span>
-      <span class="hidden xl:inline" data-i18n="header_color_legend">Warna Pergerakan</span>
-    </a>
-
-    <!-- Notification Bell with Coral Dot -->
-    <button onclick="openNotificationModal()" title="Notifikasi Anomali & Peringatan Sistem" class="relative w-9 h-9 rounded-xl flex items-center justify-center text-textMain/70 hover:text-sidebar hover:bg-panelBg transition border border-transparent hover:border-[#E6E4F0]">
-      <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-      </svg>
-      <span class="w-2.5 h-2.5 rounded-full bg-brandCoral absolute top-1.5 right-1.5 ring-2 ring-white"></span>
-    </button>
-
     <!-- Authenticated User Profile Avatar & Role Tag -->
     @auth
       <div onclick="openUserProfileInfo()" class="flex items-center gap-2 pl-1 cursor-pointer transition hover:opacity-90">
         <div class="w-9 h-9 rounded-xl overflow-hidden border border-[#E6E4F0] shrink-0 bg-sidebar text-white flex items-center justify-center font-bold text-xs">
           {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
         </div>
-        <div class="hidden md:flex flex-col text-left">
+        <div class="hidden xl:flex flex-col text-left">
           <span class="text-xs font-bold text-textMain leading-tight truncate max-w-[120px]">{{ auth()->user()->name }}</span>
           <span class="text-[10px] font-semibold text-textMuted">{{ auth()->user()->primaryRole()?->label ?? 'User' }}</span>
         </div>

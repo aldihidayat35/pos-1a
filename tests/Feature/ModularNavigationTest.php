@@ -106,4 +106,19 @@ class ModularNavigationTest extends TestCase
         // Check that 'Kategori' is active in header
         $response->assertSee('bg-white text-sidebar font-bold');
     }
+
+    public function test_header_elements_removed_and_desktop_overflow_present(): void
+    {
+        $user = User::where('username', 'superadmin')->first();
+        $response = $this->actingAs($user)->get('/dashboard');
+
+        $response->assertStatus(200);
+        // Movement colors and notification bell removed from header
+        $response->assertDontSee('data-i18n="header_color_legend"');
+        $response->assertDontSee('title="Notifikasi Anomali & Peringatan Sistem"');
+
+        // Desktop overflow arrow button & dropdown present
+        $response->assertSee('id="desktopOverflowWrapper"', false);
+        $response->assertSee('id="desktopOverflowDropdown"', false);
+    }
 }

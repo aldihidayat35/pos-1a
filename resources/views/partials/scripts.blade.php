@@ -565,10 +565,149 @@
     }, 200);
   }
 
+  // Desktop Overflow Dropdown Handling
+  function toggleDesktopOverflowMenu(e) {
+    if (e) e.stopPropagation();
+    const dropdown = document.getElementById('desktopOverflowDropdown');
+    const chevron = document.getElementById('desktopOverflowChevron');
+    if (!dropdown) return;
+
+    const isHidden = dropdown.classList.contains('hidden');
+    if (isHidden) {
+      dropdown.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        dropdown.classList.remove('scale-95', 'opacity-0');
+        dropdown.classList.add('scale-100', 'opacity-100');
+      });
+      if (chevron) chevron.classList.add('rotate-180');
+    } else {
+      closeDesktopOverflowMenu();
+    }
+  }
+
+  function closeDesktopOverflowMenu() {
+    const dropdown = document.getElementById('desktopOverflowDropdown');
+    const chevron = document.getElementById('desktopOverflowChevron');
+    if (!dropdown || dropdown.classList.contains('hidden')) return;
+
+    dropdown.classList.remove('scale-100', 'opacity-100');
+    dropdown.classList.add('scale-95', 'opacity-0');
+    if (chevron) chevron.classList.remove('rotate-180');
+    setTimeout(() => {
+      dropdown.classList.add('hidden');
+    }, 200);
+  }
+
+  function calculateDesktopSubMenuOverflow() {
+    const wrapper = document.getElementById('desktopSubMenuWrapper');
+    const container = document.getElementById('desktopSubMenuContainer');
+    const overflowWrapper = document.getElementById('desktopOverflowWrapper');
+    const overflowList = document.getElementById('desktopOverflowList');
+    const overflowBadge = document.getElementById('desktopOverflowCountBadge');
+    const overflowBtn = document.getElementById('desktopOverflowBtn');
+
+    if (!wrapper || !container || !overflowWrapper || !overflowList) return;
+    if (window.innerWidth < 768) return;
+
+    const items = container.querySelectorAll('.submenu-desktop-item');
+    if (items.length === 0) return;
+
+    // Temporarily unhide all items and hide overflow button to measure natural sizes
+    overflowWrapper.classList.add('hidden');
+    items.forEach(el => el.classList.remove('hidden'));
+
+    // Determine max available width for left container inside header
+    const header = document.querySelector('header');
+    const rightHeader = header ? header.querySelector('.flex.items-center.justify-end') : null;
+    let maxAllowedWidth = 600;
+
+    if (header && rightHeader) {
+      maxAllowedWidth = Math.max(160, header.clientWidth - rightHeader.offsetWidth - 48);
+    }
+
+    let totalWidth = 0;
+    items.forEach(el => {
+      totalWidth += el.offsetWidth + 4;
+    });
+
+    if (totalWidth <= maxAllowedWidth) {
+      overflowWrapper.classList.add('hidden');
+      return;
+    }
+
+    // Allocate space reserving ~52px for the overflow arrow button
+    const targetWidth = Math.max(120, maxAllowedWidth - 52);
+    let accumulatedWidth = 0;
+    let hiddenItems = [];
+
+    items.forEach((el, idx) => {
+      const itemWidth = el.offsetWidth + 4;
+      if (accumulatedWidth + itemWidth <= targetWidth && hiddenItems.length === 0) {
+        accumulatedWidth += itemWidth;
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+        hiddenItems.push(el);
+      }
+    });
+
+    if (hiddenItems.length > 0) {
+      overflowWrapper.classList.remove('hidden');
+      overflowList.innerHTML = '';
+      let hasActiveInOverflow = false;
+
+      hiddenItems.forEach(el => {
+        const isActive = el.getAttribute('data-submenu-active') === '1' || el.classList.contains('bg-white');
+        if (isActive) hasActiveInOverflow = true;
+
+        const clone = document.createElement('a');
+        clone.href = el.href;
+        if (el.getAttribute('onclick')) clone.setAttribute('onclick', el.getAttribute('onclick'));
+        clone.className = isActive
+          ? 'flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs transition bg-panelBg text-sidebar font-bold border border-[#E6E4F0]'
+          : 'flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs transition text-textMuted hover:text-textMain hover:bg-[#FAF9FD]';
+
+        const iconEl = el.querySelector('svg');
+        const textSpan = el.querySelector('span');
+        const labelText = textSpan ? textSpan.innerText : '';
+        const iconHtml = iconEl ? iconEl.outerHTML : '';
+
+        clone.innerHTML = `
+          <div class="flex items-center gap-2">
+            ${iconHtml}
+            <span>${labelText}</span>
+          </div>
+          ${isActive ? '<span class="w-2 h-2 rounded-full bg-brandOrange"></span>' : ''}
+        `;
+        overflowList.appendChild(clone);
+      });
+
+      if (overflowBadge) {
+        overflowBadge.innerText = `+${hiddenItems.length}`;
+      }
+
+      if (hasActiveInOverflow) {
+        overflowBtn.className = 'flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition bg-sidebar text-white font-bold border border-sidebar shadow-sm';
+        const chevron = document.getElementById('desktopOverflowChevron');
+        if (chevron) chevron.className = 'w-3.5 h-3.5 text-white transition-transform duration-200';
+      } else {
+        overflowBtn.className = 'flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition bg-white text-sidebar font-bold border border-[#E6E4F0] shadow-sm hover:bg-[#FAF9FD]';
+        const chevron = document.getElementById('desktopOverflowChevron');
+        if (chevron) chevron.className = 'w-3.5 h-3.5 text-sidebar transition-transform duration-200';
+      }
+    } else {
+      overflowWrapper.classList.add('hidden');
+    }
+  }
+
   document.addEventListener('click', (e) => {
-    const wrapper = document.getElementById('mobileMenuWrapper');
-    if (wrapper && !wrapper.contains(e.target)) {
+    const mobileWrapper = document.getElementById('mobileMenuWrapper');
+    if (mobileWrapper && !mobileWrapper.contains(e.target)) {
       closeMobileSubMenu();
+    }
+    const overflowWrapper = document.getElementById('desktopOverflowWrapper');
+    if (overflowWrapper && !overflowWrapper.contains(e.target)) {
+      closeDesktopOverflowMenu();
     }
   });
 
@@ -757,7 +896,14 @@
 
     // Initial render
     renderSubMenus();
+    calculateDesktopSubMenuOverflow();
     renderMovementStream();
     renderBarChart();
+  });
+
+  let resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calculateDesktopSubMenuOverflow, 50);
   });
 </script>

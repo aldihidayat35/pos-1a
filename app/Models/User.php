@@ -97,6 +97,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user has any of the given permissions
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        $all = $this->allPermissions()->pluck('name')->toArray();
+        foreach ($permissions as $p) {
+            if (in_array($p, $all, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve all unique permissions across user's roles
      */
     public function allPermissions(): Collection

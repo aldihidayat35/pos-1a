@@ -19,7 +19,7 @@
     
     @php
       $activeIdx = 0;
-      if (request()->routeIs('warehouse.*')) {
+      if (request()->routeIs('warehouse.*') || request()->routeIs('opname.*')) {
           $activeIdx = 1;
       } elseif (request()->routeIs('store.*')) {
           $activeIdx = 2;

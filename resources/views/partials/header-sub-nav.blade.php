@@ -76,9 +76,8 @@
           ],
           [
               'label' => 'Blind Opname',
-              'route' => 'javascript:void(0)',
-              'onclick' => "openToast('Blind Opname Gudang Sentral: Modul aktif penuh pada Fase 7!')",
-              'active' => false,
+              'route' => route('opname.index'),
+              'active' => request()->routeIs('opname.*'),
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
           ],
       ];
@@ -159,22 +158,47 @@
           [
               'label' => 'Semua Anomali',
               'route' => route('audit.index'),
-              'active' => true,
+              'active' => !request()->has('severity'),
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
           ],
           [
-              'label' => 'Selisih Opname',
-              'route' => 'javascript:void(0)',
-              'onclick' => "openToast('Filter: Menampilkan seluruh selisih opname minus (Merah)!')",
-              'active' => false,
+              'label' => 'Selisih Opname (Merah)',
+              'route' => route('audit.index', ['severity' => 'RED']),
+              'active' => request('severity') === 'RED',
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
           ],
           [
-              'label' => 'Accountability Board',
-              'route' => 'javascript:void(0)',
-              'onclick' => "openToast('Accountability Board: Log audit permanen mengikat user_id & role.')",
-              'active' => false,
+              'label' => 'Belanja Darurat (Oranye)',
+              'route' => route('audit.index', ['severity' => 'ORANGE']),
+              'active' => request('severity') === 'ORANGE',
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>',
+          ],
+          [
+              'label' => 'Sesi Opname Fisik',
+              'route' => route('opname.index'),
+              'active' => request()->routeIs('opname.*'),
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
+          ],
+      ];
+  } elseif (request()->routeIs('opname.*')) {
+      $subMenus = [
+          [
+              'label' => 'Semua Sesi Opname',
+              'route' => route('opname.index'),
+              'active' => request()->routeIs('opname.index') || request()->routeIs('opname.show'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>',
+          ],
+          [
+              'label' => 'Buka Sesi Opname Baru',
+              'route' => route('opname.create'),
+              'active' => request()->routeIs('opname.create'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>',
+          ],
+          [
+              'label' => 'Log Selisih Susut (Merah)',
+              'route' => route('audit.index', ['severity' => 'RED']),
+              'active' => false,
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
           ],
       ];
   } else {

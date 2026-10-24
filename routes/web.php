@@ -24,6 +24,7 @@ use App\Http\Controllers\Warehouse\GoodsReceiptController;
 use App\Http\Controllers\Warehouse\PurchaseOrderController;
 use App\Http\Controllers\Warehouse\StockLedgerController;
 use App\Http\Controllers\Warehouse\StockTransferController;
+use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -125,7 +126,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/invoices/{invoice}/pay', [B2bInvoiceController::class, 'pay'])->name('invoices.pay');
     });
 
-    // 4. Feed Pergerakan 5-Warna & Anomali (Modular Monolith)
+    // 4. Stok Opname Mandiri & Blind Count (Fase 7)
+    Route::prefix('opname')->name('opname.')->group(function () {
+        Route::get('/', [StockOpnameController::class, 'index'])->name('index');
+        Route::get('/create', [StockOpnameController::class, 'create'])->name('create');
+        Route::post('/', [StockOpnameController::class, 'store'])->name('store');
+        Route::get('/{opname}', [StockOpnameController::class, 'show'])->name('show');
+        Route::get('/{opname}/count', [StockOpnameController::class, 'count'])->name('count');
+        Route::post('/{opname}/count', [StockOpnameController::class, 'saveCount'])->name('count.save');
+        Route::get('/{opname}/reconcile', [StockOpnameController::class, 'reconcile'])->name('reconcile');
+        Route::post('/{opname}/reconcile', [StockOpnameController::class, 'saveReconcile'])->name('reconcile.save');
+        Route::post('/{opname}/finalize', [StockOpnameController::class, 'finalize'])->name('finalize');
+        Route::post('/{opname}/cancel', [StockOpnameController::class, 'cancel'])->name('cancel');
+    });
+
+    // 5. Feed Pergerakan 5-Warna & Anomali (Modular Monolith)
     Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
 
     // Location Scope Switcher

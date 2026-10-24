@@ -12,9 +12,13 @@ use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\Master\SupplierController;
 use App\Http\Controllers\Master\UomController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\Master\PricingController;
+use App\Http\Controllers\Store\EmergencyPurchaseController;
+use App\Http\Controllers\Store\StoreTransferController;
 use App\Http\Controllers\Warehouse\GoodsReceiptController;
 use App\Http\Controllers\Warehouse\PurchaseOrderController;
 use App\Http\Controllers\Warehouse\StockLedgerController;
+use App\Http\Controllers\Warehouse\StockTransferController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    // 1. Operasional Gudang Pusat & Rantai Pasok (Fase 3 Modular Monolith)
+    // 1. Operasional Gudang Pusat & Rantai Pasok (Fase 3 & 4 Modular Monolith)
     Route::prefix('warehouse')->name('warehouse.')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('index');
 
@@ -53,12 +57,31 @@ Route::middleware('auth')->group(function () {
         Route::post('/po/{purchaseOrder}/receive', [GoodsReceiptController::class, 'store'])->name('receipts.store');
         Route::get('/receipts/{goodsReceipt}', [GoodsReceiptController::class, 'show'])->name('receipts.show');
 
+        // Stock Transfers (Gudang -> Toko)
+        Route::get('/transfers', [StockTransferController::class, 'index'])->name('transfers.index');
+        Route::get('/transfers/create', [StockTransferController::class, 'create'])->name('transfers.create');
+        Route::post('/transfers', [StockTransferController::class, 'store'])->name('transfers.store');
+        Route::get('/transfers/{stockTransfer}', [StockTransferController::class, 'show'])->name('transfers.show');
+
         // Kartu Stok & Audit Ledger
         Route::get('/ledger', [StockLedgerController::class, 'index'])->name('ledger.index');
     });
 
-    // 2. Operasional Toko & Kasir POS (Modular Monolith)
-    Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+    // 2. Operasional Toko & Kasir POS (Fase 4 & 5 Modular Monolith)
+    Route::prefix('store')->name('store.')->group(function () {
+        Route::get('/', [StoreController::class, 'index'])->name('index');
+
+        // Penerimaan Transfer Masuk Toko
+        Route::get('/transfers', [StoreTransferController::class, 'index'])->name('transfers.index');
+        Route::get('/transfers/{stockTransfer}', [StoreTransferController::class, 'show'])->name('transfers.show');
+        Route::post('/transfers/{stockTransfer}/receive', [StoreTransferController::class, 'receive'])->name('transfers.receive');
+
+        // Pembelian Emergency Toko (+Foto Nota)
+        Route::get('/emergency', [EmergencyPurchaseController::class, 'index'])->name('emergency.index');
+        Route::get('/emergency/create', [EmergencyPurchaseController::class, 'create'])->name('emergency.create');
+        Route::post('/emergency', [EmergencyPurchaseController::class, 'store'])->name('emergency.store');
+        Route::get('/emergency/{emergencyPurchase}', [EmergencyPurchaseController::class, 'show'])->name('emergency.show');
+    });
 
     // 3. Kemitraan B2B & Sales (Modular Monolith)
     Route::get('/b2b', [B2bController::class, 'index'])->name('b2b.index');
@@ -88,6 +111,11 @@ Route::middleware('auth')->group(function () {
         
         // Locations (Warehouses, Stores, Transit)
         Route::resource('locations', LocationMasterController::class)->except(['create', 'show', 'edit']);
+
+        // Pricing Policies & Floor-Price Lock Matrix (Fase 4)
+        Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
+        Route::post('/pricing/check', [PricingController::class, 'check'])->name('pricing.check');
+        Route::put('/pricing/policy', [PricingController::class, 'updatePolicy'])->name('pricing.policy.update');
     });
 });
 

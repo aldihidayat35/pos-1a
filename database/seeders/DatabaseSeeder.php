@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             DevUserSeeder::class,
             MasterDataSeeder::class,
             InventoryAndPOSeeder::class,
+            TransferEmergencyPricingSeeder::class,
         ]);
     }
 }

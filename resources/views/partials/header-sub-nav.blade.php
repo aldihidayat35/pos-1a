@@ -229,42 +229,13 @@
           ],
       ];
   } else {
-      // Default: Dasbor Utama
+      // Default: Dasbor Utama (Hanya Ringkasan Utama, tanpa filter warna)
       $subMenus = [
           [
               'label' => 'Ringkasan Utama',
               'route' => route('dashboard'),
-              'onclick' => 'selectSubMenu(0); if(typeof filterMovementStream===\'function\') filterMovementStream(\'all\');',
               'active' => true,
               'icon' => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
-          ],
-          [
-              'label' => 'Stream Masuk (Hijau)',
-              'route' => 'javascript:void(0)',
-              'onclick' => 'selectSubMenu(1); if(typeof filterMovementStream===\'function\') filterMovementStream(\'green\');',
-              'active' => false,
-              'icon' => '<circle cx="12" cy="12" r="4" fill="#10B981"/><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>',
-          ],
-          [
-              'label' => 'Stream Transfer (Biru)',
-              'route' => 'javascript:void(0)',
-              'onclick' => 'selectSubMenu(2); if(typeof filterMovementStream===\'function\') filterMovementStream(\'blue\');',
-              'active' => false,
-              'icon' => '<circle cx="12" cy="12" r="4" fill="#3B82F6"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>',
-          ],
-          [
-              'label' => 'Stream Penjualan (Ungu)',
-              'route' => 'javascript:void(0)',
-              'onclick' => 'selectSubMenu(3); if(typeof filterMovementStream===\'function\') filterMovementStream(\'purple\');',
-              'active' => false,
-              'icon' => '<circle cx="12" cy="12" r="4" fill="#8B5CF6"/><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>',
-          ],
-          [
-              'label' => 'Stream Anomali (Merah)',
-              'route' => 'javascript:void(0)',
-              'onclick' => 'selectSubMenu(4); if(typeof filterMovementStream===\'function\') filterMovementStream(\'red\');',
-              'active' => false,
-              'icon' => '<circle cx="12" cy="12" r="4" fill="#EF4444"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>',
           ],
       ];
   }

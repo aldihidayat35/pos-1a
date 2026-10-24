@@ -16,85 +16,60 @@
       <span class="w-2.5 h-2.5 rounded-full bg-brandOrange animate-pulse" title="Gudang Operasional"></span>
     </div>
 
-    <div class="space-y-2.5 pt-1">
+    <!-- GRID 4-KOLOM KOMPAK AKSI LOGISTIK GUDANG -->
+    <div class="grid grid-cols-4 gap-2 pt-0.5">
       <!-- 1. BUAT PO SUPLAYER -->
       @if($currentUser?->hasPermission('purchasing.po') || $currentUser?->hasPermission('inventory.manage') || $currentUser?->isSuperAdmin())
         <a href="{{ route('warehouse.po.create') }}" 
-           class="w-full p-3.5 bg-sidebar hover:bg-sidebar/95 text-white rounded-2xl transition duration-200 flex items-center justify-between group shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition shrink-0">
-              <svg class="w-5 h-5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-              </svg>
-            </div>
-            <div class="text-left">
-              <p class="text-xs font-bold leading-tight">+ Buat PO Suplayer</p>
-              <p class="text-[10px] text-white/70 mt-0.5">Purchase Order Inbound</p>
-            </div>
+           class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+           title="Buat PO Suplayer (Purchase Order)">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 group-hover:bg-white/10 flex items-center justify-center transition">
+            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
           </div>
-          <span class="px-2 py-0.5 rounded-lg bg-white/15 text-[10px] font-bold text-brandOrange">PO Baru</span>
+          <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">+PO</span>
         </a>
       @endif
 
       <!-- 2. TRANSFER STOK GUDANG KE TOKO -->
       @if($currentUser?->hasPermission('inventory.transfer') || $currentUser?->isSuperAdmin())
         <a href="{{ route('warehouse.transfers.create') }}" 
-           class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
-              </svg>
-            </div>
-            <div class="text-left">
-              <p class="text-xs font-bold leading-tight text-textMain">Transfer Stok ke Toko</p>
-              <p class="text-[10px] text-textMuted mt-0.5 font-normal">Kirim Barang ke Gerai Ritel</p>
-            </div>
+           class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+           title="Transfer Stok ke Toko Ritel">
+          <div class="w-8 h-8 rounded-xl bg-blue-50 group-hover:bg-white/10 flex items-center justify-center transition">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
           </div>
-          <svg class="w-4 h-4 text-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-          </svg>
+          <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">Transfer</span>
         </a>
       @endif
 
       <!-- 3. INPUT STOK OPNAME FISIK -->
       @if($currentUser?->hasPermission('inventory.opname') || $currentUser?->isSuperAdmin())
         <a href="{{ route('opname.create') }}" 
-           class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-amber-50 text-brandOrange flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-              </svg>
-            </div>
-            <div class="text-left">
-              <p class="text-xs font-bold leading-tight text-textMain">Input Stok Opname</p>
-              <p class="text-[10px] text-textMuted mt-0.5 font-normal">Pencocokan Fisik & Selisih</p>
-            </div>
+           class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+           title="Input Sesi Stok Opname">
+          <div class="w-8 h-8 rounded-xl bg-amber-50 group-hover:bg-white/10 flex items-center justify-center transition">
+            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
           </div>
-          <svg class="w-4 h-4 text-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-          </svg>
+          <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">Opname</span>
         </a>
       @endif
 
       <!-- 4. KARTU STOK & AUDIT LEDGER -->
       <a href="{{ route('warehouse.ledger.index') }}" 
-         class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <div class="text-left">
-            <p class="text-xs font-bold leading-tight text-textMain">Kartu Stok & Audit Ledger</p>
-            <p class="text-[10px] text-textMuted mt-0.5 font-normal">Riwayat Mutasi & HPP Masuk</p>
-          </div>
+         class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+         title="Buku Kartu Stok & Audit Ledger">
+        <div class="w-8 h-8 rounded-xl bg-emerald-50 group-hover:bg-white/10 flex items-center justify-center transition">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
         </div>
-        <svg class="w-4 h-4 text-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
+        <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">Ledger</span>
       </a>
     </div>
   </div>

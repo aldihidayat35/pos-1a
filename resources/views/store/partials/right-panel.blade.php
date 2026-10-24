@@ -17,87 +17,60 @@
       <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" title="Terminal Toko Siap"></span>
     </div>
 
-    <div class="space-y-2.5 pt-1">
-      <!-- 1. BUKA TERMINAL KASIR POS (PRIMARY CALL TO ACTION) -->
+    <!-- GRID 4-KOLOM KOMPAK AKSI CEPAT TOKO -->
+    <div class="grid grid-cols-4 gap-2 pt-0.5">
+      <!-- 1. TERMINAL KASIR POS -->
       @if($currentUser?->hasPermission('pos.access') || $currentUser?->isSuperAdmin())
         <a href="{{ route('store.pos.terminal') }}" 
-           class="w-full p-3.5 bg-sidebar hover:bg-sidebar/95 text-white rounded-2xl transition duration-200 flex items-center justify-between group shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition shrink-0">
-              <svg class="w-5 h-5 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-              </svg>
-            </div>
-            <div class="text-left">
-              <p class="text-xs font-bold leading-tight">Terminal Kasir POS</p>
-              <p class="text-[10px] text-white/70 mt-0.5">Penjualan Cepat & Barcode</p>
-            </div>
+           class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+           title="Buka Terminal Kasir POS (F2)">
+          <div class="w-8 h-8 rounded-xl bg-purple-50 group-hover:bg-white/10 flex items-center justify-center transition">
+            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
           </div>
-          <span class="px-2 py-0.5 rounded-lg bg-white/15 text-[10px] font-mono font-bold text-brandOrange">F2 / F9</span>
+          <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">Kasir POS</span>
         </a>
       @endif
 
-      <!-- 2. + INPUT BELANJA EMERGENCY (ORANGE HIGHLIGHT) -->
+      <!-- 2. + INPUT BELANJA EMERGENCY -->
       @if($currentUser?->hasPermission('emergency.input') || $currentUser?->isSuperAdmin())
         <a href="{{ route('store.emergency.create') }}" 
-           class="w-full p-3.5 bg-brandOrange hover:bg-brandOrange/90 text-white rounded-2xl transition duration-200 flex items-center justify-between group shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center transition shrink-0">
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-              </svg>
-            </div>
-            <div class="text-left">
-              <p class="text-xs font-bold leading-tight">+ Belanja Emergency</p>
-              <p class="text-[10px] text-white/80 mt-0.5">Beli Darurat (+Foto Nota)</p>
-            </div>
+           class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+           title="Input Belanja Emergency (+Foto Nota)">
+          <div class="w-8 h-8 rounded-xl bg-amber-50 group-hover:bg-white/10 flex items-center justify-center transition">
+            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
           </div>
-          <span class="px-2 py-0.5 rounded-lg bg-white/20 text-[10px] font-bold text-white uppercase tracking-wider">Instan</span>
+          <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">+Darurat</span>
         </a>
       @endif
 
-      <!-- 3. KELOLA SHIFT KASIR & LACI UANG -->
+      <!-- 3. KELOLA SHIFT KASIR -->
       @if($currentUser?->hasPermission('pos.cash_shift') || $currentUser?->isSuperAdmin())
         <a href="{{ route('store.shifts.index') }}" 
-           class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-sidebar flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-              </svg>
-            </div>
-            <div class="text-left">
-              <p class="text-xs font-bold leading-tight text-textMain">Shift Laci Kasir</p>
-              <p class="text-[10px] text-textMuted mt-0.5 font-normal">Rekonsiliasi Modal Awal & Akhir</p>
-            </div>
+           class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+           title="Shift Laci Kasir & Rekonsiliasi Kas">
+          <div class="w-8 h-8 rounded-xl bg-indigo-50 group-hover:bg-white/10 flex items-center justify-center transition">
+            <svg class="w-4 h-4 text-sidebar group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
           </div>
-          <svg class="w-4 h-4 text-textMuted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-          </svg>
+          <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">Shift</span>
         </a>
       @endif
 
       <!-- 4. DAFTAR TRANSFER MASUK TOKO -->
       <a href="{{ route('store.transfers.index') }}" 
-         class="w-full p-3 bg-white hover:bg-panelBg text-sidebar font-bold rounded-2xl transition duration-150 flex items-center justify-between border border-[#ECEBF4] shadow-sm">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
-            </svg>
-          </div>
-          <div class="text-left">
-            <p class="text-xs font-bold leading-tight text-textMain">Transfer Masuk Gudang</p>
-            <p class="text-[10px] text-textMuted mt-0.5 font-normal">Penerimaan Kiriman Transit</p>
-          </div>
+         class="aspect-square flex flex-col items-center justify-center p-2 rounded-2xl bg-white hover:bg-sidebar text-sidebar hover:text-white border border-[#ECEBF4] shadow-xs group transition relative" 
+         title="Transfer Masuk (Penerimaan dari Gudang)">
+        <div class="w-8 h-8 rounded-xl bg-blue-50 group-hover:bg-white/10 flex items-center justify-center transition">
+          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+          </svg>
         </div>
-        @if(($stats['incoming_transfers_count'] ?? 0) > 0)
-          <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">
-            {{ $stats['incoming_transfers_count'] }}
-          </span>
-        @else
-          <span class="text-xs text-textMuted font-normal">0</span>
-        @endif
+        <span class="text-[10px] font-bold mt-1 text-textMain group-hover:text-white truncate">Transfer</span>
       </a>
     </div>
   </div>

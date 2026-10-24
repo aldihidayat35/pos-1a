@@ -72,7 +72,6 @@ class RolePermissionSeeder extends Seeder
                 'permissions' => [
                     'dashboard.view',
                     'dashboard.financial',
-                    'dashboard.audit',
                     'reports.export',
                     'inventory.view',
                     'inventory.hpp_view',
@@ -83,7 +82,6 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Penanggung jawab operasional toko, POS, stok emergency, dan pengesahan opname toko.',
                 'permissions' => [
                     'dashboard.view',
-                    'dashboard.audit',
                     'inventory.view',
                     'inventory.hpp_view',
                     'emergency.input',
@@ -103,7 +101,6 @@ class RolePermissionSeeder extends Seeder
                 'description' => 'Penanggung jawab rantai pasok gudang pusat, PO suplayer, distribusi, dan opname gudang.',
                 'permissions' => [
                     'dashboard.view',
-                    'dashboard.audit',
                     'inventory.view',
                     'inventory.manage',
                     'inventory.hpp_view',

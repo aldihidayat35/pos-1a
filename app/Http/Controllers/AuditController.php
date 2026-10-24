@@ -14,8 +14,8 @@ class AuditController extends Controller
     public function index(Request $request): View
     {
         $user = $request->user();
-        if (!$user->hasPermission('dashboard.audit') && !$user->isSuperAdmin() && !$user->isOwner()) {
-            abort(403, 'Akses Ditolak: Anda tidak memiliki izin untuk melihat Accountability Board.');
+        if (!$user->isSuperAdmin() && !$user->hasPermission('dashboard.audit')) {
+            abort(403, 'Akses Ditolak: Halaman Feed Pergerakan & Anomali (Audit) hanya dapat diakses oleh Super Administrator.');
         }
 
         $activeLocation = $user->getActiveLocation();

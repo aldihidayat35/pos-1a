@@ -61,39 +61,43 @@ const PasarNav = {
   updateIndicators(index) {
     if (index === null || index === undefined || isNaN(index) || index < 0 || index > 5) return;
 
-    // Desktop indicator (vertical: 68px step)
+    // Desktop indicator
+    const desktopButtons = Array.from(document.querySelectorAll('#sidebarNav .sidebar-btn'));
+    const targetDesktop = document.querySelector(`#sidebarNav .sidebar-btn[data-nav-idx="${index}"]`);
     const indicator = document.getElementById('navIndicator');
-    if (indicator) {
-      const stepY = index * 68;
-      indicator.style.transform = `translateY(${stepY}px)`;
+
+    if (targetDesktop && indicator) {
+      const visibleIdx = desktopButtons.indexOf(targetDesktop);
+      if (visibleIdx !== -1) {
+        indicator.style.display = 'block';
+        indicator.style.transform = `translateY(${visibleIdx * 68}px)`;
+      }
+    } else if (indicator) {
+      indicator.style.display = 'none';
     }
 
-    // Desktop buttons active state
-    const desktopButtons = document.querySelectorAll('#sidebarNav .sidebar-btn');
     desktopButtons.forEach((btn) => {
-      const btnIdx = parseInt(btn.getAttribute('data-nav-idx'));
-      if (btnIdx === index) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
+      btn.classList.toggle('active', btn === targetDesktop);
     });
 
-    // Mobile indicator (horizontal: 100% per column step)
+    // Mobile indicator
+    const mobileButtons = Array.from(document.querySelectorAll('#mobileNav .mobile-nav-btn'));
+    const targetMobile = document.querySelector(`#mobileNav .mobile-nav-btn[data-nav-idx="${index}"]`);
     const mobileIndicator = document.getElementById('mobileNavIndicator');
-    if (mobileIndicator) {
-      mobileIndicator.style.transform = `translateX(calc(${index} * 100%))`;
+
+    if (targetMobile && mobileIndicator) {
+      const mobileIdx = mobileButtons.indexOf(targetMobile);
+      if (mobileIdx !== -1) {
+        mobileIndicator.style.display = 'block';
+        mobileIndicator.style.width = `calc(100% / ${mobileButtons.length || 1})`;
+        mobileIndicator.style.transform = `translateX(calc(${mobileIdx} * 100%))`;
+      }
+    } else if (mobileIndicator) {
+      mobileIndicator.style.display = 'none';
     }
 
-    // Mobile buttons active state
-    const mobileButtons = document.querySelectorAll('#mobileNav .mobile-nav-btn');
     mobileButtons.forEach((btn) => {
-      const btnIdx = parseInt(btn.getAttribute('data-nav-idx'));
-      if (btnIdx === index) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
+      btn.classList.toggle('active', btn === targetMobile);
     });
   },
 

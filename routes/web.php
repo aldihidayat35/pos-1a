@@ -13,8 +13,10 @@ use App\Http\Controllers\Master\CategoryController;
 use App\Http\Controllers\Master\LocationMasterController;
 use App\Http\Controllers\Master\MemberController;
 use App\Http\Controllers\Master\ProductController;
+use App\Http\Controllers\Master\RoleController;
 use App\Http\Controllers\Master\SupplierController;
 use App\Http\Controllers\Master\UomController;
+use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\Master\PricingController;
 use App\Http\Controllers\Store\CashShiftController;
@@ -146,8 +148,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/{opname}/cancel', [StockOpnameController::class, 'cancel'])->name('cancel');
     });
 
-    // 5. Feed Pergerakan 5-Warna & Anomali (Modular Monolith)
-    Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+    // 5. Feed Pergerakan 5-Warna & Anomali (Khusus Super Admin)
+    Route::get('/audit', [AuditController::class, 'index'])
+        ->name('audit.index')
+        ->middleware('permission:dashboard.audit');
 
     // 6. Laporan Finansial & Dashboard Owner (Fase 8)
     Route::prefix('reports')->name('reports.')->group(function () {
@@ -187,6 +191,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
         Route::post('/pricing/check', [PricingController::class, 'check'])->name('pricing.check');
         Route::put('/pricing/policy', [PricingController::class, 'updatePolicy'])->name('pricing.policy.update');
+
+        // User & Role Permission Matrix Management (Fase RBAC Centang-Centang)
+        Route::middleware('permission:system.users')->group(function () {
+            Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle_status');
+            Route::resource('users', UserController::class)->except(['create', 'show', 'edit']);
+            Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+            Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        });
     });
 });
 

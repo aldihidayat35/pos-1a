@@ -669,10 +669,17 @@
       overflowWrapper.classList.remove('hidden');
       overflowList.innerHTML = '';
       let hasActiveInOverflow = false;
+      let activeItemLabel = '';
 
       hiddenItems.forEach(el => {
         const isActive = el.getAttribute('data-submenu-active') === '1' || el.classList.contains('bg-white');
-        if (isActive) hasActiveInOverflow = true;
+        if (isActive) {
+          hasActiveInOverflow = true;
+          const textSpan = el.querySelector('span');
+          if (textSpan) {
+            activeItemLabel = textSpan.innerText.trim();
+          }
+        }
 
         const clone = document.createElement('a');
         clone.href = el.href;
@@ -700,11 +707,17 @@
       });
 
       if (overflowBadge) {
-        overflowBadge.innerText = `+${hiddenItems.length}`;
+        if (hasActiveInOverflow && activeItemLabel) {
+          // Extract first keyword/concept (e.g. 'Pengguna' from 'Pengguna & Hak Akses', 'Kebijakan' from 'Kebijakan Harga')
+          const firstWord = activeItemLabel.split(' ')[0];
+          overflowBadge.innerText = `+${hiddenItems.length} • ${firstWord}`;
+        } else {
+          overflowBadge.innerText = `+${hiddenItems.length}`;
+        }
       }
 
       if (hasActiveInOverflow) {
-        overflowBtn.className = 'flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition bg-sidebar text-white font-bold border border-sidebar shadow-sm';
+        overflowBtn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition bg-sidebar text-white font-bold border border-sidebar shadow-sm';
         const chevron = document.getElementById('desktopOverflowChevron');
         if (chevron) chevron.className = 'w-3.5 h-3.5 text-white transition-transform duration-200';
       } else {

@@ -201,6 +201,33 @@
               'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
           ],
       ];
+  } elseif (request()->routeIs('reports.*')) {
+      $subMenus = [
+          [
+              'label' => 'Ringkasan Finansial',
+              'route' => route('reports.index'),
+              'active' => request()->routeIs('reports.index'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>',
+          ],
+          [
+              'label' => 'Buku Penjualan & Margin',
+              'route' => route('reports.sales'),
+              'active' => request()->routeIs('reports.sales'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>',
+          ],
+          [
+              'label' => 'Valuasi Stok Aset',
+              'route' => route('reports.inventory'),
+              'active' => request()->routeIs('reports.inventory'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
+          ],
+          [
+              'label' => 'Penuaan Piutang B2B',
+              'route' => route('reports.receivables'),
+              'active' => request()->routeIs('reports.receivables'),
+              'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+          ],
+      ];
   } else {
       // Default: Dasbor Utama
       $subMenus = [

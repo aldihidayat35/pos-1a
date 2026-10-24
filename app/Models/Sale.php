@@ -11,6 +11,9 @@ class Sale extends Model
 {
     use HasFactory;
 
+    public const STATUS_COMPLETED = 'COMPLETED';
+    public const STATUS_VOIDED = 'VOIDED';
+
     protected $fillable = [
         'sale_number',
         'idempotency_key',

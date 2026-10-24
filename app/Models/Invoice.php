@@ -12,6 +12,7 @@ class Invoice extends Model
     use HasFactory;
 
     public const STATUS_OPEN = 'OPEN';
+    public const STATUS_PARTIAL = 'PARTIALLY_PAID';
     public const STATUS_PARTIALLY_PAID = 'PARTIALLY_PAID';
     public const STATUS_PAID = 'PAID';
     public const STATUS_OVERDUE = 'OVERDUE';
@@ -40,6 +41,11 @@ class Invoice extends Model
     }
 
     public function order(): BelongsTo
+    {
+        return $this->belongsTo(B2bOrder::class, 'b2b_order_id');
+    }
+
+    public function b2bOrder(): BelongsTo
     {
         return $this->belongsTo(B2bOrder::class, 'b2b_order_id');
     }

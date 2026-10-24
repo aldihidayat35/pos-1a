@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use App\Models\User;
+use App\Services\FinancialReportService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        protected FinancialReportService $reportService
+    ) {}
+
     /**
      * Display the main shell dashboard
      */
@@ -18,7 +24,7 @@ class DashboardController extends Controller
         $activeLocation = $user->getActiveLocation();
         $primaryRole = $user->primaryRole();
 
-        // Real operational baseline stats (honest values, no fake financial calculations)
+        // Real operational baseline stats
         $stats = [
             'total_users' => User::where('is_active', true)->count(),
             'total_locations' => Location::active()->count(),
@@ -32,6 +38,12 @@ class DashboardController extends Controller
             'active_location_type' => $activeLocation?->type ?? 'CENTRAL',
         ];
 
-        return view('dashboard.index', compact('user', 'stats', 'activeLocation', 'primaryRole'));
+        // Real-time dynamic financial calculations (Fase 8)
+        $financialSummary = null;
+        if ($user->hasPermission('dashboard.financial') || $user->isOwner() || $user->isSuperAdmin()) {
+            $financialSummary = $this->reportService->getExecutiveSummary($activeLocation, Carbon::today(), Carbon::today());
+        }
+
+        return view('dashboard.index', compact('user', 'stats', 'activeLocation', 'primaryRole', 'financialSummary'));
     }
 }

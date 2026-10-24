@@ -89,60 +89,80 @@
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <!-- Card 1: Omzet Hari Ini -->
-        <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200">
+        <a href="{{ route('reports.sales') }}" class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200 block group">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_omzet_today">Omzet Hari Ini</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_omzet_today">Omzet Realisasi Hari Ini</span>
             <div class="w-7 h-7 rounded-lg bg-movePurpleBg text-movePurple flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
           </div>
-          <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">Rp 48.250.000</p>
-          <p class="text-[11px] text-textMuted mt-1" data-i18n="stat_omzet_sub">Toko: Rp 18.5M • B2B: Rp 29.7M</p>
-        </div>
+          <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+            Rp {{ number_format($financialSummary['revenue']['total'] ?? 0, 0, ',', '.') }}
+          </p>
+          <p class="text-[11px] text-textMuted mt-1">
+            Toko: Rp {{ number_format($financialSummary['revenue']['pos'] ?? 0, 0, ',', '.') }} • B2B: Rp {{ number_format($financialSummary['revenue']['b2b'] ?? 0, 0, ',', '.') }}
+          </p>
+        </a>
 
         <!-- Card 2: Estimasi Laba Kotor -->
-        <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200">
+        <a href="{{ route('reports.index') }}" class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200 block group">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_profit_est">Laba Kotor</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_profit_est">Laba Kotor Real-Time</span>
             <div class="w-7 h-7 rounded-lg bg-moveGreenBg text-moveGreen flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
               </svg>
             </div>
           </div>
-          <p class="font-display text-xl sm:text-2xl font-extrabold text-moveGreen mt-3">Rp 7.820.000</p>
-          <p class="text-[11px] text-textMuted mt-1" data-i18n="stat_profit_sub">Margin Real-Time: +16.2%</p>
-        </div>
+          <p class="font-display text-xl sm:text-2xl font-extrabold text-moveGreen mt-3">
+            Rp {{ number_format($financialSummary['profit']['gross_profit'] ?? 0, 0, ',', '.') }}
+          </p>
+          <p class="text-[11px] text-textMuted mt-1">
+            Margin: +{{ $financialSummary['profit']['margin_percent'] ?? 0 }}% dari omzet
+          </p>
+        </a>
 
         <!-- Card 3: Nilai Aset Stok -->
-        <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200">
+        <a href="{{ route('reports.inventory') }}" class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200 block group">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_stock_asset">Nilai Aset Stok</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_stock_asset">Nilai Aset Persediaan</span>
             <div class="w-7 h-7 rounded-lg bg-moveBlueBg text-moveBlue flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
             </div>
           </div>
-          <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">Rp 482.900.000</p>
-          <p class="text-[11px] text-textMuted mt-1" data-i18n="stat_stock_sub">Gudang 75% • Toko 25%</p>
-        </div>
+          <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+            Rp {{ number_format($financialSummary['inventory']['total_value'] ?? 0, 0, ',', '.') }}
+          </p>
+          <p class="text-[11px] text-textMuted mt-1">
+            Gudang {{ $financialSummary['inventory']['warehouse_percent'] ?? 0 }}% • Toko {{ $financialSummary['inventory']['store_percent'] ?? 0 }}%
+          </p>
+        </a>
 
         <!-- Card 4: Piutang B2B Berjalan -->
-        <div class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200">
+        <a href="{{ route('reports.receivables') }}" class="bg-white rounded-[22px] p-5 border border-[#ECEBF4] hover:bg-panelBg/40 transition duration-200 block group">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_b2b_debt">Piutang B2B</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-textMuted" data-i18n="stat_b2b_debt">Piutang B2B Berjalan</span>
             <div class="w-7 h-7 rounded-lg bg-moveOrangeBg text-moveOrange flex items-center justify-center">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
           </div>
-          <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">Rp 86.400.000</p>
-          <p class="text-[11px] text-moveGreen font-semibold mt-1" data-i18n="stat_b2b_sub">Plafon Aman (0 Overdue)</p>
-        </div>
+          <p class="font-display text-xl sm:text-2xl font-extrabold text-textMain mt-3">
+            Rp {{ number_format($financialSummary['receivables']['total'] ?? 0, 0, ',', '.') }}
+          </p>
+          <p class="text-[11px] mt-1 font-semibold">
+            @if(($financialSummary['receivables']['overdue_count'] ?? 0) > 0)
+              <span class="text-rose-600 font-bold">{{ $financialSummary['receivables']['overdue_count'] }} Faktur Overdue (Rp {{ number_format($financialSummary['receivables']['overdue_total'] ?? 0, 0, ',', '.') }})</span>
+            @else
+              <span class="text-moveGreen">Plafon Aman (0 Overdue)</span>
+            @endif
+          </p>
+        </a>
       </div>
     </div>
   @else

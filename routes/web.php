@@ -24,6 +24,7 @@ use App\Http\Controllers\Warehouse\GoodsReceiptController;
 use App\Http\Controllers\Warehouse\PurchaseOrderController;
 use App\Http\Controllers\Warehouse\StockLedgerController;
 use App\Http\Controllers\Warehouse\StockTransferController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
@@ -142,6 +143,17 @@ Route::middleware('auth')->group(function () {
 
     // 5. Feed Pergerakan 5-Warna & Anomali (Modular Monolith)
     Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+
+    // 6. Laporan Finansial & Dashboard Owner (Fase 8)
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
+        Route::get('/inventory', [ReportController::class, 'inventory'])->name('inventory');
+        Route::get('/receivables', [ReportController::class, 'receivables'])->name('receivables');
+        Route::get('/export/financial', [ReportController::class, 'exportFinancial'])->name('export.financial');
+        Route::get('/export/sales', [ReportController::class, 'exportSales'])->name('export.sales');
+        Route::get('/export/inventory', [ReportController::class, 'exportInventory'])->name('export.inventory');
+    });
 
     // Location Scope Switcher
     Route::post('/location/switch', [LocationSwitchController::class, 'switch'])->name('location.switch');

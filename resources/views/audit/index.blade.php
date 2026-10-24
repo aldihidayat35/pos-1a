@@ -72,8 +72,44 @@
     </div>
   </div>
 
+  <!-- Filter & Search Bar -->
+  <div class="bg-white rounded-2xl p-4 border border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <form method="GET" action="{{ route('audit.index') }}" class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+      @if(request('severity'))
+        <input type="hidden" name="severity" value="{{ request('severity') }}">
+      @endif
+      <div class="flex items-center gap-1.5 bg-panelBg px-3 py-2 rounded-xl border border-[#ECEBF4] shrink-0">
+        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+        <select data-table-perpage="audit-table" class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+          <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+          <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>12</option>
+          <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+          <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+        </select>
+      </div>
+
+      <div class="relative flex-1 sm:w-72">
+        <input type="text" name="search" value="{{ request('search') }}"
+               data-table-search="audit-table"
+               placeholder="Cari judul anomali, deskripsi, atau no referensi..."
+               class="w-full text-xs rounded-xl border border-[#ECEBF4] pl-8 pr-3 py-2 focus:outline-none focus:border-sidebar">
+        <svg class="w-4 h-4 text-textMuted absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+
+      <button type="submit" class="px-3.5 py-2 bg-sidebar text-white text-xs font-bold rounded-xl transition">
+        Cari
+      </button>
+
+      @if(request()->hasAny(['search', 'severity', 'per_page']))
+        <a href="{{ route('audit.index') }}" class="px-3 py-2 text-xs font-semibold text-textMuted hover:text-sidebar transition">
+          Reset
+        </a>
+      @endif
+    </form>
+  </div>
+
   <!-- 3. ACCOUNTABILITY LIVE FEED -->
-  <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm space-y-4">
+  <div class="bg-white rounded-3xl p-5 sm:p-6 border border-[#ECEBF4] shadow-sm space-y-4" data-async-table="audit-table">
     <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
       <div>
         <h3 class="font-bold text-sm text-textMain flex items-center gap-2">

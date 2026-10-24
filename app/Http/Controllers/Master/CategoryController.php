@@ -12,11 +12,19 @@ class CategoryController extends Controller
 {
     public function index(Request $request): View
     {
-        $categories = ProductCategory::with('parent')
-            ->withCount('products')
-            ->orderBy('name')
-            ->paginate(15);
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $search = trim($request->input('search', ''));
 
+        $query = ProductCategory::with('parent')->withCount('products');
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $categories = $query->orderBy('name')->paginate($perPage)->withQueryString();
         $parentCandidates = ProductCategory::active()->get();
 
         return view('master.categories.index', compact('categories', 'parentCandidates'));

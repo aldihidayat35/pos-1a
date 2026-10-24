@@ -10,9 +10,26 @@ use Illuminate\View\View;
 
 class LocationMasterController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $locations = Location::withCount('userLocations')->orderBy('type')->orderBy('name')->paginate(15);
+        $query = Location::withCount('userLocations');
+
+        if ($type = $request->input('type')) {
+            $query->where('type', $type);
+        }
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $locations = $query->orderBy('type')->orderBy('name')->paginate($perPage)->withQueryString();
+
         return view('master.locations.index', compact('locations'));
     }
 

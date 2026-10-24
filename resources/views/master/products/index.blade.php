@@ -52,12 +52,14 @@
     <div class="bg-white p-4 rounded-2xl border border-[#ECEBF4] flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
         <form method="GET" action="{{ route('master.products.index') }}" class="flex flex-wrap items-center gap-3 w-full md:w-auto flex-1">
             <!-- Search Input -->
-            <div class="relative flex-1 min-w-[240px]">
+            <div class="relative flex-1 min-w-[200px]">
                 <svg class="w-4 h-4 text-textMuted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" name="search" value="{{ request('search') }}" 
-                       placeholder="Cari SKU, nama produk, atau barcode..." 
+                <input type="text" name="search" 
+                       data-table-search="products-table"
+                       value="{{ request('search') }}" 
+                       placeholder="Cari SKU, nama produk, barcode..." 
                        class="w-full pl-10 pr-4 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
             </div>
 
@@ -76,11 +78,18 @@
                 <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Hanya Nonaktif</option>
             </select>
 
+            <!-- Per Page Selector -->
+            <select data-table-perpage="products-table" name="per_page" class="px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-bold text-sidebar focus:bg-white focus:outline-none focus:border-sidebar transition cursor-pointer">
+                <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>12 / hal</option>
+                <option value="25" {{ request('per_page', 12) == 25 ? 'selected' : '' }}>25 / hal</option>
+                <option value="50" {{ request('per_page', 12) == 50 ? 'selected' : '' }}>50 / hal</option>
+            </select>
+
             <button type="submit" class="px-4 py-2.5 bg-sidebar hover:bg-sidebarDark text-white text-xs font-semibold rounded-xl transition">
                 Filter
             </button>
 
-            @if(request()->hasAny(['search', 'category_id', 'status']))
+            @if(request()->hasAny(['search', 'category_id', 'status', 'per_page']))
                 <a href="{{ route('master.products.index') }}" class="px-3 py-2.5 bg-panelBg hover:bg-gray-200 text-textMuted text-xs font-semibold rounded-xl transition">
                     Reset
                 </a>
@@ -96,9 +105,10 @@
         </a>
     </div>
 
-    <!-- Products Table -->
-    <div class="bg-white rounded-2xl border border-[#ECEBF4] overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
+    <!-- Products Table Card with Async & Mobile Card-Stack -->
+    <div data-async-table="products-table" class="bg-white rounded-2xl border border-[#ECEBF4] overflow-hidden shadow-sm">
+        <!-- DESKTOP VIEW: Structured Table (hidden on mobile) -->
+        <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead class="bg-panelBg/80 border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
                     <tr>
@@ -220,6 +230,79 @@
             </table>
         </div>
 
+        <!-- MOBILE VIEW: Card Stack Layout (visible on mobile only) -->
+        <div class="block md:hidden p-3.5 space-y-3">
+            @forelse($products as $p)
+                <div class="bg-panelBg/40 border border-[#ECEBF4] rounded-2xl p-4 space-y-3">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="font-mono font-bold text-xs text-sidebar bg-sidebar/5 px-2 py-0.5 rounded border border-sidebar/10">{{ $p->sku }}</span>
+                            <h4 class="font-bold text-textMain text-sm mt-1">{{ $p->name }}</h4>
+                            <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white text-textMuted border border-[#ECEBF4]">
+                                {{ $p->category->name ?? 'Tanpa Kategori' }}
+                            </span>
+                        </div>
+                        <div>
+                            @if($p->is_active)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-500 border border-gray-200">
+                                    Nonaktif
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-[#ECEBF4]">
+                        <div>
+                            <span class="text-[10px] text-textMuted block uppercase font-bold">Satuan Dasar</span>
+                            <span class="font-bold text-sidebar">{{ $p->baseUom->name }} ({{ $p->baseUom->symbol }})</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-textMuted block uppercase font-bold">Konversi Bertingkat</span>
+                            @php
+                                $mobileConvs = $p->productUoms->where('is_base', false);
+                            @endphp
+                            @if($mobileConvs->count() > 0)
+                                <span class="font-semibold text-textMain">{{ $mobileConvs->count() }} Tingkat UOM</span>
+                            @else
+                                <span class="text-textMuted italic">Hanya Satuan Dasar</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-[#ECEBF4] flex items-center justify-end gap-2">
+                        <a href="{{ route('master.products.edit', $p) }}" 
+                           class="px-3 py-1.5 text-xs font-bold text-sidebar bg-sidebar/10 hover:bg-sidebar/20 rounded-lg transition flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            Edit
+                        </a>
+
+                        @if($p->is_active)
+                            <form method="POST" action="{{ route('master.products.destroy', $p) }}" 
+                                  onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan produk [{{ $p->name }}]?')" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                                    </svg>
+                                    Nonaktifkan
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="py-8 text-center text-textMuted text-xs">Tidak ada produk ditemukan.</div>
+            @endforelse
+        </div>
+
+        <!-- Pagination Footer -->
         @if($products->hasPages())
             <div class="p-4 border-t border-[#ECEBF4] bg-panelBg/30">
                 {{ $products->links() }}

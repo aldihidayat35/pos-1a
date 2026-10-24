@@ -23,7 +23,8 @@ class SupplierController extends Controller
             });
         }
 
-        $suppliers = $query->orderBy('name')->paginate(15)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $suppliers = $query->orderBy('name')->paginate($perPage)->withQueryString();
 
         return view('master.suppliers.index', compact('suppliers'));
     }

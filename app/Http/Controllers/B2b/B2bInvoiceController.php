@@ -40,7 +40,8 @@ class B2bInvoiceController extends Controller
             });
         }
 
-        $invoices = $query->paginate(15)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $invoices = $query->paginate($perPage)->withQueryString();
 
         $stats = [
             'total_invoiced' => Invoice::sum('total_amount'),

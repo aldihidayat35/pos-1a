@@ -27,7 +27,17 @@ class AuditController extends Controller
             $query->where('severity', $request->severity);
         }
 
-        $anomalies = $query->orderByDesc('id')->paginate(12)->withQueryString();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('reference_number', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = min(max((int) $request->input('per_page', 12), 5), 100);
+        $anomalies = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         $counts = [
             'ALL' => AnomalyEvent::count(),

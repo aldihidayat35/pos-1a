@@ -62,7 +62,8 @@ class StockLedgerController extends Controller
             });
         }
 
-        $movements = $ledgerQuery->orderByDesc('id')->paginate(15)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $movements = $ledgerQuery->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         // 3. Stats & Dropdowns
         $locations = Location::where('is_active', true)->orderBy('name')->get();

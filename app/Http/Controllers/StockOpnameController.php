@@ -44,7 +44,16 @@ class StockOpnameController extends Controller
             $query->where('status', $request->status);
         }
 
-        $opnames = $query->orderByDesc('id')->paginate(10)->withQueryString();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('opname_number', 'LIKE', "%{$search}%")
+                  ->orWhere('notes', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $perPage = min(max((int) $request->input('per_page', 10), 5), 100);
+        $opnames = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         // Calculate summary counters
         $statsLocationId = $request->filled('location_id') ? $request->location_id : ($activeLocation?->id);

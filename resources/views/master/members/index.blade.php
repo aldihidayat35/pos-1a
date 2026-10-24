@@ -93,30 +93,45 @@
         </div>
 
         <!-- Members Table Card (Right Col: 8) -->
-        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm">
+        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm" data-async-table="members-table">
             <div class="p-5 border-b border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h3 class="font-bold text-sm text-textMain">Daftar Member & Mitra B2B</h3>
                     <p class="text-xs text-textMuted">Total {{ $members->total() }} pelanggan terdaftar</p>
                 </div>
 
-                <form method="GET" action="{{ route('master.members.index') }}" class="flex flex-wrap items-center gap-2">
-                    <select name="type" class="px-3 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain">
-                        <option value="">Semua Tipe</option>
-                        <option value="RETAIL" {{ request('type') === 'RETAIL' ? 'selected' : '' }}>Hanya Ritel</option>
-                        <option value="B2B" {{ request('type') === 'B2B' ? 'selected' : '' }}>Hanya B2B</option>
-                    </select>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-1.5 bg-panelBg px-2.5 py-1.5 rounded-xl border border-[#E6E4F0]">
+                        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+                        <select data-table-perpage="members-table"
+                                class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                        </select>
+                    </div>
 
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kode, no. hp..."
-                           class="px-3 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain">
+                    <form method="GET" action="{{ route('master.members.index') }}" class="flex flex-wrap items-center gap-2">
+                        <select name="type" onchange="this.form.submit()" class="px-2.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none">
+                            <option value="">Semua Tipe</option>
+                            <option value="RETAIL" {{ request('type') === 'RETAIL' ? 'selected' : '' }}>Hanya Ritel</option>
+                            <option value="B2B" {{ request('type') === 'B2B' ? 'selected' : '' }}>Hanya B2B</option>
+                        </select>
 
-                    <button type="submit" class="px-3 py-2 bg-sidebar text-white text-xs font-semibold rounded-xl transition">
-                        Filter
-                    </button>
-                </form>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kode, no. hp..."
+                               data-table-search="members-table"
+                               class="px-3.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none focus:border-sidebar w-36 sm:w-48">
+
+                        @if(request('search') || request('type'))
+                            <a href="{{ route('master.members.index') }}" class="text-xs text-textMuted hover:text-red-500 font-semibold px-1.5">Reset</a>
+                        @endif
+                    </form>
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
+            <!-- Desktop View: Table -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-panelBg/80 border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
                         <tr>
@@ -198,6 +213,84 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Mobile View: Card Stack -->
+            <div class="block md:hidden divide-y divide-[#ECEBF4]">
+                @forelse($members as $m)
+                    <div class="p-4 space-y-3 hover:bg-panelBg/30 transition">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <span class="inline-block px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-sidebar/10 text-sidebar border border-sidebar/20">
+                                    {{ $m->member_code }}
+                                </span>
+                                <h4 class="font-bold text-sm text-textMain mt-1">{{ $m->name }}</h4>
+                                <p class="text-[11px] text-textMuted">{{ $m->address ?: 'Tanpa alamat domisili' }}</p>
+                            </div>
+                            <div class="text-right">
+                                @if($m->type === 'B2B')
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">
+                                        B2B Mitra
+                                    </span>
+                                @else
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                        Ritel Umum
+                                    </span>
+                                @endif
+                                @if($m->tier)
+                                    <span class="block text-[10px] text-brandOrange font-bold mt-0.5">
+                                        {{ $m->tier->name }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-textMuted block">Telepon / Kontak</span>
+                                @if($m->phone)
+                                    <a href="tel:{{ $m->phone }}" class="font-semibold text-sidebar hover:underline">{{ $m->phone }}</a>
+                                @else
+                                    <span class="text-textMuted">—</span>
+                                @endif
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-textMuted block">Plafon Kredit</span>
+                                @if($m->type === 'B2B')
+                                    <span class="font-bold font-mono text-sidebar">Rp {{ number_format($m->credit_limit, 0, ',', '.') }}</span>
+                                @else
+                                    <span class="text-textMuted">—</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-1">
+                            <a href="{{ route('master.members.card', $m) }}" 
+                               class="px-3 py-1.5 bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white rounded-xl text-xs font-bold transition inline-flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                                </svg>
+                                <span>Lihat Kartu QR</span>
+                            </a>
+
+                            @if($m->is_active)
+                                <form method="POST" action="{{ route('master.members.destroy', $m) }}" 
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan member [{{ $m->name }}]?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition inline-flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                                        </svg>
+                                        Nonaktifkan
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-8 px-4 text-center text-textMuted text-xs">Belum ada member terdaftar.</div>
+                @endforelse
             </div>
 
             @if($members->hasPages())

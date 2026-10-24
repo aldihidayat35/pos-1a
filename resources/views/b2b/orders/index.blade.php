@@ -35,8 +35,20 @@
   <!-- Filter & Search Bar -->
   <div class="bg-white rounded-2xl p-4 border border-[#ECEBF4] flex flex-col md:flex-row md:items-center justify-between gap-3">
     <form method="GET" action="{{ route('b2b.orders.index') }}" class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+      <div class="flex items-center gap-1.5 bg-panelBg px-3 py-2 rounded-xl border border-[#ECEBF4] shrink-0">
+        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+        <select data-table-perpage="b2b-orders-table" class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+          <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+          <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+          <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+          <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+        </select>
+      </div>
+
       <div class="relative flex-1 md:w-64">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari No. Pesanan / Nama Mitra..." class="w-full text-xs rounded-xl border border-[#ECEBF4] pl-8 pr-3 py-2 focus:outline-none focus:border-sidebar">
+        <input type="text" name="search" value="{{ request('search') }}"
+               data-table-search="b2b-orders-table"
+               placeholder="Cari No. Pesanan / Nama Mitra..." class="w-full text-xs rounded-xl border border-[#ECEBF4] pl-8 pr-3 py-2 focus:outline-none focus:border-sidebar">
         <svg class="w-4 h-4 text-textMuted absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </div>
 
@@ -59,7 +71,7 @@
         Filter
       </button>
 
-      @if(request()->hasAny(['search', 'status', 'payment_term']))
+      @if(request()->hasAny(['search', 'status', 'payment_term', 'per_page']))
         <a href="{{ route('b2b.orders.index') }}" class="px-3 py-2 text-xs font-semibold text-textMuted hover:text-sidebar transition">
           Reset
         </a>
@@ -67,9 +79,10 @@
     </form>
   </div>
 
-  <!-- Orders Table -->
-  <div class="bg-white rounded-[26px] p-6 border border-[#ECEBF4] space-y-4">
-    <div class="overflow-x-auto">
+  <!-- Orders Table Container -->
+  <div class="bg-white rounded-[26px] p-5 sm:p-6 border border-[#ECEBF4] space-y-4" data-async-table="b2b-orders-table">
+    <!-- Desktop View: Table -->
+    <div class="hidden md:block overflow-x-auto">
       <table class="w-full text-left text-xs border-collapse">
         <thead>
           <tr class="border-b border-[#ECEBF4] text-textMuted">
@@ -164,6 +177,80 @@
           @endforelse
         </tbody>
       </table>
+    </div>
+
+    <!-- Mobile View: Card Stack -->
+    <div class="block md:hidden divide-y divide-[#ECEBF4]">
+      @forelse($orders as $ord)
+        <div class="py-4 space-y-3">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <a href="{{ route('b2b.orders.show', $ord) }}" class="font-mono font-bold text-sidebar hover:underline text-sm block">
+                {{ $ord->order_number }}
+              </a>
+              <span class="text-[10px] text-textMuted">{{ $ord->created_at->format('d/m/Y H:i') }}</span>
+            </div>
+            <div>
+              @if($ord->status === 'RESERVED' || $ord->status === 'READY_FOR_PICKUP')
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 inline-flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-purple-600 animate-pulse"></span>
+                  Teralokasi
+                </span>
+              @elseif($ord->status === 'HANDED_OVER')
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  Diserahkan
+                </span>
+              @elseif($ord->status === 'CANCELLED')
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-100 text-red-800">Dibatalkan</span>
+              @else
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 text-gray-800">{{ $ord->status }}</span>
+              @endif
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Mitra Rekanan</span>
+              <span class="font-bold text-textMain text-xs block truncate">{{ $ord->member->name }}</span>
+              <span class="text-[10px] text-purple-700 bg-purple-100 px-1 py-0.2 rounded font-semibold inline-block mt-0.5">
+                {{ $ord->member->tier?->name ?? 'NON-TIER' }}
+              </span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Total Nilai</span>
+              <span class="font-mono font-black text-sidebar text-sm block">
+                Rp {{ number_format($ord->total_amount, 0, ',', '.') }}
+              </span>
+              <span class="text-[10px] font-semibold text-textMuted block mt-0.5">
+                {{ $ord->payment_term === 'CASH' ? 'Tunai (CBD)' : $ord->payment_term }}
+              </span>
+            </div>
+            <div class="col-span-2 pt-1 border-t border-[#ECEBF4]/60 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Lokasi Serah</span>
+                <span class="text-[11px] text-textMain font-medium">{{ $ord->fulfillmentLocation->name }}</span>
+              </div>
+              @if($ord->pickupTicket)
+                <div class="text-right">
+                  <span class="text-[10px] uppercase font-bold text-textMuted block">Tiket QR</span>
+                  <span class="text-[11px] font-mono font-bold text-purple-700">{{ $ord->pickupTicket->ticket_number }}</span>
+                </div>
+              @endif
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end pt-1">
+            <a href="{{ route('b2b.orders.show', $ord) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sidebar text-white hover:bg-sidebar/90 font-bold text-xs transition shadow-sm">
+              <span>Lihat Rincian Order</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      @empty
+        <div class="py-10 text-center text-textMuted text-xs">
+          Tidak ada pesanan B2B yang sesuai kriteria pencarian.
+        </div>
+      @endforelse
     </div>
 
     <!-- Pagination -->

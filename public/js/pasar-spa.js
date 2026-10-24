@@ -289,6 +289,7 @@ const PasarNav = {
       if (link.target && link.target !== '_self') return;
       if (link.hasAttribute('download')) return;
       if (link.hasAttribute('data-native') || link.hasAttribute('data-reload')) return;
+      if (link.closest('[data-async-table]')) return; // Delegated to PasarTable for seamless async table updates
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // Open in new tab
 
       const href = link.getAttribute('href');

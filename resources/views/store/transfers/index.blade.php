@@ -35,14 +35,46 @@
     </a>
   </div>
 
-  <!-- Transfers List -->
-  <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm">
+  <!-- Search & Filter Bar -->
+  <div class="bg-white rounded-3xl p-4 border border-[#ECEBF4] shadow-sm">
+    <form action="{{ route('store.transfers.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 text-xs">
+      <div class="flex items-center gap-1.5 bg-panelBg px-3 py-2 rounded-xl border border-[#ECEBF4] shrink-0">
+        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+        <select data-table-perpage="store-transfers-table" class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+          <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+          <option value="15" {{ request('per_page', 10) == 15 ? 'selected' : '' }}>15</option>
+          <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+        </select>
+      </div>
+
+      <div class="relative flex-1 w-full">
+        <input type="text" name="search" value="{{ request('search') }}"
+               data-table-search="store-transfers-table"
+               placeholder="Cari nomor transfer atau gudang pengirim..."
+               class="w-full px-3.5 py-2 bg-panelBg rounded-xl border border-[#ECEBF4] text-xs font-medium text-textMain focus:outline-none">
+      </div>
+
+      <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-sidebar text-white font-bold text-xs rounded-xl hover:bg-sidebar/90 transition shadow-sm">
+        Cari
+      </button>
+
+      @if(request()->anyFilled(['search', 'per_page']))
+        <a href="{{ route('store.transfers.index') }}" class="px-2.5 py-2 text-xs font-bold text-brandCoral hover:underline text-center">
+          Reset
+        </a>
+      @endif
+    </form>
+  </div>
+
+  <!-- Transfers List Container -->
+  <div class="bg-white rounded-3xl border border-[#ECEBF4] p-5 sm:p-6 shadow-sm" data-async-table="store-transfers-table">
     @if($transfers->isEmpty())
       <div class="py-12 text-center text-textMuted text-xs">
         Tidak ada kiriman transfer masuk untuk lokasi toko ini.
       </div>
     @else
-      <div class="overflow-x-auto">
+      <!-- Desktop View: Table -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
@@ -100,6 +132,57 @@
             @endforeach
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile View: Card Stack -->
+      <div class="block md:hidden divide-y divide-[#ECEBF4]">
+        @foreach($transfers as $trf)
+          <div class="py-4 space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <a href="{{ route('store.transfers.show', $trf->id) }}" class="font-extrabold text-brandOrange hover:underline text-sm font-mono block">
+                  {{ $trf->transfer_number }}
+                </a>
+                <span class="text-[10px] text-textMuted">Dispatch: {{ $trf->dispatched_at?->format('d/m/Y H:i') }}</span>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border shrink-0 {{ $trf->status_badge_class }}">
+                {{ $trf->status_label }}
+              </span>
+            </div>
+
+            <div class="text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4] space-y-1.5">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Gudang Asal Pengirim</span>
+                <span class="font-bold text-textMain text-xs">{{ $trf->fromLocation->name }}</span>
+              </div>
+              <div class="pt-1 border-t border-[#ECEBF4]/60">
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Daftar Barang</span>
+                <div class="space-y-0.5 mt-0.5">
+                  @foreach($trf->items as $item)
+                    <div class="text-[11px] text-textMain">
+                      • {{ $item->product->name }} ({{ number_format($item->requested_qty_input, 0) }} {{ $item->productUom?->uom?->symbol }})
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-1">
+              @if(in_array($trf->status, ['DISPATCHED', 'PARTIALLY_RECEIVED']))
+                <a href="{{ route('store.transfers.show', $trf->id) }}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition inline-flex items-center gap-1.5 shadow-sm">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                  </svg>
+                  <span>Terima Barang</span>
+                </a>
+              @else
+                <a href="{{ route('store.transfers.show', $trf->id) }}" class="px-3 py-1.5 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4]">
+                  Lihat Detail
+                </a>
+              @endif
+            </div>
+          </div>
+        @endforeach
       </div>
 
       <div class="mt-4 pt-4 border-t border-[#ECEBF4]">

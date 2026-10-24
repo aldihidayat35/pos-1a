@@ -63,15 +63,37 @@
         </div>
 
         <!-- Categories Table Card (Right Col: 8) -->
-        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm">
-            <div class="p-5 border-b border-[#ECEBF4] flex items-center justify-between">
+        <div data-async-table="categories-table" class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm">
+            <!-- Table Header Controls: Search & Per Page -->
+            <div class="p-4 sm:p-5 border-b border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white">
                 <div>
                     <h3 class="font-bold text-sm text-textMain">Daftar Kategori Terdaftar</h3>
                     <p class="text-xs text-textMuted">Total {{ $categories->total() }} kategori produk</p>
                 </div>
+                <div class="flex items-center gap-2">
+                    <!-- Live Search Input -->
+                    <div class="relative flex-1 sm:w-56">
+                        <input type="text" 
+                               data-table-search="categories-table" 
+                               value="{{ request('search') }}" 
+                               placeholder="Cari kode, nama, deskripsi..." 
+                               class="w-full pl-8 pr-3 py-1.5 text-xs bg-panelBg border border-[#E6E4F0] rounded-xl focus:bg-white focus:outline-none focus:border-sidebar transition font-medium">
+                        <svg class="w-3.5 h-3.5 text-textMuted absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <!-- Per Page Selector -->
+                    <select data-table-perpage="categories-table" class="text-xs bg-panelBg border border-[#E6E4F0] px-2.5 py-1.5 rounded-xl font-bold text-sidebar focus:outline-none focus:border-sidebar transition cursor-pointer">
+                        <option value="10" {{ request('per_page', 15) == 10 ? 'selected' : '' }}>10 / hal</option>
+                        <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15 / hal</option>
+                        <option value="25" {{ request('per_page', 15) == 25 ? 'selected' : '' }}>25 / hal</option>
+                        <option value="50" {{ request('per_page', 15) == 50 ? 'selected' : '' }}>50 / hal</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
+            <!-- DESKTOP VIEW: Structured Clean Table (hidden on mobile) -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-panelBg/80 border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
                         <tr>
@@ -134,6 +156,62 @@
                 </table>
             </div>
 
+            <!-- MOBILE VIEW: Card Stack Layout (visible on mobile only) -->
+            <div class="block md:hidden p-3.5 space-y-3">
+                @forelse($categories as $cat)
+                    <div class="bg-panelBg/40 border border-[#ECEBF4] rounded-2xl p-4 space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <span class="font-mono font-bold text-xs text-sidebar bg-sidebar/5 px-2 py-0.5 rounded border border-sidebar/10">{{ $cat->code }}</span>
+                                <h4 class="font-bold text-textMain text-sm mt-1">{{ $cat->name }}</h4>
+                                @if($cat->description)
+                                    <p class="text-[11px] text-textMuted mt-0.5">{{ $cat->description }}</p>
+                                @endif
+                            </div>
+                            <div>
+                                @if($cat->is_active)
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        Aktif
+                                    </span>
+                                @else
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-500 border border-gray-200">
+                                        Nonaktif
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-[#ECEBF4]">
+                            <div>
+                                <span class="text-[10px] text-textMuted block uppercase font-bold">Kategori Induk</span>
+                                <span class="font-semibold text-textMain">{{ $cat->parent?->name ?? '— (Root)' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-textMuted block uppercase font-bold">Produk Terkait</span>
+                                <span class="font-semibold text-sidebar">{{ $cat->products_count }} Base SKU</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-[#ECEBF4] flex justify-end">
+                            <form method="POST" action="{{ route('master.categories.destroy', $cat) }}" 
+                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori [{{ $cat->name }}]?')" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                    Hapus Kategori
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-8 text-center text-textMuted text-xs">Belum ada kategori terdaftar.</div>
+                @endforelse
+            </div>
+
+            <!-- Pagination Footer -->
             @if($categories->hasPages())
                 <div class="p-4 border-t border-[#ECEBF4] bg-panelBg/30">
                     {{ $categories->links() }}

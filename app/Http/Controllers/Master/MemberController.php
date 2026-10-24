@@ -32,7 +32,8 @@ class MemberController extends Controller
             });
         }
 
-        $members = $query->orderBy('name')->paginate(15)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $members = $query->orderBy('name')->paginate($perPage)->withQueryString();
         $tiers = MemberTier::active()->orderBy('priority')->get();
 
         return view('master.members.index', compact('members', 'tiers'));

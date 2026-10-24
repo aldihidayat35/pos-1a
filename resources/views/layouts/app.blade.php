@@ -311,6 +311,8 @@
 
   <!-- SPA-LITE NAVIGATION & SMOOTH TRANSITION ENGINE -->
   <script src="{{ asset('js/pasar-spa.js') }}"></script>
+  <!-- DYNAMIC SERVER-SIDE TABLE & MOBILE CARD-STACK ENGINE -->
+  <script src="{{ asset('js/pasar-table.js') }}"></script>
 
 </body>
 </html>

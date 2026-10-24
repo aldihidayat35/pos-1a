@@ -253,7 +253,8 @@ class PosController extends Controller
             $query->where('payment_method', $request->payment_method);
         }
 
-        $sales = $query->orderByDesc('id')->paginate(12)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 12), 5), 100);
+        $sales = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         $canVoid = $user->hasPermission('pos.void') || $user->isSuperAdmin();
 

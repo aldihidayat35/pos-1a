@@ -47,7 +47,8 @@ class PurchaseOrderController extends Controller
             });
         }
 
-        $orders = $query->orderByDesc('id')->paginate(12)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 12), 5), 100);
+        $orders = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         $statusCounts = [
             'ALL' => PurchaseOrder::count(),

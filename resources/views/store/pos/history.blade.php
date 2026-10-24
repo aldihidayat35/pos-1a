@@ -53,18 +53,29 @@
 
   <!-- Search & Filter Bar -->
   <div class="bg-white rounded-3xl p-4 border border-[#ECEBF4] shadow-sm">
-    <form action="{{ route('store.pos.history') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+    <form action="{{ route('store.pos.history') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs items-center">
       <div class="sm:col-span-2">
         <input type="text" name="search" value="{{ request('search') }}"
+               data-table-search="pos-history-table"
                placeholder="Cari No. Struk (misal POS-...) atau Nama Pelanggan..."
                class="w-full px-3.5 py-2 bg-panelBg rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none">
       </div>
 
       <div>
-        <select name="status" class="w-full px-3 py-2 bg-panelBg rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none">
+        <select name="status" onchange="this.form.submit()" class="w-full px-3 py-2 bg-panelBg rounded-xl border border-[#ECEBF4] text-xs font-semibold text-textMain focus:outline-none">
           <option value="">-- Semua Status --</option>
           <option value="POSTED" {{ request('status') === 'POSTED' ? 'selected' : '' }}>POSTED (Berhasil)</option>
           <option value="VOIDED" {{ request('status') === 'VOIDED' ? 'selected' : '' }}>VOIDED (Dibatalkan)</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-1.5 bg-panelBg px-3 py-2 rounded-xl border border-[#ECEBF4]">
+        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+        <select data-table-perpage="pos-history-table" class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+          <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+          <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>12</option>
+          <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+          <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
         </select>
       </div>
 
@@ -72,21 +83,24 @@
         <button type="submit" class="flex-1 py-2 bg-sidebar text-white font-bold text-xs rounded-xl hover:bg-sidebar/90 transition shadow-sm">
           Filter
         </button>
-        <a href="{{ route('store.pos.history') }}" class="px-3 py-2 bg-panelBg text-sidebar font-bold text-xs rounded-xl hover:bg-gray-200 transition">
-          Reset
-        </a>
+        @if(request()->anyFilled(['search', 'status', 'per_page']))
+          <a href="{{ route('store.pos.history') }}" class="px-2.5 py-2 text-xs font-bold text-brandCoral hover:underline text-center">
+            Reset
+          </a>
+        @endif
       </div>
     </form>
   </div>
 
-  <!-- Sales Table -->
-  <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm">
+  <!-- Sales Table Container -->
+  <div class="bg-white rounded-3xl border border-[#ECEBF4] p-5 sm:p-6 shadow-sm" data-async-table="pos-history-table">
     @if($sales->isEmpty())
       <div class="py-12 text-center text-textMuted text-xs">
         Belum ada riwayat transaksi kasir yang ditemukan.
       </div>
     @else
-      <div class="overflow-x-auto">
+      <!-- Desktop View: Table -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
@@ -159,6 +173,71 @@
             @endforeach
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile View: Card Stack -->
+      <div class="block md:hidden divide-y divide-[#ECEBF4]">
+        @foreach($sales as $s)
+          <div class="py-4 space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <a href="{{ route('store.pos.receipt', $s->id) }}" class="font-extrabold text-sidebar hover:text-brandOrange hover:underline text-sm font-mono block">
+                  {{ $s->sale_number }}
+                </a>
+                <span class="text-[10px] text-textMuted">{{ $s->posted_at?->format('d/m/Y H:i') }} • Kasir: {{ $s->cashier->name }}</span>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border block {{ $s->status_badge_class }}">
+                  {{ $s->status_label }}
+                </span>
+                <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-panelBg text-sidebar uppercase mt-1 inline-block">
+                  {{ $s->payment_method }}
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Pelanggan</span>
+                <span class="font-bold text-textMain text-xs block truncate">{{ $s->customer_name }}</span>
+                @if($s->member)
+                  <span class="text-[10px] text-brandOrange font-mono font-bold">{{ $s->member->member_code }}</span>
+                @endif
+              </div>
+              <div>
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Total Belanja</span>
+                <span class="font-mono font-black text-sidebar text-sm">
+                  Rp {{ number_format($s->total_amount, 0, ',', '.') }}
+                </span>
+              </div>
+              <div class="col-span-2 pt-1.5 border-t border-[#ECEBF4]/60">
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Daftar Item</span>
+                <div class="text-[11px] text-textMain space-y-0.5 mt-0.5">
+                  @foreach($s->items->take(2) as $it)
+                    <div class="truncate">
+                      • {{ $it->product->name }} ({{ number_format($it->quantity_input, 1) }})
+                    </div>
+                  @endforeach
+                  @if($s->items->count() > 2)
+                    <span class="text-[10px] text-textMuted italic">+{{ $s->items->count() - 2 }} item lainnya</span>
+                  @endif
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-1">
+              <a href="{{ route('store.pos.receipt', $s->id) }}" class="px-3 py-1.5 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4]">
+                Lihat Struk
+              </a>
+              @if($s->isPosted() && $canVoid)
+                <button type="button" onclick="openVoidModal({{ $s->id }}, '{{ $s->sale_number }}', 'Rp {{ number_format($s->total_amount, 0, ',', '.') }}')"
+                        class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs rounded-xl transition border border-rose-200">
+                  Batalkan (Void)
+                </button>
+              @endif
+            </div>
+          </div>
+        @endforeach
       </div>
 
       <div class="mt-4 pt-4 border-t border-[#ECEBF4]">

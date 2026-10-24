@@ -88,6 +88,23 @@
   <!-- Filter & Search Bar -->
   <div class="bg-white rounded-2xl p-4 border border-[#ECEBF4] flex flex-col md:flex-row md:items-center justify-between gap-3">
     <form method="GET" action="{{ route('opname.index') }}" class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+      <div class="flex items-center gap-1.5 bg-panelBg px-3 py-2 rounded-xl border border-[#ECEBF4] shrink-0">
+        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+        <select data-table-perpage="opname-table" class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+          <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+          <option value="15" {{ request('per_page', 10) == 15 ? 'selected' : '' }}>15</option>
+          <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+        </select>
+      </div>
+
+      <div class="relative flex-1 md:w-60">
+        <input type="text" name="search" value="{{ request('search') }}"
+               data-table-search="opname-table"
+               placeholder="Cari No. Sesi / Catatan..."
+               class="w-full text-xs rounded-xl border border-[#ECEBF4] pl-8 pr-3 py-2 focus:outline-none focus:border-sidebar">
+        <svg class="w-4 h-4 text-textMuted absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+
       <div class="flex items-center gap-2">
         <span class="text-xs font-bold text-textMuted">Lokasi:</span>
         <select name="location_id" class="text-xs rounded-xl border border-[#ECEBF4] px-3 py-2 bg-white focus:outline-none focus:border-sidebar" onchange="this.form.submit()">
@@ -115,7 +132,7 @@
         Filter
       </button>
 
-      @if(request()->hasAny(['status', 'location_id']))
+      @if(request()->hasAny(['status', 'location_id', 'search', 'per_page']))
         <a href="{{ route('opname.index') }}" class="text-xs text-textMuted hover:text-rose-600 transition underline">
           Reset Filter
         </a>
@@ -123,9 +140,10 @@
     </form>
   </div>
 
-  <!-- Table of Stock Opname Sessions -->
-  <div class="bg-white rounded-2xl border border-[#ECEBF4] overflow-hidden shadow-sm">
-    <div class="overflow-x-auto">
+  <!-- Table of Stock Opname Sessions Container -->
+  <div class="bg-white rounded-2xl border border-[#ECEBF4] overflow-hidden shadow-sm" data-async-table="opname-table">
+    <!-- Desktop View: Table -->
+    <div class="hidden md:block overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-sidebar text-white text-[11px] font-bold uppercase tracking-wider">
@@ -246,6 +264,89 @@
           @endforelse
         </tbody>
       </table>
+    </div>
+
+    <!-- Mobile View: Card Stack -->
+    <div class="block md:hidden divide-y divide-[#ECEBF4]">
+      @forelse($opnames as $opn)
+        <div class="p-4 space-y-3">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <a href="{{ route('opname.show', $opn->id) }}" class="font-bold text-sidebar hover:underline text-sm block">
+                {{ $opn->opname_number }}
+              </a>
+              <span class="text-[10px] text-textMuted">{{ $opn->started_at->format('d M Y, H:i') }} • {{ $opn->location->name }}</span>
+            </div>
+            <div>
+              @php $badge = $opn->status_badge; @endphp
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border {{ $badge['class'] }}">
+                <span>{{ $badge['label'] }}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Cakupan Hitung</span>
+              <span class="font-semibold text-textMain text-[11px] block truncate">
+                @if($opn->scope_type === 'ALL')
+                  Semua Produk
+                @elseif($opn->scope_type === 'CATEGORY')
+                  {{ $opn->category?->name ?? 'Kategori' }}
+                @else
+                  Pilihan Khusus
+                @endif
+              </span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Total Dihitung</span>
+              <span class="font-bold text-sidebar text-xs">{{ $opn->total_items_counted }} Item</span>
+            </div>
+            <div class="pt-1 border-t border-[#ECEBF4]/60">
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Selisih Item</span>
+              @if($opn->total_items_discrepancy > 0)
+                <span class="font-bold text-rose-600 text-xs">{{ $opn->total_items_discrepancy }} Berselisih</span>
+              @else
+                <span class="text-textMuted text-xs">0 (Sesuai)</span>
+              @endif
+            </div>
+            <div class="pt-1 border-t border-[#ECEBF4]/60">
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Nilai Selisih</span>
+              <span class="font-mono font-bold text-xs {{ $opn->total_variance_value < 0 ? 'text-rose-600' : ($opn->total_variance_value > 0 ? 'text-emerald-600' : 'text-textMuted') }}">
+                @if($opn->total_variance_value < 0)
+                  -Rp {{ number_format(abs($opn->total_variance_value), 0, ',', '.') }}
+                @elseif($opn->total_variance_value > 0)
+                  +Rp {{ number_format($opn->total_variance_value, 0, ',', '.') }}
+                @else
+                  Rp 0
+                @endif
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-1.5 pt-1">
+            @if($opn->isOpen() && ($user->hasPermission('opname.blind_count') || $user->isSuperAdmin()))
+              <a href="{{ route('opname.count', $opn->id) }}" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold rounded-xl border border-amber-200 transition text-xs flex items-center gap-1">
+                <span>Hitung Blind</span>
+              </a>
+            @endif
+
+            @if($opn->isReconciliation() && ($user->hasPermission('opname.reconcile') || $user->isSuperAdmin()))
+              <a href="{{ route('opname.reconcile', $opn->id) }}" class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-xl border border-purple-200 transition text-xs flex items-center gap-1">
+                <span>Rekonsiliasi</span>
+              </a>
+            @endif
+
+            <a href="{{ route('opname.show', $opn->id) }}" class="px-3 py-1.5 bg-panelBg hover:bg-white text-sidebar font-bold rounded-xl border border-[#ECEBF4] transition text-xs">
+              Detail
+            </a>
+          </div>
+        </div>
+      @empty
+        <div class="py-10 text-center text-textMuted text-xs">
+          Belum ada sesi Stock Opname.
+        </div>
+      @endforelse
     </div>
 
     @if($opnames->hasPages())

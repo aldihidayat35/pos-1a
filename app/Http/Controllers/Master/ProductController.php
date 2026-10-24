@@ -49,7 +49,8 @@ class ProductController extends Controller
             }
         }
 
-        $products = $query->orderBy('name')->paginate(12)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 12), 5), 100);
+        $products = $query->orderBy('name')->paginate($perPage)->withQueryString();
         $categories = ProductCategory::active()->orderBy('name')->get();
         $uoms = Uom::active()->orderBy('name')->get();
 

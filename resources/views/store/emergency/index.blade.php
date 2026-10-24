@@ -45,14 +45,46 @@
     </div>
   </div>
 
-  <!-- Purchases Table -->
-  <div class="bg-white rounded-3xl border border-[#ECEBF4] p-6 shadow-sm">
+  <!-- Search & Filter Bar -->
+  <div class="bg-white rounded-3xl p-4 border border-[#ECEBF4] shadow-sm">
+    <form action="{{ route('store.emergency.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 text-xs">
+      <div class="flex items-center gap-1.5 bg-panelBg px-3 py-2 rounded-xl border border-[#ECEBF4] shrink-0">
+        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+        <select data-table-perpage="emergency-table" class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+          <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+          <option value="15" {{ request('per_page', 10) == 15 ? 'selected' : '' }}>15</option>
+          <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+        </select>
+      </div>
+
+      <div class="relative flex-1 w-full">
+        <input type="text" name="search" value="{{ request('search') }}"
+               data-table-search="emergency-table"
+               placeholder="Cari nomor dokumen, kios, atau nama produk..."
+               class="w-full px-3.5 py-2 bg-panelBg rounded-xl border border-[#ECEBF4] text-xs font-medium text-textMain focus:outline-none">
+      </div>
+
+      <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-sidebar text-white font-bold text-xs rounded-xl hover:bg-sidebar/90 transition shadow-sm">
+        Cari
+      </button>
+
+      @if(request()->anyFilled(['search', 'per_page']))
+        <a href="{{ route('store.emergency.index') }}" class="px-2.5 py-2 text-xs font-bold text-brandCoral hover:underline text-center">
+          Reset
+        </a>
+      @endif
+    </form>
+  </div>
+
+  <!-- Purchases Table Container -->
+  <div class="bg-white rounded-3xl border border-[#ECEBF4] p-5 sm:p-6 shadow-sm" data-async-table="emergency-table">
     @if($purchases->isEmpty())
       <div class="py-12 text-center text-textMuted text-xs">
         Belum ada riwayat pembelian emergency di lokasi toko ini.
       </div>
     @else
-      <div class="overflow-x-auto">
+      <!-- Desktop View: Table -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
@@ -110,6 +142,59 @@
             @endforeach
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile View: Card Stack -->
+      <div class="block md:hidden divide-y divide-[#ECEBF4]">
+        @foreach($purchases as $emg)
+          <div class="py-4 space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <a href="{{ route('store.emergency.show', $emg->id) }}" class="font-extrabold text-brandOrange hover:underline text-sm font-mono block">
+                  {{ $emg->purchase_number }}
+                </a>
+                <span class="text-[10px] text-textMuted">{{ $emg->posted_at?->format('d/m/Y H:i') }} • Oleh: {{ $emg->creator?->name }}</span>
+              </div>
+              <div>
+                @if($emg->receipt_photo_path)
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                    Ada Foto
+                  </span>
+                @else
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">
+                    Tanpa Foto
+                  </span>
+                @endif
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-bold text-sm text-textMain">{{ $emg->product->name }}</h4>
+              <span class="text-[10px] text-textMuted font-mono">{{ $emg->product->sku }} • Kios: {{ $emg->merchant_name }}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Kuantitas</span>
+                <span class="font-mono font-bold text-sidebar text-xs">
+                  {{ number_format($emg->qty_input, 1) }} {{ $emg->productUom?->uom?->symbol }}
+                </span>
+              </div>
+              <div>
+                <span class="text-[10px] uppercase font-bold text-textMuted block">Total Biaya</span>
+                <span class="font-mono font-black text-amber-700 text-xs">
+                  Rp {{ number_format($emg->total_amount, 0, ',', '.') }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end pt-1">
+              <a href="{{ route('store.emergency.show', $emg->id) }}" class="px-3 py-1.5 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4]">
+                Lihat Detail Nota
+              </a>
+            </div>
+          </div>
+        @endforeach
       </div>
 
       <div class="mt-4 pt-4 border-t border-[#ECEBF4]">

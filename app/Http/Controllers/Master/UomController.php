@@ -10,9 +10,21 @@ use Illuminate\View\View;
 
 class UomController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $uoms = Uom::withCount('baseProducts')->orderBy('dimension')->orderBy('name')->paginate(15);
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $search = trim($request->input('search', ''));
+
+        $query = Uom::withCount('baseProducts');
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('symbol', 'like', "%{$search}%");
+            });
+        }
+
+        $uoms = $query->orderBy('dimension')->orderBy('name')->paginate($perPage)->withQueryString();
         return view('master.uoms.index', compact('uoms'));
     }
 

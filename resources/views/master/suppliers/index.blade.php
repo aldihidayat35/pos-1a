@@ -69,23 +69,38 @@
         </div>
 
         <!-- Suppliers Table Card (Right Col: 8) -->
-        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm">
+        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm" data-async-table="suppliers-table">
             <div class="p-5 border-b border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h3 class="font-bold text-sm text-textMain">Daftar Suplayer Aktif</h3>
                     <p class="text-xs text-textMuted">Total {{ $suppliers->total() }} mitra pemasok terdaftar</p>
                 </div>
 
-                <form method="GET" action="{{ route('master.suppliers.index') }}" class="flex items-center gap-2">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari suplayer..."
-                           class="px-3 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none focus:border-sidebar">
-                    <button type="submit" class="px-3 py-2 bg-sidebar text-white text-xs font-semibold rounded-xl transition">
-                        Cari
-                    </button>
-                </form>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-1.5 bg-panelBg px-2.5 py-1.5 rounded-xl border border-[#E6E4F0]">
+                        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+                        <select data-table-perpage="suppliers-table"
+                                class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                        </select>
+                    </div>
+
+                    <form method="GET" action="{{ route('master.suppliers.index') }}" class="flex items-center gap-2">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari suplayer / kontak..."
+                               data-table-search="suppliers-table"
+                               class="px-3.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none focus:border-sidebar w-40 sm:w-56">
+                        @if(request('search'))
+                            <a href="{{ route('master.suppliers.index') }}" class="text-xs text-textMuted hover:text-red-500 font-semibold px-2">Reset</a>
+                        @endif
+                    </form>
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
+            <!-- Desktop View: Table -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-panelBg/80 border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
                         <tr>
@@ -147,6 +162,73 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Mobile View: Card Stack -->
+            <div class="block md:hidden divide-y divide-[#ECEBF4]">
+                @forelse($suppliers as $sup)
+                    <div class="p-4 space-y-3 hover:bg-panelBg/30 transition">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <span class="inline-block px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-sidebar/10 text-sidebar border border-sidebar/20">
+                                    {{ $sup->supplier_code }}
+                                </span>
+                                <h4 class="font-bold text-sm text-textMain mt-1">{{ $sup->name }}</h4>
+                                @if($sup->email)
+                                    <p class="text-[11px] text-textMuted">{{ $sup->email }}</p>
+                                @endif
+                            </div>
+                            <div>
+                                @if($sup->is_active)
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        Aktif
+                                    </span>
+                                @else
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-500 border border-gray-200">
+                                        Nonaktif
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-textMuted block">Kontak PIC</span>
+                                <span class="font-semibold text-textMain">{{ $sup->contact_person ?: '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-textMuted block">Telepon / WA</span>
+                                @if($sup->phone)
+                                    <a href="tel:{{ $sup->phone }}" class="font-semibold text-sidebar hover:underline">{{ $sup->phone }}</a>
+                                @else
+                                    <span class="text-textMuted">—</span>
+                                @endif
+                            </div>
+                            <div class="col-span-2 pt-1 border-t border-[#ECEBF4]/60">
+                                <span class="text-[10px] uppercase font-bold text-textMuted block">Alamat Gudang</span>
+                                <span class="text-textMuted text-[11px]">{{ $sup->address ?: '—' }}</span>
+                            </div>
+                        </div>
+
+                        @if($sup->is_active)
+                            <div class="flex items-center justify-end pt-1">
+                                <form method="POST" action="{{ route('master.suppliers.destroy', $sup) }}" 
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan suplayer [{{ $sup->name }}]?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition inline-flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                                        </svg>
+                                        Nonaktifkan
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                @empty
+                    <div class="py-8 px-4 text-center text-textMuted text-xs">Belum ada suplayer terdaftar.</div>
+                @endforelse
             </div>
 
             @if($suppliers->hasPages())

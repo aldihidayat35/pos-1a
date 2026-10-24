@@ -32,7 +32,17 @@ class EmergencyPurchaseController extends Controller
             $query->where('location_id', $activeLocation->id);
         }
 
-        $purchases = $query->orderByDesc('id')->paginate(10);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('purchase_number', 'LIKE', "%{$search}%")
+                  ->orWhere('merchant_name', 'LIKE', "%{$search}%")
+                  ->orWhereHas('product', fn($p) => $p->where('name', 'LIKE', "%{$search}%"));
+            });
+        }
+
+        $perPage = min(max((int) $request->input('per_page', 10), 5), 100);
+        $purchases = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         return view('store.emergency.index', compact('purchases', 'user', 'activeLocation'));
     }

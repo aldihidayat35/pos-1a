@@ -180,7 +180,8 @@
       <p class="text-xs text-textMuted mt-0.5">Batas minimum harga yang dihitung otomatis berdasarkan HPP Moving Average aktual.</p>
     </div>
 
-    <div class="overflow-x-auto">
+    <!-- Desktop View: Matrix Table -->
+    <div class="hidden md:block overflow-x-auto">
       <table class="w-full text-left text-xs">
         <thead>
           <tr class="border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
@@ -229,6 +230,57 @@
           @endforeach
         </tbody>
       </table>
+    </div>
+
+    <!-- Mobile View: Card Stack -->
+    <div class="block md:hidden divide-y divide-[#ECEBF4]">
+      @foreach($pricingMatrix as $row)
+        @php $limits = $row['limits']; @endphp
+        <div class="py-3.5 space-y-2.5">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="inline-block px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-sidebar/10 text-sidebar border border-sidebar/20">
+                {{ $row['product']->sku }}
+              </span>
+              <h4 class="font-bold text-sm text-textMain mt-1">{{ $row['product']->name }}</h4>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+              TERKUNCI
+            </span>
+          </div>
+
+          <!-- Highlight Effective Floor Price -->
+          <div class="bg-rose-50/80 border border-rose-200/80 p-2.5 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-rose-700 block">Batas Min Efektif (Floor Lock)</span>
+              <span class="text-[11px] text-textMuted">Batas mutlak transaksi sistem</span>
+            </div>
+            <span class="font-mono font-black text-rose-600 text-sm">
+              Rp {{ number_format($limits['effective_min_price'], 0, ',', '.') }}
+            </span>
+          </div>
+
+          <!-- Breakdown Grid -->
+          <div class="grid grid-cols-2 gap-2 text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4]">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">HPP Berjalan</span>
+              <span class="font-mono font-bold text-sidebar">Rp {{ number_format($limits['current_unit_cost'], 0, ',', '.') }}</span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Floor Price (+Markup)</span>
+              <span class="font-mono font-bold text-amber-700">Rp {{ number_format($limits['floor_price'], 0, ',', '.') }}</span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Market Min</span>
+              <span class="font-mono text-textMuted">Rp {{ number_format($limits['market_min_price'], 0, ',', '.') }}</span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-textMuted block">Harga Katalog</span>
+              <span class="font-mono font-bold text-emerald-700">Rp {{ number_format($limits['list_price'], 0, ',', '.') }}</span>
+            </div>
+          </div>
+        </div>
+      @endforeach
     </div>
   </div>
 </main>

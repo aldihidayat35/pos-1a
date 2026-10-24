@@ -46,7 +46,8 @@ class B2bOrderController extends Controller
             });
         }
 
-        $orders = $query->paginate(15)->withQueryString();
+        $perPage = min(max((int) $request->input('per_page', 15), 5), 100);
+        $orders = $query->paginate($perPage)->withQueryString();
         $user = $request->user();
         $activeLocation = $user->getActiveLocation();
 

@@ -66,15 +66,46 @@
         </div>
 
         <!-- Locations Table Card (Right Col: 8) -->
-        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm">
-            <div class="p-5 border-b border-[#ECEBF4] flex items-center justify-between">
+        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm" data-async-table="locations-table">
+            <div class="p-5 border-b border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h3 class="font-bold text-sm text-textMain">Daftar Lokasi Operasional</h3>
                     <p class="text-xs text-textMuted">Total {{ $locations->total() }} titik operasional aktif</p>
                 </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-1.5 bg-panelBg px-2.5 py-1.5 rounded-xl border border-[#E6E4F0]">
+                        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
+                        <select data-table-perpage="locations-table"
+                                class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
+                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                        </select>
+                    </div>
+
+                    <form method="GET" action="{{ route('master.locations.index') }}" class="flex flex-wrap items-center gap-2">
+                        <select name="type" onchange="this.form.submit()" class="px-2.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none">
+                            <option value="">Semua Tipe</option>
+                            <option value="STORE" {{ request('type') === 'STORE' ? 'selected' : '' }}>STORE (Toko)</option>
+                            <option value="WAREHOUSE" {{ request('type') === 'WAREHOUSE' ? 'selected' : '' }}>WAREHOUSE (Gudang)</option>
+                            <option value="TRANSIT" {{ request('type') === 'TRANSIT' ? 'selected' : '' }}>TRANSIT (Pos)</option>
+                        </select>
+
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kode, alamat..."
+                               data-table-search="locations-table"
+                               class="px-3.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none focus:border-sidebar w-36 sm:w-48">
+
+                        @if(request('search') || request('type'))
+                            <a href="{{ route('master.locations.index') }}" class="text-xs text-textMuted hover:text-red-500 font-semibold px-1.5">Reset</a>
+                        @endif
+                    </form>
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
+            <!-- Desktop View: Table -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead class="bg-panelBg/80 border-b border-[#ECEBF4] text-textMuted font-bold uppercase tracking-wider text-[11px]">
                         <tr>
@@ -143,6 +174,71 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Mobile View: Card Stack -->
+            <div class="block md:hidden divide-y divide-[#ECEBF4]">
+                @forelse($locations as $loc)
+                    <div class="p-4 space-y-3 hover:bg-panelBg/30 transition">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <span class="inline-block px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-sidebar/10 text-sidebar border border-sidebar/20">
+                                    {{ $loc->code }}
+                                </span>
+                                <h4 class="font-bold text-sm text-textMain mt-1">{{ $loc->name }}</h4>
+                            </div>
+                            <div class="text-right">
+                                @if($loc->type === 'WAREHOUSE')
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
+                                        Gudang
+                                    </span>
+                                @elseif($loc->type === 'STORE')
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                        Toko Ritel
+                                    </span>
+                                @else
+                                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">
+                                        Transit
+                                    </span>
+                                @endif
+                                <span class="block text-[10px] mt-0.5 font-bold {{ $loc->is_active ? 'text-emerald-600' : 'text-gray-400' }}">
+                                    {{ $loc->is_active ? '● Aktif' : '○ Nonaktif' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="text-xs bg-panelBg/60 p-2.5 rounded-xl border border-[#ECEBF4] space-y-1">
+                            @if($loc->phone)
+                                <div class="flex items-center gap-1.5 text-textMain">
+                                    <span class="text-[10px] uppercase font-bold text-textMuted w-14">Telp:</span>
+                                    <a href="tel:{{ $loc->phone }}" class="text-sidebar hover:underline font-semibold">{{ $loc->phone }}</a>
+                                </div>
+                            @endif
+                            <div class="flex items-start gap-1.5 text-textMuted">
+                                <span class="text-[10px] uppercase font-bold text-textMuted w-14 shrink-0">Alamat:</span>
+                                <span class="text-[11px] leading-tight">{{ $loc->address ?: 'Tanpa alamat lengkap' }}</span>
+                            </div>
+                        </div>
+
+                        @if($loc->is_active)
+                            <div class="flex items-center justify-end pt-1">
+                                <form method="POST" action="{{ route('master.locations.destroy', $loc) }}" 
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan lokasi [{{ $loc->name }}]?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition inline-flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                                        </svg>
+                                        Nonaktifkan
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                @empty
+                    <div class="py-8 px-4 text-center text-textMuted text-xs">Belum ada lokasi terdaftar.</div>
+                @endforelse
             </div>
 
             @if($locations->hasPages())

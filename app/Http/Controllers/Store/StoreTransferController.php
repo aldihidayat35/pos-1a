@@ -23,10 +23,26 @@ class StoreTransferController extends Controller
         }
 
         $activeLocation = $user->getActiveLocation();
-        $transfers = StockTransfer::with(['fromLocation', 'toLocation', 'creator', 'items.product'])
-            ->where('to_location_id', $activeLocation?->id)
-            ->orderByDesc('id')
-            ->paginate(10);
+        $query = StockTransfer::with(['fromLocation', 'toLocation', 'creator', 'items.product']);
+
+        if ($activeLocation && !$user->isSuperAdmin() && !$user->isOwner()) {
+            $query->where('to_location_id', $activeLocation->id);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('transfer_number', 'LIKE', "%{$search}%")
+                  ->orWhereHas('fromLocation', fn($l) => $l->where('name', 'LIKE', "%{$search}%"));
+            });
+        }
+
+        $perPage = min(max((int) $request->input('per_page', 10), 5), 100);
+        $transfers = $query->orderByDesc('id')->paginate($perPage)->withQueryString();
 
         return view('store.transfers.index', compact('transfers', 'user', 'activeLocation'));
     }

@@ -10,6 +10,11 @@
       <div class="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold mb-2">
         <span class="w-2 h-2 rounded-full bg-moveRed animate-pulse"></span>
         <span data-i18n="p4_badge">Zero-Bottleneck Accountability Board</span>
+        @if($user->isOwner())
+          <span class="ml-2 bg-brandCoral/30 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+            Mode Owner Read-Only
+          </span>
+        @endif
       </div>
       <h1 class="font-display text-2xl font-bold" data-i18n="p4_title">
         Audit Trail & Laporan Anomali Terpadu

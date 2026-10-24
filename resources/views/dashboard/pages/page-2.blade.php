@@ -2,6 +2,17 @@
      PAGE 2 (INDEX 2): INVENTARIS & STOK RAK
      ======================================================= -->
 <div id="page-2" class="page-view hidden space-y-6">
+  @if(!$user->hasPermission('pos.access') && !$user->isOwner() && !$user->isSuperAdmin())
+    <div class="p-4 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] text-xs font-semibold flex items-center gap-3">
+      <svg class="w-5 h-5 text-[#F59E0B] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>
+      <div>
+        <p class="font-bold">Akses Dibatasi — Khusus Pengelola Toko & Kasir</p>
+        <p class="text-[11px] text-[#92400E]/90 mt-0.5">Akun Anda ({{ $user->primaryRole()?->label ?? 'User' }}) tidak memiliki izin transaksi kasir POS. Otorisasi penjualan dan shift laci uang dilindungi di server.</p>
+      </div>
+    </div>
+  @endif
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-panelBg p-6 rounded-[24px] border border-[#ECEBF4]">
     <div>
       <h1 class="font-display text-2xl font-bold text-textMain">Inventaris & Direktori Rak</h1>

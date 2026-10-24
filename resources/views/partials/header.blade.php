@@ -1,6 +1,6 @@
 <!-- ==========================================================
      FIXED HEADER (Clean borderless header, does not move when scrolling)
-     Contains: Contextual Sub-Menus (Mobile Dropdown & Desktop Pills) + Right Profile & Language Switcher
+     Contains: Contextual Sub-Menus (Mobile Dropdown & Desktop Pills) + Location Scope + Language Switcher & Profile
      ========================================================== -->
 <header class="shrink-0 bg-white px-4 md:px-0 py-2.5 md:py-3 flex items-center justify-between gap-3 sm:gap-4 z-30">
   
@@ -41,9 +41,38 @@
 
   </div>
 
-  <!-- Right Header: Language Switcher, Action Shortcuts, Notifications & Profile Avatar -->
+  <!-- Right Header: Location Scope Selector, Language Switcher, Notifications & Profile Avatar -->
   <div class="flex items-center justify-end gap-2 sm:gap-3 shrink-0">
     
+    <!-- Active Location Scope Pill / Dropdown -->
+    @if(isset($activeLocation))
+      <div class="relative inline-flex items-center">
+        @if(isset($userLocations) && $userLocations->count() > 1)
+          <form method="POST" action="{{ route('location.switch') }}" id="locationSwitchForm" class="m-0">
+            @csrf
+            <div class="relative inline-flex items-center bg-panelBg border border-[#E6E4F0] px-2.5 py-1.5 rounded-xl text-xs font-bold text-sidebar shadow-sm hover:border-sidebar transition">
+              <span class="w-2 h-2 rounded-full {{ $activeLocation->isWarehouse() ? 'bg-brandOrange' : ($activeLocation->isStore() ? 'bg-movePurple' : 'bg-brandCyan') }} mr-1.5 shrink-0"></span>
+              <select name="location_id" onchange="document.getElementById('locationSwitchForm').submit()" class="bg-transparent text-sidebar text-xs font-bold focus:outline-none cursor-pointer pr-4 appearance-none">
+                @foreach($userLocations as $loc)
+                  <option value="{{ $loc->id }}" {{ $loc->id === $activeLocation->id ? 'selected' : '' }}>
+                    {{ $loc->name }} ({{ $loc->code }})
+                  </option>
+                @endforeach
+              </select>
+              <svg class="w-3 h-3 text-textMuted pointer-events-none absolute right-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </div>
+          </form>
+        @else
+          <div class="hidden sm:inline-flex items-center gap-1.5 bg-panelBg border border-[#E6E4F0] px-2.5 py-1.5 rounded-xl text-xs font-bold text-sidebar shadow-sm" title="Lokasi Operasional Aktif">
+            <span class="w-2 h-2 rounded-full {{ $activeLocation->isWarehouse() ? 'bg-brandOrange' : 'bg-movePurple' }}"></span>
+            <span class="max-w-[150px] truncate">{{ $activeLocation->name }}</span>
+          </div>
+        @endif
+      </div>
+    @endif
+
     <!-- Instant Language Switcher (ID / EN) -->
     <div class="inline-flex items-center bg-panelBg border border-[#E6E4F0] p-0.5 rounded-xl text-xs font-bold shadow-sm" id="langSwitcherContainer">
       <button id="langBtnID" onclick="setAppLanguage('id')" class="px-2.5 py-1.5 rounded-lg transition duration-200 bg-sidebar text-white shadow-sm" title="Bahasa Indonesia">
@@ -55,7 +84,7 @@
     </div>
 
     <!-- Live Color Codes Quick Legend Pill (PRD Movement Color Standard) -->
-    <button onclick="switchPage(4)" title="Lihat Standar 5 Indikator Warna Pergerakan" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0] text-xs font-bold">
+    <button onclick="switchPage(4)" title="Lihat Standar 5 Indikator Warna Pergerakan" class="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-panelBg hover:bg-[#EAE8F2] text-sidebar transition border border-[#E6E4F0] text-xs font-bold">
       <span class="flex items-center gap-1">
         <span class="w-2 h-2 rounded-full bg-moveGreen"></span>
         <span class="w-2 h-2 rounded-full bg-moveBlue"></span>
@@ -63,15 +92,7 @@
         <span class="w-2 h-2 rounded-full bg-moveOrange"></span>
         <span class="w-2 h-2 rounded-full bg-moveRed"></span>
       </span>
-      <span class="hidden md:inline" data-i18n="header_color_legend">Warna Pergerakan</span>
-    </button>
-
-    <!-- Gear Settings Icon -->
-    <button onclick="switchPage(3)" title="Pengaturan Sistem & Parameter Kunci" class="w-9 h-9 rounded-xl flex items-center justify-center text-textMain/70 hover:text-sidebar hover:bg-panelBg transition border border-transparent hover:border-[#E6E4F0]">
-      <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
+      <span class="hidden xl:inline" data-i18n="header_color_legend">Warna Pergerakan</span>
     </button>
 
     <!-- Notification Bell with Coral Dot -->
@@ -82,16 +103,32 @@
       <span class="w-2.5 h-2.5 rounded-full bg-brandCoral absolute top-1.5 right-1.5 ring-2 ring-white"></span>
     </button>
 
-    <!-- User Profile Avatar & Role Tag -->
-    <div onclick="openUserProfileInfo()" class="flex items-center gap-2 pl-1 cursor-pointer transition hover:opacity-90">
-      <div class="w-9 h-9 rounded-xl overflow-hidden border border-[#E6E4F0] shrink-0">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/342A6E/FFFFFF?text=BW'" />
+    <!-- Authenticated User Profile Avatar & Role Tag -->
+    @auth
+      <div onclick="openUserProfileInfo()" class="flex items-center gap-2 pl-1 cursor-pointer transition hover:opacity-90">
+        <div class="w-9 h-9 rounded-xl overflow-hidden border border-[#E6E4F0] shrink-0 bg-sidebar text-white flex items-center justify-center font-bold text-xs">
+          {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+        </div>
+        <div class="hidden md:flex flex-col text-left">
+          <span class="text-xs font-bold text-textMain leading-tight truncate max-w-[120px]">{{ auth()->user()->name }}</span>
+          <span class="text-[10px] font-semibold text-textMuted">{{ auth()->user()->primaryRole()?->label ?? 'User' }}</span>
+        </div>
       </div>
-      <div class="hidden xl:flex flex-col text-left">
-        <span class="text-xs font-bold text-textMain leading-tight">Barbara W.</span>
-        <span class="text-[10px] font-semibold text-textMuted" data-i18n="role_owner">Owner & Pengawas</span>
-      </div>
-    </div>
+
+      <!-- Logout Form Button -->
+      <form method="POST" action="{{ route('logout') }}" class="inline ml-0.5">
+        @csrf
+        <button type="submit" title="Keluar dari Sistem (Logout)" class="w-9 h-9 rounded-xl flex items-center justify-center text-textMuted hover:text-brandCoral hover:bg-panelBg transition border border-transparent hover:border-[#E6E4F0]">
+          <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </button>
+      </form>
+    @else
+      <a href="{{ route('login') }}" class="px-3.5 py-1.5 rounded-xl bg-sidebar text-white text-xs font-bold transition hover:bg-sidebarDark">
+        Masuk
+      </a>
+    @endauth
 
   </div>
 </header>

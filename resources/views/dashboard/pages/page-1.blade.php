@@ -4,14 +4,26 @@
      ======================================================= -->
 <div id="page-1" class="page-view hidden space-y-7">
 
+@if(!$user->hasPermission('purchasing.receive') && !$user->hasPermission('inventory.manage') && !$user->isOwner() && !$user->isSuperAdmin())
+    <div class="p-4 rounded-2xl bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] text-xs font-semibold flex items-center gap-3">
+      <svg class="w-5 h-5 text-[#F59E0B] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>
+      <div>
+        <p class="font-bold">Akses Dibatasi — Khusus Pengelola Gudang Sentral</p>
+        <p class="text-[11px] text-[#92400E]/90 mt-0.5">Akun Anda ({{ $user->primaryRole()?->label ?? 'User' }}) hanya memiliki akses pantau dasar. Mutasi dan penerimaan fisik barang gudang dikunci oleh server.</p>
+      </div>
+    </div>
+  @endif
+
   <!-- 1. SOFT SOLID ORANGE HERO BANNER (No gradient, no glow shadow) -->
   <div id="p1-sec-hero" class="relative bg-brandOrange rounded-[24px] p-7 sm:p-8 text-white overflow-hidden flex items-center justify-between min-h-[155px]">
     <div class="relative z-10 max-w-md">
       <h1 class="font-display text-2xl sm:text-[32px] font-bold tracking-tight leading-tight">
-        Halo, Barbara!
+        Halo, {{ $user->name }}!
       </h1>
       <p class="text-white/95 text-sm sm:text-[15px] mt-1.5 font-medium">
-        Selamat datang kembali di Smart Gudang Sentral
+        Gudang Pusat Sentral • Operasional Rantai Pasok Terpadu
       </p>
       <div class="mt-4 flex flex-wrap items-center gap-2.5">
         <span class="bg-white/20 px-3 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">

@@ -292,3 +292,7 @@
   </div>
 </main>
 @endsection
+
+@section('right_panel')
+  @include('b2b.partials.right-panel')
+@endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashShift;
 use App\Models\EmergencyPurchase;
 use App\Models\InventoryBalance;
 use App\Models\Location;
@@ -44,12 +45,20 @@ class StoreController extends Controller
 
         $canViewHpp = $user->hasPermission('inventory.hpp_view') || $user->isSuperAdmin() || $user->isOwner();
 
+        $activeShift = CashShift::where('location_id', $activeLocation?->id)
+            ->where('status', 'OPEN')
+            ->with('cashier')
+            ->latest('id')
+            ->first();
+
         $stats = [
             'total_products' => Product::where('is_active', true)->count(),
             'active_location_name' => $activeLocation?->name ?? 'Toko Pasar Raya Blok A',
             'active_location_code' => $activeLocation?->code ?? 'STR-PASAR-1',
             'incoming_transfers_count' => $incomingTransfers->count(),
             'emergency_purchases_count' => $recentEmergencies->count(),
+            'total_emergency_spent' => EmergencyPurchase::where('location_id', $activeLocation?->id)->sum('total_amount'),
+            'active_shift' => $activeShift,
         ];
 
         return view('store.index', compact(

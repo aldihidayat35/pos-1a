@@ -228,3 +228,7 @@
     </div>
 </div>
 @endsection
+
+@section('right_panel')
+  @include('master.partials.right-panel')
+@endsection

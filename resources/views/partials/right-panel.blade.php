@@ -1,7 +1,7 @@
 <!-- ============================================================
      RIGHT SIDE PANEL (Soft flat colors, no neon shadows)
      ============================================================ -->
-<aside class="w-full lg:w-[370px] xl:w-[410px] shrink-0 flex flex-col justify-between">
+<div class="w-full flex flex-col justify-between">
   
   <!-- Soft Lavender-Gray Container -->
   <div class="bg-panelBg rounded-[30px] p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-7 border border-[#ECEBF4]">
@@ -143,4 +143,4 @@
     </div>
 
   </div>
-</aside>
+</div>

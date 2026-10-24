@@ -307,5 +307,5 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+  @include('master.partials.right-panel')
 @endsection

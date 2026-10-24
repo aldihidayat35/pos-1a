@@ -121,5 +121,5 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+  @include('store.partials.right-panel')
 @endsection

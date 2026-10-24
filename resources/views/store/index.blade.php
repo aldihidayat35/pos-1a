@@ -24,94 +24,23 @@
   @endif
 
   <!-- Header Banner -->
-  <div class="bg-panelBg p-6 rounded-[26px] border border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+  <div class="bg-panelBg p-6 sm:p-7 rounded-[26px] border border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
       <div class="flex items-center gap-2">
         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brandOrange text-white uppercase tracking-wider">GERAI TOKO PASAR</span>
         <span class="text-xs text-textMuted">• {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }})</span>
       </div>
       <h1 class="font-display text-2xl font-bold text-textMain mt-1.5">Operasional Toko & Kasir</h1>
-      <p class="text-xs text-textMuted mt-1 max-w-xl">
-        Penerimaan barang kiriman transit dari gudang, pencatatan belanja darurat berbukti nota, dan monitoring stok rak toko.
+      <p class="text-xs text-textMuted mt-1 max-w-2xl">
+        Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
       </p>
     </div>
 
-    <div class="flex flex-wrap items-center gap-2 shrink-0">
-      @if($user->hasPermission('pos.access') || $user->isSuperAdmin())
-        <a href="{{ route('store.pos.terminal') }}" class="px-4 py-2.5 bg-sidebar hover:bg-sidebar/95 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-          </svg>
-          <span>Terminal Kasir POS</span>
-        </a>
-      @endif
-
-      @if($user->hasPermission('pos.cash_shift') || $user->isSuperAdmin())
-        <a href="{{ route('store.shifts.index') }}" class="px-4 py-2.5 bg-white hover:bg-panelBg text-sidebar font-bold text-xs rounded-xl transition border border-[#ECEBF4] flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-          </svg>
-          <span>Shift Laci</span>
-        </a>
-      @endif
-
-      @if($user->hasPermission('emergency.input') || $user->isSuperAdmin())
-        <a href="{{ route('store.emergency.create') }}" class="px-4 py-2.5 bg-brandOrange hover:bg-brandOrange/90 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-          </svg>
-          <span>+ Belanja Emergency</span>
-        </a>
-      @endif
-
-      <a href="{{ route('store.transfers.index') }}" class="px-4 py-2.5 bg-panelBg hover:bg-[#EAE8F2] text-sidebar font-bold text-xs rounded-xl transition flex items-center gap-2 border border-[#ECEBF4]">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
-        </svg>
-        <span>Transfer Masuk ({{ $stats['incoming_transfers_count'] }})</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- Operational Metrics Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <div class="bg-white p-5 rounded-3xl border border-[#ECEBF4] shadow-sm flex items-center justify-between">
-      <div>
-        <p class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Transfer Dalam Perjalanan</p>
-        <p class="text-2xl font-black text-blue-600 mt-1 font-mono">{{ $stats['incoming_transfers_count'] }}</p>
-        <p class="text-[11px] text-textMuted mt-0.5">Menuju toko ini (Status Transit)</p>
-      </div>
-      <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="bg-white p-5 rounded-3xl border border-[#ECEBF4] shadow-sm flex items-center justify-between">
-      <div>
-        <p class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Belanja Emergency Bulan Ini</p>
-        <p class="text-2xl font-black text-brandOrange mt-1 font-mono">{{ $stats['emergency_purchases_count'] }}</p>
-        <p class="text-[11px] text-textMuted mt-0.5">Pengadaan darurat berfoto nota</p>
-      </div>
-      <div class="w-11 h-11 rounded-2xl bg-amber-50 text-brandOrange flex items-center justify-center">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-        </svg>
-      </div>
-    </div>
-
-    <div class="bg-white p-5 rounded-3xl border border-[#ECEBF4] shadow-sm flex items-center justify-between">
-      <div>
-        <p class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Total Item di Rak Toko</p>
-        <p class="text-2xl font-black text-sidebar mt-1 font-mono">{{ $balances->count() }}</p>
-        <p class="text-[11px] text-textMuted mt-0.5">SKU bersaldo on-hand aktif</p>
-      </div>
-      <div class="w-11 h-11 rounded-2xl bg-panelBg text-sidebar flex items-center justify-center">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-        </svg>
-      </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <span class="bg-white px-3.5 py-2 rounded-xl border border-[#ECEBF4] text-xs font-semibold text-sidebar inline-flex items-center gap-2 shadow-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>{{ $balances->count() }} SKU di Rak Toko</span>
+      </span>
     </div>
   </div>
 
@@ -310,5 +239,5 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+  @include('store.partials.right-panel')
 @endsection

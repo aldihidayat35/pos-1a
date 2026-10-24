@@ -169,5 +169,5 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+  @include('audit.partials.right-panel')
 @endsection

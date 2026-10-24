@@ -278,9 +278,11 @@
             @yield('content')
           </div>
 
-          <!-- RIGHT SIDE PANEL (CONTEXTUAL) -->
+          <!-- RIGHT SIDE PANEL (CONTEXTUAL & STICKY ON DESKTOP) -->
           @hasSection('right_panel')
-            @yield('right_panel')
+            <aside class="w-full lg:w-[370px] xl:w-[410px] shrink-0 lg:sticky lg:top-0 self-start">
+              @yield('right_panel')
+            </aside>
           @endif
 
         </div>

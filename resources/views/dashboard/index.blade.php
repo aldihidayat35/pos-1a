@@ -22,5 +22,5 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+  @include('dashboard.partials.right-panel')
 @endsection

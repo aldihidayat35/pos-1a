@@ -243,5 +243,5 @@
 @endsection
 
 @section('right_panel')
-  @include('partials.right-panel')
+  @include('warehouse.partials.right-panel')
 @endsection

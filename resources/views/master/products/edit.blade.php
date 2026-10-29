@@ -140,7 +140,7 @@
                                 <label class="block text-[10px] font-bold text-textMuted uppercase mb-1">Faktor = x Satuan Dasar</label>
                                 <div class="relative">
                                     <input type="number" step="0.000001" min="0.000001" name="conversions[{{ $idx }}][factor_to_base]" value="{{ (float)$conv->factor_to_base }}" required class="w-full px-3 py-2 bg-white border border-[#E6E4F0] rounded-xl text-xs font-semibold text-textMain pr-10 focus:outline-none focus:border-sidebar">
-                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-textMuted">{{ $product->baseUom->symbol }}</span>
+                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-textMuted base-uom-symbol">{{ $product->baseUom->symbol }}</span>
                                 </div>
                             </div>
 
@@ -280,6 +280,12 @@
     let convRowIndex = 100;
     const allUoms = @json($uoms);
 
+    baseUomSelect.addEventListener('change', function() {
+        const selectedBaseOption = this.options[this.selectedIndex];
+        const baseSymbol = selectedBaseOption ? selectedBaseOption.getAttribute('data-symbol') : '';
+        document.querySelectorAll('.base-uom-symbol').forEach(el => el.textContent = baseSymbol);
+    });
+
     btnAddConversion.addEventListener('click', function() {
         const selectedBaseOption = baseUomSelect.options[baseUomSelect.selectedIndex];
         const baseDimension = selectedBaseOption.getAttribute('data-dimension');
@@ -288,7 +294,15 @@
         const validUoms = allUoms.filter(u => u.dimension === baseDimension && u.id != baseUomSelect.value);
 
         if (validUoms.length === 0) {
-            alert(`Tidak ada satuan konversi yang tersedia untuk dimensi ${baseDimension}.`);
+            if (typeof SwalModal !== 'undefined') {
+                SwalModal.fire({
+                    icon: 'warning',
+                    title: 'Satuan Konversi Belum Ada',
+                    text: `Tidak ada satuan konversi yang tersedia untuk dimensi ${baseDimension}.`
+                });
+            } else {
+                alert(`Tidak ada satuan konversi yang tersedia untuk dimensi ${baseDimension}.`);
+            }
             return;
         }
 
@@ -317,7 +331,7 @@
                 <label class="block text-[10px] font-bold text-textMuted uppercase mb-1">Faktor = x Satuan Dasar</label>
                 <div class="relative">
                     <input type="number" step="0.000001" min="0.000001" name="conversions[${convRowIndex}][factor_to_base]" required placeholder="Mis. 25" class="w-full px-3 py-2 bg-white border border-[#E6E4F0] rounded-xl text-xs font-semibold text-textMain pr-10 focus:outline-none focus:border-sidebar">
-                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-textMuted">${baseSymbol}</span>
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-textMuted base-uom-symbol">${baseSymbol}</span>
                 </div>
             </div>
 
@@ -355,7 +369,11 @@
             const file = input.files[0];
 
             if (file.size > 2 * 1024 * 1024) {
-                alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                if (typeof SwalToast !== 'undefined') {
+                    SwalToast.fire({ icon: 'error', title: 'Ukuran file terlalu besar! Maksimal 2MB.' });
+                } else {
+                    alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                }
                 input.value = '';
                 return;
             }

@@ -39,6 +39,13 @@ class MemberController extends Controller
         return view('master.members.index', compact('members', 'tiers'));
     }
 
+    public function create(): View
+    {
+        $tiers = MemberTier::active()->orderBy('priority')->get();
+
+        return view('master.members.create', compact('tiers'));
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -50,11 +57,18 @@ class MemberController extends Controller
             'phone' => ['nullable', 'string', 'max:35'],
             'email' => ['nullable', 'email', 'max:100'],
             'address' => ['nullable', 'string', 'max:500'],
+        ], [
+            'member_code.unique' => 'Kode member ini sudah terdaftar di sistem.',
+            'name.required' => 'Nama lengkap member / mitra wajib diisi.',
+            'type.required' => 'Tipe kemitraan wajib dipilih.',
+            'tier_id.exists' => 'Tier keanggotaan tidak valid.',
+            'credit_limit.numeric' => 'Plafon kredit harus berupa angka.',
+            'email.email' => 'Format email member tidak valid.',
         ]);
 
         $member = $this->memberService->createMember($validated);
 
-        return back()->with('success', "Member [{$member->name}] ({$member->member_code}) berhasil didaftarkan!");
+        return redirect()->route('master.members.index')->with('success', "Member [{$member->name}] ({$member->member_code}) berhasil didaftarkan!");
     }
 
     public function update(Request $request, Member $member): RedirectResponse

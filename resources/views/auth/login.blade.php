@@ -8,6 +8,9 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,31 +70,6 @@
         Sistem Manajemen Operasional Pasar Terpadu (Gudang, Toko, & B2B)
       </p>
     </div>
-
-    <!-- Alert / Validation Feedback -->
-    @if ($errors->any())
-      <div class="p-4 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] text-[#991B1B] text-xs font-semibold flex items-start gap-2.5">
-        <svg class="w-5 h-5 shrink-0 text-[#EF4444]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/>
-        </svg>
-        <div class="space-y-0.5">
-          @foreach ($errors->all() as $error)
-            <p>{{ $error }}</p>
-          @endforeach
-        </div>
-      </div>
-    @endif
-
-    @if (session('info'))
-      <div class="p-4 rounded-2xl bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E40AF] text-xs font-semibold flex items-center gap-2.5">
-        <svg class="w-4 h-4 shrink-0 text-[#3B82F6]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/>
-        </svg>
-        <span>{{ session('info') }}</span>
-      </div>
-    @endif
 
     <!-- Login Form -->
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
@@ -279,6 +257,9 @@
       }
     }
   </script>
+
+  <!-- SWEETALERT2 NOTIFICATION & CONFIRMATION ENGINE -->
+  @include('partials.sweetalert')
 
 </body>
 </html>

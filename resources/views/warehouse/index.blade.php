@@ -17,24 +17,7 @@
     </div>
   @endif
 
-  <!-- Flash Notifications -->
-  @if(session('success'))
-    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
-      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-      </svg>
-      <span>{{ session('success') }}</span>
-    </div>
-  @endif
 
-  @if(session('error'))
-    <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2">
-      <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-      <span>{{ session('error') }}</span>
-    </div>
-  @endif
 
   <!-- 1. SOFT SOLID ORANGE HERO BANNER (Clean UI with Mobile Tooltip) -->
   <div class="relative bg-brandOrange rounded-[24px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">

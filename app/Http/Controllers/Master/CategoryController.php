@@ -30,6 +30,13 @@ class CategoryController extends Controller
         return view('master.categories.index', compact('categories', 'parentCandidates'));
     }
 
+    public function create(): View
+    {
+        $parentCandidates = ProductCategory::active()->get();
+
+        return view('master.categories.create', compact('parentCandidates'));
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -37,11 +44,17 @@ class CategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'parent_id' => ['nullable', 'exists:product_categories,id'],
             'description' => ['nullable', 'string', 'max:500'],
+        ], [
+            'code.required' => 'Kode kategori wajib diisi.',
+            'code.unique' => 'Kode kategori ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama kategori wajib diisi.',
+            'parent_id.exists' => 'Kategori induk yang dipilih tidak valid.',
         ]);
 
+        $validated['code'] = strtoupper(trim($validated['code']));
         $category = ProductCategory::create($validated);
 
-        return back()->with('success', "Kategori [{$category->name}] berhasil dibuat!");
+        return redirect()->route('master.categories.index')->with('success', "Kategori [{$category->name}] berhasil dibuat!");
     }
 
     public function update(Request $request, ProductCategory $category): RedirectResponse
@@ -52,8 +65,15 @@ class CategoryController extends Controller
             'parent_id' => ['nullable', 'exists:product_categories,id', 'different:id'],
             'description' => ['nullable', 'string', 'max:500'],
             'is_active' => ['nullable', 'boolean'],
+        ], [
+            'code.required' => 'Kode kategori wajib diisi.',
+            'code.unique' => 'Kode kategori ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama kategori wajib diisi.',
+            'parent_id.exists' => 'Kategori induk yang dipilih tidak valid.',
+            'parent_id.different' => 'Kategori induk tidak boleh sama dengan kategori ini sendiri.',
         ]);
 
+        $validated['code'] = strtoupper(trim($validated['code']));
         $category->update($validated);
 
         return back()->with('success', "Kategori [{$category->name}] berhasil diperbarui!");

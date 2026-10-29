@@ -4,15 +4,7 @@
 
 @section('content')
 <main class="flex-1 w-full space-y-6">
-  <!-- Flash Notifications -->
-  @if(session('success'))
-    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
-      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-      </svg>
-      <span>{{ session('success') }}</span>
-    </div>
-  @endif
+
 
   <!-- Top Breadcrumb & Action Header (Clean UI with Mobile Tooltip) -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative">
@@ -24,7 +16,7 @@
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <h1 class="font-display text-xl sm:text-2xl font-bold text-textMain tracking-tight">
-          Transfer Antar Lokasi
+          Pengiriman Transfer Antar Lokasi
         </h1>
 
         <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->

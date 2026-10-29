@@ -293,7 +293,14 @@
     const resBox = document.getElementById('sim_result_box');
 
     if (!offeredPrice || offeredPrice <= 0) {
-      alert('Harap masukkan nominal harga tawar terlebih dahulu.');
+      if (typeof SwalToast !== 'undefined') {
+        SwalToast.fire({
+          icon: 'warning',
+          title: 'Harap masukkan nominal harga tawar terlebih dahulu.'
+        });
+      } else {
+        alert('Harap masukkan nominal harga tawar terlebih dahulu.');
+      }
       return;
     }
 
@@ -356,8 +363,4 @@
     }
   }
 </script>
-@endsection
-
-@section('right_panel')
-  @include('master.partials.right-panel')
 @endsection

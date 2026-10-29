@@ -188,23 +188,10 @@
     }
   };
 
-  function setAppLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('pasar_lang', lang);
-    document.documentElement.lang = lang;
-
-    // Update Language Toggle Button Styles
-    const btnID = document.getElementById('langBtnID');
-    const btnEN = document.getElementById('langBtnEN');
-    if (btnID && btnEN) {
-      if (lang === 'id') {
-        btnID.className = 'px-2.5 py-1.5 rounded-lg transition duration-200 bg-sidebar text-white shadow-sm';
-        btnEN.className = 'px-2.5 py-1.5 rounded-lg transition duration-200 text-textMuted hover:text-textMain';
-      } else {
-        btnEN.className = 'px-2.5 py-1.5 rounded-lg transition duration-200 bg-sidebar text-white shadow-sm';
-        btnID.className = 'px-2.5 py-1.5 rounded-lg transition duration-200 text-textMuted hover:text-textMain';
-      }
-    }
+  function setAppLanguage(lang = 'id') {
+    currentLang = 'id';
+    localStorage.setItem('pasar_lang', 'id');
+    document.documentElement.lang = 'id';
 
     // Translate all [data-i18n] text nodes
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -231,22 +218,6 @@
     // Re-render sub menus and movement feed
     renderSubMenus();
     renderMovementStream();
-
-    // Sync with backend session & user preference
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    if (csrfToken) {
-      fetch('{{ route("locale.switch") }}', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({ locale: lang })
-      }).catch(() => {});
-    }
-
-    openToast(i18n[lang].toast_lang_switched);
   }
 
   // ============================================================
@@ -467,7 +438,9 @@
   }
 
   function openUserProfileInfo() {
-    openToast('Akun Aktif: Barbara Wijaya (Owner Pasar) • Hak Akses: Penuh (Read-Only Audit & Keuangan)');
+    if (typeof toggleUserProfileDropdown === 'function') {
+      toggleUserProfileDropdown();
+    }
   }
 
   // ============================================================
@@ -903,10 +876,17 @@
   }
 
   // ============================================================
-  // 6. TOAST NOTIFICATION ENGINE
+  // 6. TOAST NOTIFICATION ENGINE (SWEETALERT2 INTEGRATED)
   // ============================================================
   let toastTimer = null;
-  function openToast(msg) {
+  function openToast(msg, icon = 'info') {
+    if (typeof SwalToast !== 'undefined') {
+      SwalToast.fire({
+        icon: icon,
+        title: msg
+      });
+      return;
+    }
     const box = document.getElementById('toastBox');
     const msgEl = document.getElementById('toastMessage');
     if (!box || !msgEl) return;
@@ -922,9 +902,8 @@
   // 7. INITIALIZATION ON DOM READY
   // ============================================================
   window.addEventListener('DOMContentLoaded', function () {
-    // Initialize language from storage
-    const savedLang = localStorage.getItem('pasar_lang') || 'id';
-    setAppLanguage(savedLang);
+    // Lock application language permanently to Indonesian
+    setAppLanguage('id');
 
     // Initial render
     renderSubMenus();

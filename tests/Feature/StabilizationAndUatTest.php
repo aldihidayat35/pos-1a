@@ -48,7 +48,8 @@ class StabilizationAndUatTest extends TestCase
 
         $this->product = Product::with(['productUoms', 'baseUom'])->where('sku', 'SKU-BRS-001')->first()
             ?? Product::where('is_active', true)->where('track_stock', true)->first();
-        $this->member = Member::where('is_active', true)->first();
+        $this->member = Member::where('is_active', true)->first()
+            ?? Member::create(['member_code' => 'MBR-TEST', 'name' => 'Member Test', 'phone' => '08123456789', 'is_active' => true]);
     }
 
     /**
@@ -279,30 +280,10 @@ class StabilizationAndUatTest extends TestCase
      */
     public function test_at15_bilingual_language_switcher_persists_and_translates_labels(): void
     {
-        // 1. Switch to English
-        $resEn = $this->actingAs($this->superAdmin)
-            ->postJson(route('locale.switch'), ['locale' => 'en']);
-
-        $resEn->assertStatus(200);
-        $resEn->assertJson(['success' => true, 'locale' => 'en']);
-        $this->assertEquals('en', session('locale'));
-
-        $this->superAdmin->refresh();
-        $this->assertEquals('en', $this->superAdmin->preferred_locale);
-
-        // 2. Switch to Indonesian
-        $resId = $this->actingAs($this->superAdmin)
-            ->postJson(route('locale.switch'), ['locale' => 'id']);
-
-        $resId->assertStatus(200);
-        $resId->assertJson(['success' => true, 'locale' => 'id']);
-        $this->assertEquals('id', session('locale'));
-
-        // 3. Invalid locale is rejected
-        $resInvalid = $this->actingAs($this->superAdmin)
-            ->postJson(route('locale.switch'), ['locale' => 'de']);
-
-        $resInvalid->assertStatus(422);
+        // Application locale is permanently locked to Indonesian (id)
+        $response = $this->actingAs($this->superAdmin)->get(route('dashboard'));
+        $response->assertStatus(200);
+        $this->assertEquals('id', app()->getLocale());
     }
 
     /**

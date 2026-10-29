@@ -29,6 +29,11 @@ class SupplierController extends Controller
         return view('master.suppliers.index', compact('suppliers'));
     }
 
+    public function create(): View
+    {
+        return view('master.suppliers.create');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -38,12 +43,17 @@ class SupplierController extends Controller
             'phone' => ['nullable', 'string', 'max:35'],
             'email' => ['nullable', 'email', 'max:100'],
             'address' => ['nullable', 'string', 'max:500'],
+        ], [
+            'supplier_code.required' => 'Kode suplayer wajib diisi.',
+            'supplier_code.unique' => 'Kode suplayer ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama perusahaan / suplayer wajib diisi.',
+            'email.email' => 'Format email suplayer tidak valid.',
         ]);
 
         $validated['supplier_code'] = strtoupper(trim($validated['supplier_code']));
         $supplier = Supplier::create($validated);
 
-        return back()->with('success', "Suplayer [{$supplier->name}] ({$supplier->supplier_code}) berhasil ditambahkan!");
+        return redirect()->route('master.suppliers.index')->with('success', "Suplayer [{$supplier->name}] ({$supplier->supplier_code}) berhasil ditambahkan!");
     }
 
     public function update(Request $request, Supplier $supplier): RedirectResponse
@@ -56,6 +66,11 @@ class SupplierController extends Controller
             'email' => ['nullable', 'email', 'max:100'],
             'address' => ['nullable', 'string', 'max:500'],
             'is_active' => ['nullable', 'boolean'],
+        ], [
+            'supplier_code.required' => 'Kode suplayer wajib diisi.',
+            'supplier_code.unique' => 'Kode suplayer ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama perusahaan / suplayer wajib diisi.',
+            'email.email' => 'Format email suplayer tidak valid.',
         ]);
 
         $validated['supplier_code'] = strtoupper(trim($validated['supplier_code']));

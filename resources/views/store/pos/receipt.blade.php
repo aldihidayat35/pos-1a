@@ -60,7 +60,7 @@
   @endif
 
   <!-- Thermal Paper Receipt Container (Max Width 400px, 80mm feel) -->
-  <div class="max-w-md mx-auto bg-white rounded-3xl border border-[#ECEBF4] p-6 sm:p-8 shadow-sm space-y-5 font-mono text-xs">
+  <div id="thermalReceipt" class="printable-receipt max-w-md mx-auto bg-white rounded-3xl border border-[#ECEBF4] p-6 sm:p-8 shadow-sm space-y-5 font-mono text-xs">
     <!-- Header -->
     <div class="text-center space-y-1 border-b border-dashed border-gray-300 pb-4">
       <h2 class="font-display font-black text-lg text-sidebar tracking-tight uppercase">PasarHub Store</h2>
@@ -162,6 +162,118 @@
 </main>
 @endsection
 
-@section('right_panel')
-  @include('partials.right-panel')
-@endsection
+@push('styles')
+<style>
+@media print {
+  /* 1. Page margin reset for Thermal 80mm printers */
+  @page {
+    margin: 0;
+    size: 80mm auto;
+  }
+
+  /* 2. Reset full viewport & layout overflow traps */
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    background: #FFFFFF !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body > div {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  /* 3. Hide all surrounding layout chrome, headers, navigation, buttons & modals */
+  #sidebarNav,
+  #mobileNav,
+  header,
+  #topProgressBar,
+  aside,
+  .print\:hidden,
+  .no-print,
+  .swal2-container {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  #scrollableWorkspace {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  #workspaceContentWrapper,
+  main {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hide everything by default, reveal only the thermal receipt */
+  body * {
+    visibility: hidden;
+  }
+
+  #thermalReceipt,
+  #thermalReceipt * {
+    visibility: visible !important;
+  }
+
+  /* 4. Format Thermal Receipt Specially for 80mm Paper */
+  #thermalReceipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 76mm !important;
+    max-width: 80mm !important;
+    margin: 0 auto !important;
+    padding: 4mm 3mm !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-family: 'Courier New', Courier, monospace, monospace !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* High Contrast Monochrome for Thermal Heads */
+  #thermalReceipt * {
+    color: #000000 !important;
+    border-color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  #thermalReceipt h2 {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    color: #000000 !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  #thermalReceipt .border-dashed {
+    border-bottom: 1px dashed #000000 !important;
+  }
+
+  #thermalReceipt .border-gray-200,
+  #thermalReceipt .border-gray-300 {
+    border-color: #000000 !important;
+  }
+}
+</style>
+@endpush

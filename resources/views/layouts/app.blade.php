@@ -11,6 +11,9 @@
   <!-- Chart.js CDN for Modern Interactive Analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- SweetAlert2 CDN for Interactive Notifications & Confirmation Dialogs -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -307,6 +310,12 @@
 
   <!-- GLOBAL PRODUCT IMAGE LIGHTBOX MODAL -->
   @include('partials.product-image-modal')
+
+  <!-- USER CHANGE PASSWORD MODAL -->
+  @include('partials.change-password-modal')
+
+  <!-- SWEETALERT2 NOTIFICATION & CONFIRMATION ENGINE -->
+  @include('partials.sweetalert')
 
   <!-- APPLICATION LOGIC & INTERACTIVE SCRIPTS -->
   @include('partials.scripts')

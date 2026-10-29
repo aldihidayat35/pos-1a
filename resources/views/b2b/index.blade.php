@@ -17,8 +17,8 @@
     </div>
   @endif
 
-  <!-- 1. SOLID HERO BANNER (Clean UI with Mobile Tooltip) -->
-  <div class="relative bg-sidebar rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm">
+  <!-- 1. SOLID HERO BANNER (Clean UI with Mobile Tooltip & Quick Actions) -->
+  <div class="relative bg-sidebar rounded-[26px] p-6 sm:p-8 text-white overflow-hidden shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="relative z-10 max-w-2xl">
       <div class="flex items-center gap-2 flex-wrap">
         <h1 class="font-display text-lg sm:text-2xl md:text-[30px] font-bold tracking-tight leading-tight">
@@ -59,6 +59,29 @@
       <p class="hidden md:block text-white/85 text-[11px] sm:text-xs md:text-sm mt-1.5 font-medium leading-relaxed">
         Pusat kendali pesanan grosir, reservasi fisik stok otomatis, penguncian plafon kredit server-side, tiket serah terima QR, dan pembukuan piutang tempo.
       </p>
+    </div>
+
+    <!-- Quick Action Buttons for B2B -->
+    <div class="relative z-10 flex items-center gap-2.5 flex-wrap shrink-0">
+      @if($user?->hasPermission('b2b.order') || $user?->isSuperAdmin() || $user?->isOwner())
+        <a href="{{ route('b2b.orders.create') }}" 
+           class="px-4 py-2.5 rounded-2xl bg-brandOrange hover:bg-brandOrange/90 text-white font-bold text-xs shadow-md transition inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Buat Order Grosir B2B</span>
+        </a>
+      @endif
+
+      @if($user?->hasPermission('b2b.pickup_validate') || $user?->isSuperAdmin() || $user?->isOwner())
+        <a href="{{ route('b2b.pickup.scan') }}" 
+           class="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white text-white hover:text-sidebar font-bold text-xs border border-white/20 shadow-xs transition inline-flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+          </svg>
+          <span>Scan Tiket QR</span>
+        </a>
+      @endif
     </div>
   </div>
 
@@ -353,8 +376,4 @@
     </div>
   </div>
 </main>
-@endsection
-
-@section('right_panel')
-  @include('b2b.partials.right-panel')
 @endsection

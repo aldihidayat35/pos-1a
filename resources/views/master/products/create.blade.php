@@ -277,7 +277,11 @@
     btnAddConversion.addEventListener('click', function() {
         const selectedBaseOption = baseUomSelect.options[baseUomSelect.selectedIndex];
         if (!baseUomSelect.value) {
-            alert('Silakan pilih Satuan Dasar (Base UOM) terlebih dahulu.');
+            if (typeof SwalToast !== 'undefined') {
+                SwalToast.fire({ icon: 'warning', title: 'Silakan pilih Satuan Dasar (Base UOM) terlebih dahulu.' });
+            } else {
+                alert('Silakan pilih Satuan Dasar (Base UOM) terlebih dahulu.');
+            }
             baseUomSelect.focus();
             return;
         }
@@ -289,7 +293,15 @@
         const validUoms = allUoms.filter(u => u.dimension === baseDimension && u.id != baseUomSelect.value);
 
         if (validUoms.length === 0) {
-            alert(`Tidak ada satuan konversi yang tersedia untuk dimensi ${baseDimension}. Silakan daftarkan satuan baru di menu Satuan UOM.`);
+            if (typeof SwalModal !== 'undefined') {
+                SwalModal.fire({
+                    icon: 'warning',
+                    title: 'Satuan Konversi Belum Ada',
+                    text: `Tidak ada satuan konversi yang tersedia untuk dimensi ${baseDimension}. Silakan daftarkan satuan baru di menu Satuan UOM.`
+                });
+            } else {
+                alert(`Tidak ada satuan konversi yang tersedia untuk dimensi ${baseDimension}. Silakan daftarkan satuan baru di menu Satuan UOM.`);
+            }
             return;
         }
 
@@ -355,7 +367,11 @@
             const file = input.files[0];
 
             if (file.size > 2 * 1024 * 1024) {
-                alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                if (typeof SwalToast !== 'undefined') {
+                    SwalToast.fire({ icon: 'error', title: 'Ukuran file terlalu besar! Maksimal 2MB.' });
+                } else {
+                    alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                }
                 input.value = '';
                 return;
             }

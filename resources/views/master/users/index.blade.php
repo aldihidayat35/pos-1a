@@ -254,7 +254,7 @@
                                     </button>
 
                                     @if(!$isSelf)
-                                        <form method="POST" action="{{ route('master.users.destroy', $u) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna {{ $u->name }}? Tindakan ini tidak dapat dibatalkan.')">
+                                        <form method="POST" action="{{ route('master.users.destroy', $u) }}" class="inline" data-confirm="Apakah Anda yakin ingin menghapus pengguna {{ $u->name }}? Tindakan ini tidak dapat dibatalkan." data-confirm-title="Hapus Pengguna" data-confirm-btn="Ya, Hapus">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-1.5 rounded-lg bg-panelBg hover:bg-rose-600 hover:text-white text-textMuted transition" title="Hapus Pengguna">

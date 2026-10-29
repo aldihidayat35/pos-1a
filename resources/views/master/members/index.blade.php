@@ -7,128 +7,57 @@
 @section('content')
 <div class="space-y-6">
     <!-- Sub-Nav Tabs -->
-    @include('master.partials.nav')
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <!-- Add Member Form Card (Left Col: 4) -->
-        <div class="lg:col-span-4 bg-white p-6 rounded-3xl border border-[#ECEBF4] shadow-sm">
-            <div class="border-b border-[#ECEBF4] pb-3 mb-5">
-                <h3 class="text-sm font-bold text-textMain uppercase tracking-wider">+ Pendaftaran Member / Mitra</h3>
-                <p class="text-[11px] text-textMuted mt-0.5">Daftarkan pelanggan ritel atau mitra grosir ber-QR.</p>
+    @include('master.partials.nav')    <!-- Members Table Card (Full Width) -->
+    <div data-async-table="members-table" class="w-full bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm">
+        <div class="p-4 sm:p-5 border-b border-[#ECEBF4] flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white">
+            <div>
+                <h3 class="font-bold text-sm text-textMain">Daftar Member & Mitra B2B</h3>
+                <p class="text-xs text-textMuted">Total {{ $members->total() }} pelanggan terdaftar</p>
             </div>
 
-            <form method="POST" action="{{ route('master.members.store') }}" class="space-y-4">
-                @csrf
-
-                <div>
-                    <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">
-                        Tipe Keanggotaan <span class="text-red-500">*</span>
-                    </label>
-                    <select name="type" id="memberTypeSelect" required class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-bold text-sidebar focus:bg-white focus:outline-none focus:border-sidebar transition">
-                        <option value="RETAIL" {{ old('type') === 'RETAIL' ? 'selected' : '' }}>RETAIL (Pelanggan Umum Toko / Kasir)</option>
-                        <option value="B2B" {{ old('type') === 'B2B' ? 'selected' : '' }}>B2B (Mitra Grosir / Toko Kelontong / Warung)</option>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <!-- Filter Tipe & Search Form -->
+                <form method="GET" action="{{ route('master.members.index') }}" class="flex flex-wrap items-center gap-2">
+                    <select name="type" onchange="this.form.submit()" class="px-2.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-semibold text-sidebar focus:outline-none focus:border-sidebar transition cursor-pointer">
+                        <option value="">Semua Tipe</option>
+                        <option value="RETAIL" {{ request('type') === 'RETAIL' ? 'selected' : '' }}>Hanya Ritel</option>
+                        <option value="B2B" {{ request('type') === 'B2B' ? 'selected' : '' }}>Hanya B2B</option>
                     </select>
-                </div>
 
-                <div>
-                    <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">
-                        Kode Member (Otomatis jika kosong)
-                    </label>
-                    <input type="text" name="member_code" value="{{ old('member_code') }}" placeholder="Mis. MBR-B2B-0005"
-                           class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-mono font-bold text-sidebar uppercase focus:bg-white focus:outline-none focus:border-sidebar transition">
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">
-                        Nama Lengkap / Nama Toko <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" name="name" value="{{ old('name') }}" required placeholder="Mis. Toko Sembako Makmur / Bpk. Rudi"
-                           class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-semibold text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">Tier / Tingkat</label>
-                        <select name="tier_id" class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                            <option value="">Pilih Tier</option>
-                            @foreach($tiers as $tier)
-                                <option value="{{ $tier->id }}" {{ old('tier_id') == $tier->id ? 'selected' : '' }}>
-                                    {{ $tier->name }} ({{ (float)$tier->discount_percent }}%)
-                                </option>
-                            @endforeach
-                        </select>
+                    <div class="relative">
+                        <input type="text" 
+                               name="search"
+                               data-table-search="members-table" 
+                               value="{{ request('search') }}" 
+                               placeholder="Cari nama, kode, no. hp..." 
+                               class="pl-8 pr-3 py-2 text-xs bg-panelBg border border-[#E6E4F0] rounded-xl focus:bg-white focus:outline-none focus:border-sidebar transition font-medium w-36 sm:w-48">
+                        <svg class="w-3.5 h-3.5 text-textMuted absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
                     </div>
 
-                    <div id="creditLimitWrapper">
-                        <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">Plafon Kredit (IDR)</label>
-                        <input type="number" step="1000" min="0" name="credit_limit" value="{{ old('credit_limit', 0) }}" placeholder="0"
-                               class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-semibold text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                    </div>
-                </div>
+                    @if(request('search') || request('type'))
+                        <a href="{{ route('master.members.index') }}" class="text-xs text-textMuted hover:text-red-500 font-semibold px-1">Reset</a>
+                    @endif
+                </form>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">No. Telepon / WA</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" placeholder="08..."
-                               class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                    </div>
+                <!-- Per Page Selector -->
+                <select data-table-perpage="members-table" class="text-xs bg-panelBg border border-[#E6E4F0] px-3 py-2 rounded-xl font-bold text-sidebar focus:outline-none focus:border-sidebar transition cursor-pointer">
+                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10 / hal</option>
+                    <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15 / hal</option>
+                    <option value="25" {{ request('per_page', 15) == 25 ? 'selected' : '' }}>25 / hal</option>
+                    <option value="50" {{ request('per_page', 15) == 50 ? 'selected' : '' }}>50 / hal</option>
+                </select>
 
-                    <div>
-                        <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="email@..."
-                               class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-bold text-textMain uppercase mb-1.5">Alamat Lengkap</label>
-                    <textarea name="address" rows="2" placeholder="Alamat toko atau domisili pelanggan..."
-                              class="w-full px-3.5 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">{{ old('address') }}</textarea>
-                </div>
-
-                <button type="submit" class="w-full py-2.5 bg-sidebar hover:bg-sidebarDark text-white text-xs font-bold rounded-xl transition shadow-sm">
-                    Daftarkan Member / Mitra
-                </button>
-            </form>
-        </div>
-
-        <!-- Members Table Card (Right Col: 8) -->
-        <div class="lg:col-span-8 bg-white rounded-3xl border border-[#ECEBF4] overflow-hidden shadow-sm" data-async-table="members-table">
-            <div class="p-5 border-b border-[#ECEBF4] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h3 class="font-bold text-sm text-textMain">Daftar Member & Mitra B2B</h3>
-                    <p class="text-xs text-textMuted">Total {{ $members->total() }} pelanggan terdaftar</p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="flex items-center gap-1.5 bg-panelBg px-2.5 py-1.5 rounded-xl border border-[#E6E4F0]">
-                        <span class="text-[11px] font-semibold text-textMuted whitespace-nowrap">Baris:</span>
-                        <select data-table-perpage="members-table"
-                                class="bg-transparent text-xs font-bold text-textMain focus:outline-none cursor-pointer">
-                            <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
-                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                        </select>
-                    </div>
-
-                    <form method="GET" action="{{ route('master.members.index') }}" class="flex flex-wrap items-center gap-2">
-                        <select name="type" onchange="this.form.submit()" class="px-2.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none">
-                            <option value="">Semua Tipe</option>
-                            <option value="RETAIL" {{ request('type') === 'RETAIL' ? 'selected' : '' }}>Hanya Ritel</option>
-                            <option value="B2B" {{ request('type') === 'B2B' ? 'selected' : '' }}>Hanya B2B</option>
-                        </select>
-
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kode, no. hp..."
-                               data-table-search="members-table"
-                               class="px-3.5 py-2 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:outline-none focus:border-sidebar w-36 sm:w-48">
-
-                        @if(request('search') || request('type'))
-                            <a href="{{ route('master.members.index') }}" class="text-xs text-textMuted hover:text-red-500 font-semibold px-1.5">Reset</a>
-                        @endif
-                    </form>
-                </div>
+                <!-- Tambah Member Button -->
+                <a href="{{ route('master.members.create') }}" class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-sidebar hover:bg-sidebarDark text-white text-xs font-bold rounded-xl transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <span>Tambah Member / Mitra</span>
+                </a>
             </div>
+        </div>
 
             <!-- Desktop View: Table -->
             <div class="hidden md:block overflow-x-auto">
@@ -193,7 +122,7 @@
 
                                         @if($m->is_active)
                                             <form method="POST" action="{{ route('master.members.destroy', $m) }}" 
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan member [{{ $m->name }}]?')" class="inline">
+                                                  data-confirm="Apakah Anda yakin ingin menonaktifkan member [{{ $m->name }}]?" data-confirm-title="Nonaktifkan Member" data-confirm-btn="Ya, Nonaktifkan" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="p-1.5 text-textMuted hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Nonaktifkan Member">
@@ -275,7 +204,7 @@
 
                             @if($m->is_active)
                                 <form method="POST" action="{{ route('master.members.destroy', $m) }}" 
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan member [{{ $m->name }}]?')" class="inline">
+                                      data-confirm="Apakah Anda yakin ingin menonaktifkan member [{{ $m->name }}]?" data-confirm-title="Nonaktifkan Member" data-confirm-btn="Ya, Nonaktifkan" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition inline-flex items-center gap-1">
@@ -299,10 +228,8 @@
                 </div>
             @endif
         </div>
-    </div>
 </div>
+
 @endsection
 
-@section('right_panel')
-  @include('master.partials.right-panel')
-@endsection
+

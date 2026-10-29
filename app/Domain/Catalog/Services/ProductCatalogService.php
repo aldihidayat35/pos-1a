@@ -155,65 +155,93 @@ class ProductCatalogService
 
             $product->update($updateData);
 
-            // Update base UOM barcode
-            $baseProductUom = $product->productUoms()->where('is_base', true)->first();
+            // Sync Base UOM and Conversion UOMs cleanly without unique constraint violation
+            $submittedConversions = (isset($data['conversions']) && is_array($data['conversions']))
+                ? $data['conversions']
+                : [];
+
+            $validConversions = [];
+            $targetConvUomIds = [];
+
+            foreach ($submittedConversions as $conv) {
+                if (empty($conv['uom_id']) || (int)$conv['uom_id'] === (int)$baseUom->id) {
+                    continue;
+                }
+
+                $convUom = Uom::findOrFail($conv['uom_id']);
+                if ($convUom->dimension !== $baseUom->dimension) {
+                    throw new InvalidArgumentException(
+                        "Satuan konversi [{$convUom->name}] ({$convUom->dimension}) memiliki dimensi berbeda dengan satuan dasar [{$baseUom->name}] ({$baseUom->dimension})."
+                    );
+                }
+
+                $factor = (float) ($conv['factor_to_base'] ?? 0);
+                if ($factor <= 0) {
+                    throw new InvalidArgumentException("Faktor konversi untuk [{$convUom->name}] harus lebih besar dari 0.");
+                }
+
+                $uomId = (int)$convUom->id;
+                $targetConvUomIds[] = $uomId;
+                $validConversions[$uomId] = [
+                    'factor' => $factor,
+                    'barcode' => !empty($conv['barcode']) ? trim($conv['barcode']) : null,
+                    'is_purchase' => !empty($conv['is_purchase']),
+                    'is_sale' => !empty($conv['is_sale']),
+                ];
+            }
+
+            // Allowed UOM IDs for this product (new Base UOM + valid conversion UOMs)
+            $allowedUomIds = array_unique(array_merge([(int)$baseUom->id], $targetConvUomIds));
+
+            // 1. Delete all product_uoms that were removed from the form (neither base nor in target conversions)
+            $product->productUoms()
+                ->whereNotIn('uom_id', $allowedUomIds)
+                ->delete();
+
+            // 2. Demote any former base UOM that is now a conversion (if retained in allowedUomIds)
+            $product->productUoms()
+                ->where('uom_id', '!=', $baseUom->id)
+                ->where('is_base', true)
+                ->update(['is_base' => false]);
+
+            // 3. Promote or create the new Base UOM row
+            $baseBarcode = array_key_exists('base_barcode', $data)
+                ? (!empty($data['base_barcode']) ? trim($data['base_barcode']) : null)
+                : null;
+            $baseProductUom = $product->productUoms()->where('uom_id', $baseUom->id)->first();
+
             if ($baseProductUom) {
                 $baseProductUom->update([
-                    'uom_id' => $baseUom->id,
-                    'barcode' => !empty($data['base_barcode']) ? trim($data['base_barcode']) : $baseProductUom->barcode,
+                    'factor_to_base' => 1.000000,
+                    'barcode' => array_key_exists('base_barcode', $data) ? $baseBarcode : $baseProductUom->barcode,
+                    'is_purchase' => true,
+                    'is_sale' => true,
+                    'is_base' => true,
                 ]);
             } else {
                 ProductUom::create([
                     'product_id' => $product->id,
                     'uom_id' => $baseUom->id,
                     'factor_to_base' => 1.000000,
-                    'barcode' => !empty($data['base_barcode']) ? trim($data['base_barcode']) : null,
+                    'barcode' => $baseBarcode,
                     'is_purchase' => true,
                     'is_sale' => true,
                     'is_base' => true,
                 ]);
             }
 
-            // Sync additional conversions if provided
-            if (isset($data['conversions']) && is_array($data['conversions'])) {
-                $activeUomIds = [$baseUom->id];
-
-                foreach ($data['conversions'] as $conv) {
-                    if (empty($conv['uom_id']) || $conv['uom_id'] == $baseUom->id) {
-                        continue;
-                    }
-
-                    $convUom = Uom::findOrFail($conv['uom_id']);
-                    if ($convUom->dimension !== $baseUom->dimension) {
-                        throw new InvalidArgumentException(
-                            "Satuan konversi [{$convUom->name}] ({$convUom->dimension}) memiliki dimensi berbeda dengan satuan dasar [{$baseUom->name}] ({$baseUom->dimension})."
-                        );
-                    }
-
-                    $factor = (float) ($conv['factor_to_base'] ?? 0);
-                    if ($factor <= 0) {
-                        throw new InvalidArgumentException("Faktor konversi untuk [{$convUom->name}] harus lebih besar dari 0.");
-                    }
-
-                    $activeUomIds[] = $convUom->id;
-
-                    ProductUom::updateOrCreate(
-                        ['product_id' => $product->id, 'uom_id' => $convUom->id],
-                        [
-                            'factor_to_base' => $factor,
-                            'barcode' => !empty($conv['barcode']) ? trim($conv['barcode']) : null,
-                            'is_purchase' => !empty($conv['is_purchase']),
-                            'is_sale' => !empty($conv['is_sale']),
-                            'is_base' => false,
-                        ]
-                    );
-                }
-
-                // Remove conversion UOMs that were deleted from the form
-                $product->productUoms()
-                    ->where('is_base', false)
-                    ->whereNotIn('uom_id', $activeUomIds)
-                    ->delete();
+            // 4. Upsert submitted conversion rows
+            foreach ($validConversions as $uomId => $convData) {
+                ProductUom::updateOrCreate(
+                    ['product_id' => $product->id, 'uom_id' => $uomId],
+                    [
+                        'factor_to_base' => $convData['factor'],
+                        'barcode' => $convData['barcode'],
+                        'is_purchase' => $convData['is_purchase'],
+                        'is_sale' => $convData['is_sale'],
+                        'is_base' => false,
+                    ]
+                );
             }
 
             return $product->fresh(['category', 'baseUom', 'productUoms.uom']);

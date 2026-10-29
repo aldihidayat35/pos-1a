@@ -28,6 +28,11 @@ class UomController extends Controller
         return view('master.uoms.index', compact('uoms'));
     }
 
+    public function create(): View
+    {
+        return view('master.uoms.create');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -36,12 +41,19 @@ class UomController extends Controller
             'symbol' => ['required', 'string', 'max:15'],
             'dimension' => ['required', 'in:COUNT,WEIGHT,VOLUME'],
             'precision' => ['required', 'integer', 'min:0', 'max:4'],
+        ], [
+            'code.required' => 'Kode satuan wajib diisi.',
+            'code.unique' => 'Kode satuan ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama lengkap satuan wajib diisi.',
+            'symbol.required' => 'Simbol satuan wajib diisi.',
+            'dimension.required' => 'Dimensi fisik satuan wajib dipilih.',
+            'precision.required' => 'Presisi desimal wajib diisi.',
         ]);
 
         $validated['code'] = strtoupper(trim($validated['code']));
         $uom = Uom::create($validated);
 
-        return back()->with('success', "Satuan [{$uom->name}] ({$uom->symbol}) berhasil dibuat!");
+        return redirect()->route('master.uoms.index')->with('success', "Satuan [{$uom->name}] ({$uom->symbol}) berhasil dibuat!");
     }
 
     public function update(Request $request, Uom $uom): RedirectResponse
@@ -53,6 +65,13 @@ class UomController extends Controller
             'dimension' => ['required', 'in:COUNT,WEIGHT,VOLUME'],
             'precision' => ['required', 'integer', 'min:0', 'max:4'],
             'is_active' => ['nullable', 'boolean'],
+        ], [
+            'code.required' => 'Kode satuan wajib diisi.',
+            'code.unique' => 'Kode satuan ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama lengkap satuan wajib diisi.',
+            'symbol.required' => 'Simbol satuan wajib diisi.',
+            'dimension.required' => 'Dimensi fisik satuan wajib dipilih.',
+            'precision.required' => 'Presisi desimal wajib diisi.',
         ]);
 
         $validated['code'] = strtoupper(trim($validated['code']));

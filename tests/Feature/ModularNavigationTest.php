@@ -121,4 +121,79 @@ class ModularNavigationTest extends TestCase
         $response->assertSee('id="desktopOverflowWrapper"', false);
         $response->assertSee('id="desktopOverflowDropdown"', false);
     }
+
+    public function test_master_pages_render_create_links_and_dedicated_create_pages(): void
+    {
+        $user = User::where('username', 'superadmin')->first();
+
+        // 1. Categories Index & Create Page
+        $catRes = $this->actingAs($user)->get('/master/categories');
+        $catRes->assertStatus(200);
+        $catRes->assertSee(route('master.categories.create'), false);
+        $catRes->assertDontSee('openAddModal()');
+        $catRes->assertDontSee('id="addCategoryModal"', false);
+        $catRes->assertSee('data-async-table="categories-table"', false);
+        $catRes->assertDontSee('lg:col-span-4');
+
+        $catCreateRes = $this->actingAs($user)->get('/master/categories/create');
+        $catCreateRes->assertStatus(200);
+        $catCreateRes->assertSee('Formulir Kategori Baru');
+        $catCreateRes->assertSee('Simpan Kategori');
+
+        // 2. UOMs Index & Create Page
+        $uomRes = $this->actingAs($user)->get('/master/uoms');
+        $uomRes->assertStatus(200);
+        $uomRes->assertSee(route('master.uoms.create'), false);
+        $uomRes->assertDontSee('openAddModal()');
+        $uomRes->assertDontSee('id="addUomModal"', false);
+        $uomRes->assertSee('data-async-table="uoms-table"', false);
+        $uomRes->assertDontSee('lg:col-span-4');
+
+        $uomCreateRes = $this->actingAs($user)->get('/master/uoms/create');
+        $uomCreateRes->assertStatus(200);
+        $uomCreateRes->assertSee('Formulir Satuan UOM Baru');
+        $uomCreateRes->assertSee('Simpan Satuan UOM');
+
+        // 3. Suppliers Index & Create Page
+        $supRes = $this->actingAs($user)->get('/master/suppliers');
+        $supRes->assertStatus(200);
+        $supRes->assertSee(route('master.suppliers.create'), false);
+        $supRes->assertDontSee('openAddModal()');
+        $supRes->assertDontSee('id="addSupplierModal"', false);
+        $supRes->assertSee('data-async-table="suppliers-table"', false);
+        $supRes->assertDontSee('lg:col-span-4');
+
+        $supCreateRes = $this->actingAs($user)->get('/master/suppliers/create');
+        $supCreateRes->assertStatus(200);
+        $supCreateRes->assertSee('Formulir Suplayer Baru');
+        $supCreateRes->assertSee('Simpan Data Suplayer');
+
+        // 4. Members Index & Create Page
+        $mbrRes = $this->actingAs($user)->get('/master/members');
+        $mbrRes->assertStatus(200);
+        $mbrRes->assertSee(route('master.members.create'), false);
+        $mbrRes->assertDontSee('openAddModal()');
+        $mbrRes->assertDontSee('id="addMemberModal"', false);
+        $mbrRes->assertSee('data-async-table="members-table"', false);
+        $mbrRes->assertDontSee('lg:col-span-4');
+
+        $mbrCreateRes = $this->actingAs($user)->get('/master/members/create');
+        $mbrCreateRes->assertStatus(200);
+        $mbrCreateRes->assertSee('Formulir Member / Mitra Baru');
+        $mbrCreateRes->assertSee('Daftarkan Member / Mitra');
+
+        // 5. Locations Index & Create Page
+        $locRes = $this->actingAs($user)->get('/master/locations');
+        $locRes->assertStatus(200);
+        $locRes->assertSee(route('master.locations.create'), false);
+        $locRes->assertDontSee('openAddModal()');
+        $locRes->assertDontSee('id="addLocationModal"', false);
+        $locRes->assertSee('data-async-table="locations-table"', false);
+
+        $locCreateRes = $this->actingAs($user)->get('/master/locations/create');
+        $locCreateRes->assertStatus(200);
+        $locCreateRes->assertSee('Formulir Lokasi Operasional Baru');
+        $locCreateRes->assertSee('Simpan Lokasi Cabang');
+    }
 }
+

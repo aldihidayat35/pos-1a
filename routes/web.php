@@ -7,8 +7,8 @@ use App\Http\Controllers\B2b\B2bOrderController;
 use App\Http\Controllers\B2b\B2bPickupController;
 use App\Http\Controllers\B2bController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LocationSwitchController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Master\CategoryController;
 use App\Http\Controllers\Master\LocationMasterController;
 use App\Http\Controllers\Master\MemberController;
@@ -38,10 +38,6 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Language / Locale Switcher (Public / Guest & Auth)
-Route::post('/locale/switch', [LocaleController::class, 'switch'])->name('locale.switch');
-Route::get('/locale/{locale}', [LocaleController::class, 'set'])->name('locale.set');
-
 // Guest Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -51,6 +47,7 @@ Route::middleware('guest')->group(function () {
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // 0. Dashboard Shell (Dasbor Utama & Kesehatan Finansial)
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -176,16 +173,16 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', ProductController::class);
 
         // Categories, UOMs, Suppliers, Members, Locations
-        Route::resource('categories', CategoryController::class)->except(['create', 'show', 'edit']);
-        Route::resource('uoms', UomController::class)->except(['create', 'show', 'edit']);
-        Route::resource('suppliers', SupplierController::class)->except(['create', 'show', 'edit']);
+        Route::resource('categories', CategoryController::class)->except(['show', 'edit']);
+        Route::resource('uoms', UomController::class)->except(['show', 'edit']);
+        Route::resource('suppliers', SupplierController::class)->except(['show', 'edit']);
         
         // Member QR Card & Member CRUD
         Route::get('/members/{member}/card', [MemberController::class, 'card'])->name('members.card');
-        Route::resource('members', MemberController::class)->except(['create', 'show', 'edit']);
+        Route::resource('members', MemberController::class)->except(['show', 'edit']);
         
         // Locations (Warehouses, Stores, Transit)
-        Route::resource('locations', LocationMasterController::class)->except(['create', 'show', 'edit']);
+        Route::resource('locations', LocationMasterController::class)->except(['show', 'edit']);
 
         // Pricing Policies & Floor-Price Lock Matrix (Fase 4)
         Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');

@@ -49,60 +49,69 @@
     </div>
 
     <!-- Actions & Filter Bar -->
-    <div class="bg-white p-4 rounded-2xl border border-[#ECEBF4] flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
-        <form method="GET" action="{{ route('master.products.index') }}" class="flex flex-wrap items-center gap-3 w-full md:w-auto flex-1">
-            <!-- Search Input -->
-            <div class="relative flex-1 min-w-[200px]">
-                <svg class="w-4 h-4 text-textMuted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" name="search" 
-                       data-table-search="products-table"
-                       value="{{ request('search') }}" 
-                       placeholder="Cari SKU, nama produk, barcode..." 
-                       class="w-full pl-10 pr-4 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-            </div>
+    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-[#ECEBF4] shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
+            <form method="GET" action="{{ route('master.products.index') }}" class="flex-1 flex flex-col md:flex-row md:items-center gap-2.5 sm:gap-3">
+                <!-- Search Input: Full width on mobile, flexible on desktop -->
+                <div class="relative w-full md:w-60 lg:w-72 xl:w-80">
+                    <svg class="w-4 h-4 text-textMuted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" name="search" 
+                           data-table-search="products-table"
+                           value="{{ request('search') }}" 
+                           placeholder="Cari SKU, nama produk, barcode..." 
+                           class="w-full pl-10 pr-4 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
+                </div>
 
-            <!-- Category Filter -->
-            <select name="category_id" class="px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                <option value="">Semua Kategori</option>
-                @foreach($categories as $cat)
-                    <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                @endforeach
-            </select>
+                <!-- Dropdown Filters: 2 equal cols on mobile, inline on desktop -->
+                <div class="grid grid-cols-2 md:flex md:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+                    <select name="category_id" class="w-full md:w-auto px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
+                        <option value="">Semua Kategori</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                        @endforeach
+                    </select>
 
-            <!-- Status Filter -->
-            <select name="status" class="px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
-                <option value="">Semua Status</option>
-                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Hanya Aktif</option>
-                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Hanya Nonaktif</option>
-            </select>
+                    <select name="status" class="w-full md:w-auto px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-medium text-textMain focus:bg-white focus:outline-none focus:border-sidebar transition">
+                        <option value="">Semua Status</option>
+                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Hanya Aktif</option>
+                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Hanya Nonaktif</option>
+                    </select>
+                </div>
 
-            <!-- Per Page Selector -->
-            <select data-table-perpage="products-table" name="per_page" class="px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-bold text-sidebar focus:bg-white focus:outline-none focus:border-sidebar transition cursor-pointer">
-                <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>12 / hal</option>
-                <option value="25" {{ request('per_page', 12) == 25 ? 'selected' : '' }}>25 / hal</option>
-                <option value="50" {{ request('per_page', 12) == 50 ? 'selected' : '' }}>50 / hal</option>
-            </select>
+                <!-- Per Page & Action Buttons: 2 equal cols on mobile, inline on desktop -->
+                <div class="grid grid-cols-2 md:flex md:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+                    <select data-table-perpage="products-table" name="per_page" class="w-full md:w-auto px-3 py-2.5 bg-panelBg border border-[#E6E4F0] rounded-xl text-xs font-bold text-sidebar focus:bg-white focus:outline-none focus:border-sidebar transition cursor-pointer">
+                        <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>12 / hal</option>
+                        <option value="25" {{ request('per_page', 12) == 25 ? 'selected' : '' }}>25 / hal</option>
+                        <option value="50" {{ request('per_page', 12) == 50 ? 'selected' : '' }}>50 / hal</option>
+                    </select>
 
-            <button type="submit" class="px-4 py-2.5 bg-sidebar hover:bg-sidebarDark text-white text-xs font-semibold rounded-xl transition">
-                Filter
-            </button>
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="flex-1 md:flex-none px-4 py-2.5 bg-sidebar hover:bg-sidebarDark text-white text-xs font-semibold rounded-xl transition shadow-xs text-center">
+                            Filter
+                        </button>
 
-            @if(request()->hasAny(['search', 'category_id', 'status', 'per_page']))
-                <a href="{{ route('master.products.index') }}" class="px-3 py-2.5 bg-panelBg hover:bg-gray-200 text-textMuted text-xs font-semibold rounded-xl transition">
-                    Reset
+                        @if(request()->hasAny(['search', 'category_id', 'status', 'per_page']))
+                            <a href="{{ route('master.products.index') }}" class="px-3 py-2.5 bg-panelBg hover:bg-gray-200 text-textMuted text-xs font-semibold rounded-xl transition text-center">
+                                Reset
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </form>
+
+            <!-- Tambah Produk Button: Full width on mobile, auto shrink on desktop -->
+            <div class="w-full lg:w-auto shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-[#ECEBF4]">
+                <a href="{{ route('master.products.create') }}" class="w-full lg:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-sidebar hover:bg-sidebarDark text-white text-xs font-bold rounded-xl transition shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <span>Tambah Produk Baru</span>
                 </a>
-            @endif
-        </form>
-
-        <!-- Tambah Produk Button -->
-        <a href="{{ route('master.products.create') }}" class="flex items-center gap-2 px-5 py-2.5 bg-sidebar hover:bg-sidebarDark text-white text-xs font-bold rounded-xl transition shrink-0 shadow-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>+ Tambah Produk Baru</span>
-        </a>
+            </div>
+        </div>
     </div>
 
     <!-- Products Table Card with Async & Mobile Card-Stack -->
@@ -206,7 +215,7 @@
 
                                     @if($p->is_active)
                                         <form method="POST" action="{{ route('master.products.destroy', $p) }}" 
-                                              onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan produk [{{ $p->name }}]?')" class="inline">
+                                              data-confirm="Apakah Anda yakin ingin menonaktifkan produk [{{ $p->name }}]?" data-confirm-title="Nonaktifkan Produk" data-confirm-btn="Ya, Nonaktifkan" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-2 text-textMuted hover:text-red-600 hover:bg-red-50 rounded-xl transition" title="Nonaktifkan Produk">
@@ -237,70 +246,83 @@
         </div>
 
         <!-- MOBILE VIEW: Card Stack Layout (visible on mobile only) -->
-        <div class="block md:hidden p-3.5 space-y-3">
+        <div class="block md:hidden p-3.5 sm:p-4 space-y-3.5">
             @forelse($products as $p)
-                <div class="bg-panelBg/40 border border-[#ECEBF4] rounded-2xl p-4 space-y-3">
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex items-start gap-3 min-w-0">
-                            <x-product-thumbnail :product="$p" size="lg" />
-                            <div class="min-w-0">
-                                <span class="font-mono font-bold text-xs text-sidebar bg-sidebar/5 px-2 py-0.5 rounded border border-sidebar/10">{{ $p->sku }}</span>
-                                <h4 class="font-bold text-textMain text-sm mt-1 truncate">{{ $p->name }}</h4>
-                                <span class="inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white text-textMuted border border-[#ECEBF4]">
-                                    {{ $p->category->name ?? 'Tanpa Kategori' }}
-                                </span>
-                            </div>
-                        </div>
-                        <div>
-                            @if($p->is_active)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    Aktif
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-500 border border-gray-200">
-                                    Nonaktif
-                                </span>
-                            @endif
+                <div class="bg-white border border-[#ECEBF4] rounded-2xl p-4 space-y-3 shadow-xs">
+                    <!-- Top Row: SKU Badge on left, Status Pill on right (Perfect Symmetry) -->
+                    <div class="flex items-center justify-between gap-2 pb-1">
+                        <span class="font-mono font-bold text-[11px] text-sidebar bg-sidebar/5 px-2.5 py-0.5 rounded-lg border border-sidebar/10">
+                            {{ $p->sku }}
+                        </span>
+                        @if($p->is_active)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                Aktif
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-500 border border-gray-200">
+                                Nonaktif
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Middle Row: Product Thumbnail, Name, and Category -->
+                    <div class="flex items-center gap-3">
+                        <x-product-thumbnail :product="$p" size="lg" />
+                        <div class="min-w-0 flex-1">
+                            <h4 class="font-bold text-textMain text-sm leading-snug line-clamp-2">
+                                {{ $p->name }}
+                            </h4>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-panelBg text-textMuted border border-[#ECEBF4] mt-1">
+                                {{ $p->category->name ?? 'Tanpa Kategori' }}
+                            </span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-[#ECEBF4]">
-                        <div>
-                            <span class="text-[10px] text-textMuted block uppercase font-bold">Satuan Dasar</span>
-                            <span class="font-bold text-sidebar">{{ $p->baseUom->name }} ({{ $p->baseUom->symbol }})</span>
+                    <!-- Specs Box: Symmetrical 2 Columns with Clean Vertical Divider -->
+                    <div class="bg-panelBg/70 rounded-xl p-3 border border-[#ECEBF4] grid grid-cols-2 gap-3 divide-x divide-[#ECEBF4]">
+                        <div class="pr-2">
+                            <span class="text-[10px] text-textMuted block uppercase font-bold tracking-wider">Satuan Dasar</span>
+                            <span class="font-bold text-sidebar text-xs mt-0.5 block truncate">
+                                {{ $p->baseUom->name }} ({{ $p->baseUom->symbol }})
+                            </span>
                         </div>
-                        <div>
-                            <span class="text-[10px] text-textMuted block uppercase font-bold">Konversi Bertingkat</span>
+                        <div class="pl-3">
+                            <span class="text-[10px] text-textMuted block uppercase font-bold tracking-wider">Konversi Bertingkat</span>
                             @php
                                 $mobileConvs = $p->productUoms->where('is_base', false);
                             @endphp
                             @if($mobileConvs->count() > 0)
-                                <span class="font-semibold text-textMain">{{ $mobileConvs->count() }} Tingkat UOM</span>
+                                <span class="font-bold text-textMain text-xs mt-0.5 block truncate">
+                                    {{ $mobileConvs->count() }} Tingkat UOM
+                                </span>
                             @else
-                                <span class="text-textMuted italic">Hanya Satuan Dasar</span>
+                                <span class="text-textMuted text-xs italic mt-0.5 block">
+                                    Hanya Satuan Dasar
+                                </span>
                             @endif
                         </div>
                     </div>
 
-                    <div class="pt-2 border-t border-[#ECEBF4] flex items-center justify-end gap-2">
+                    <!-- Actions: Full-Width Symmetrical Button Row -->
+                    <div class="grid {{ $p->is_active ? 'grid-cols-2' : 'grid-cols-1' }} gap-2.5 pt-1 w-full">
                         <a href="{{ route('master.products.edit', $p) }}" 
-                           class="px-3 py-1.5 text-xs font-bold text-sidebar bg-sidebar/10 hover:bg-sidebar/20 rounded-lg transition flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                           class="w-full py-2.5 px-3 text-xs font-bold text-sidebar bg-sidebar/10 hover:bg-sidebar hover:text-white rounded-xl transition flex items-center justify-center gap-2 shadow-xs">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
-                            Edit
+                            <span>Edit Produk</span>
                         </a>
 
                         @if($p->is_active)
                             <form method="POST" action="{{ route('master.products.destroy', $p) }}" 
-                                  onsubmit="return confirm('Apakah Anda yakin ingin menonaktifkan produk [{{ $p->name }}]?')" class="inline">
+                                  data-confirm="Apakah Anda yakin ingin menonaktifkan produk [{{ $p->name }}]?" data-confirm-title="Nonaktifkan Produk" data-confirm-btn="Ya, Nonaktifkan" class="w-full">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition flex items-center gap-1.5">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <button type="submit" class="w-full py-2.5 px-3 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-600 hover:text-white rounded-xl transition flex items-center justify-center gap-2 shadow-xs">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
                                     </svg>
-                                    Nonaktifkan
+                                    <span>Nonaktifkan</span>
                                 </button>
                             </form>
                         @endif
@@ -319,8 +341,4 @@
         @endif
     </div>
 </div>
-@endsection
-
-@section('right_panel')
-  @include('master.partials.right-panel')
 @endsection

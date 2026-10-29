@@ -351,8 +351,34 @@
 
   function confirmClearCart() {
     if (cart.length === 0) return;
-    if (confirm('Kosongkan semua item di keranjang belanja?')) {
-      clearCart();
+    if (typeof SwalConfirm !== 'undefined') {
+      SwalConfirm.fire({
+        title: 'Kosongkan Keranjang?',
+        text: 'Semua item yang sudah dipilih di kasir akan dihapus dari daftar.',
+        icon: 'warning',
+        confirmButtonText: 'Ya, Kosongkan',
+        cancelButtonText: 'Batal',
+        customClass: {
+          popup: 'swal2-modal',
+          title: 'font-display text-base font-bold text-textMain',
+          confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-xs shadow-sm transition active:scale-95 text-white bg-rose-600 hover:bg-rose-700 cursor-pointer',
+          cancelButton: 'px-5 py-2.5 rounded-xl font-bold text-xs bg-panelBg hover:bg-[#EAE8F2] text-textMain transition active:scale-95 mr-2 cursor-pointer'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          clearCart();
+          if (typeof SwalToast !== 'undefined') {
+            SwalToast.fire({
+              icon: 'success',
+              title: 'Keranjang belanja dikosongkan'
+            });
+          }
+        }
+      });
+    } else {
+      if (confirm('Kosongkan semua item di keranjang belanja?')) {
+        clearCart();
+      }
     }
   }
 
@@ -477,7 +503,14 @@
   // 4. Payment Modal & Execution
   function openPaymentModal() {
     if (cart.length === 0) {
-      alert('Keranjang belanja masih kosong! Tambahkan produk terlebih dahulu.');
+      if (typeof SwalToast !== 'undefined') {
+        SwalToast.fire({
+          icon: 'warning',
+          title: 'Keranjang belanja masih kosong! Tambahkan produk terlebih dahulu.'
+        });
+      } else {
+        alert('Keranjang belanja masih kosong! Tambahkan produk terlebih dahulu.');
+      }
       return;
     }
 
@@ -593,12 +626,28 @@
         // Successful checkout! Redirect to printable thermal receipt
         window.location.href = data.receipt_url;
       } else {
-        alert(data.message || 'Gagal memproses transaksi kasir.');
+        if (typeof SwalModal !== 'undefined') {
+          SwalModal.fire({
+            icon: 'error',
+            title: 'Transaksi Gagal',
+            text: data.message || 'Gagal memproses transaksi kasir.'
+          });
+        } else {
+          alert(data.message || 'Gagal memproses transaksi kasir.');
+        }
         btn.disabled = false;
         btn.innerHTML = 'Konfirmasi & Cetak Struk (Enter)';
       }
     } catch (err) {
-      alert('Terjadi kesalahan jaringan: ' + err.message);
+      if (typeof SwalModal !== 'undefined') {
+        SwalModal.fire({
+          icon: 'error',
+          title: 'Gangguan Jaringan',
+          text: 'Terjadi kesalahan jaringan: ' + err.message
+        });
+      } else {
+        alert('Terjadi kesalahan jaringan: ' + err.message);
+      }
       btn.disabled = false;
       btn.innerHTML = 'Konfirmasi & Cetak Struk (Enter)';
     }

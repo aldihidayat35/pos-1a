@@ -223,4 +223,76 @@ class MasterProductTest extends TestCase
             'is_active' => false,
         ]);
     }
+
+    public function test_product_catalog_index_does_not_render_right_panel(): void
+    {
+        $response = $this->actingAs($this->user)->get(route('master.products.index'));
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Aksi Master Data');
+    }
+
+    public function test_user_can_update_product_base_uom_to_existing_conversion_and_remove_conversions(): void
+    {
+        // Setup product with base UOM = Krg25 and conversion = Kg
+        $product = Product::create([
+            'sku' => 'SKU-CONV-SWAP',
+            'name' => 'Beras Organik Swap',
+            'normalized_name' => 'beras organik swap',
+            'category_id' => $this->category->id,
+            'base_uom_id' => $this->convUomKrg25->id,
+        ]);
+
+        ProductUom::create([
+            'product_id' => $product->id,
+            'uom_id' => $this->convUomKrg25->id,
+            'factor_to_base' => 1.0,
+            'barcode' => '8999999009999',
+            'is_base' => true,
+        ]);
+
+        ProductUom::create([
+            'product_id' => $product->id,
+            'uom_id' => $this->baseUomKg->id,
+            'factor_to_base' => 0.04,
+            'barcode' => '8999999008888',
+            'is_base' => false,
+        ]);
+
+        // Now update product: change base UOM to baseUomKg and remove conversions completely
+        $payload = [
+            'sku' => 'SKU-CONV-SWAP',
+            'name' => 'Beras Organik Swap Updated',
+            'category_id' => $this->category->id,
+            'base_uom_id' => $this->baseUomKg->id,
+            'base_barcode' => '8999999008888',
+        ];
+
+        $response = $this->actingAs($this->user)->put(route('master.products.update', $product), $payload);
+
+        $response->assertRedirect(route('master.products.index'));
+        $response->assertSessionHas('success');
+
+        // Verify product now has base_uom_id = baseUomKg
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'base_uom_id' => $this->baseUomKg->id,
+        ]);
+
+        // Verify only 1 product_uoms row exists and it is base UOM with factor 1.0
+        $this->assertDatabaseHas('product_uoms', [
+            'product_id' => $product->id,
+            'uom_id' => $this->baseUomKg->id,
+            'factor_to_base' => 1.0,
+            'barcode' => '8999999008888',
+            'is_base' => true,
+        ]);
+
+        $this->assertDatabaseMissing('product_uoms', [
+            'product_id' => $product->id,
+            'uom_id' => $this->convUomKrg25->id,
+        ]);
+
+        $this->assertEquals(1, ProductUom::where('product_id', $product->id)->count());
+    }
 }

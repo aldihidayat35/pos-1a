@@ -53,12 +53,7 @@
     </div>
   </div>
 
-  @if(session('success'))
-    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-semibold flex items-center gap-2">
-      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-      <span>{{ session('success') }}</span>
-    </div>
-  @endif
+
 
   <!-- 4-Step Visual Progress Bar -->
   <div class="bg-white rounded-3xl p-6 border border-[#ECEBF4] shadow-sm">

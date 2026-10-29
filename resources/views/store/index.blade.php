@@ -4,67 +4,217 @@
 
 @section('content')
 <main class="flex-1 w-full space-y-6">
-  <!-- Flash Notifications -->
-  @if(session('success'))
-    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
-      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-      </svg>
-      <span>{{ session('success') }}</span>
-    </div>
-  @endif
 
-  @if(session('error'))
-    <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2">
-      <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-      <span>{{ session('error') }}</span>
-    </div>
-  @endif
 
-  <!-- Header Banner (Clean UI with Mobile Tooltip) -->
+  <!-- Header Banner (Clean UI with Mobile Tooltip & Quick Actions) -->
   <div class="bg-panelBg p-5 sm:p-7 rounded-[26px] border border-[#ECEBF4] relative">
-    <div class="flex items-center gap-2 flex-wrap">
-      <h1 class="font-display text-lg sm:text-2xl font-bold text-textMain tracking-tight">Operasional Toko & Kasir</h1>
-      <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase shrink-0 bg-sidebar text-white">
-        {{ $activeLocation?->code ?? 'STR-PASAR-1' }}
-      </span>
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="font-display text-lg sm:text-2xl font-bold text-textMain tracking-tight">Operasional Toko & Kasir</h1>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase shrink-0 bg-sidebar text-white">
+            {{ $activeLocation?->code ?? 'STR-PASAR-1' }}
+          </span>
 
-      <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
-      <div class="relative md:hidden inline-flex items-center">
-        <button type="button" 
-                onclick="toggleHeaderTooltip('storeHeaderPopover', event)" 
-                class="w-6 h-6 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-1 shadow-xs"
-                title="Lihat Keterangan Halaman"
-                aria-label="Info Halaman">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
-          </svg>
-        </button>
-
-        <!-- Mobile Popover Floating Bubble -->
-        <div id="storeHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs">
-          <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
-            <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
-              <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <!-- Mobile-Only Info Tooltip Trigger (ℹ️) -->
+          <div class="relative md:hidden inline-flex items-center">
+            <button type="button" 
+                    onclick="toggleHeaderTooltip('storeHeaderPopover', event)" 
+                    class="w-6 h-6 rounded-full bg-sidebar/10 hover:bg-sidebar text-sidebar hover:text-white flex items-center justify-center transition p-1 shadow-xs"
+                    title="Lihat Keterangan Halaman"
+                    aria-label="Info Halaman">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
               </svg>
-              <span>Informasi Toko</span>
+            </button>
+
+            <!-- Mobile Popover Floating Bubble -->
+            <div id="storeHeaderPopover" class="header-popover hidden fixed inset-x-4 top-20 z-50 bg-white rounded-2xl p-4 border border-[#ECEBF4] shadow-2xl animate-in fade-in zoom-in-95 duration-150 text-xs">
+              <div class="flex items-start justify-between gap-2 pb-2 mb-2 border-b border-[#ECEBF4]">
+                <div class="flex items-center gap-1.5 font-bold text-sidebar text-xs">
+                  <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                  </svg>
+                  <span>Informasi Toko</span>
+                </div>
+                <button type="button" onclick="closeHeaderTooltip('storeHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
+              </div>
+              <p class="text-[11px] text-textMuted leading-relaxed">
+                {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
+              </p>
             </div>
-            <button type="button" onclick="closeHeaderTooltip('storeHeaderPopover')" class="p-1 text-textMuted hover:text-textMain rounded-lg font-bold">✕</button>
           </div>
-          <p class="text-[11px] text-textMuted leading-relaxed">
-            {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
-          </p>
         </div>
+
+        <!-- Desktop Subtitle (Hidden on Mobile) -->
+        <p class="hidden md:block text-[11px] sm:text-xs text-textMuted mt-1 max-w-2xl leading-normal">
+          {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
+        </p>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-2 flex-wrap shrink-0">
+        @if($user?->hasPermission('pos.access') || $user?->isSuperAdmin())
+          <a href="{{ route('store.pos.terminal') }}" 
+             class="px-3.5 py-2 rounded-xl bg-sidebar hover:bg-sidebar/90 text-white font-bold text-xs shadow-sm transition inline-flex items-center gap-2">
+            <svg class="w-4 h-4 text-brandOrange" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <span>Kasir POS (F2)</span>
+          </a>
+        @endif
+
+        @if($user?->hasPermission('emergency.input') || $user?->isSuperAdmin())
+          <a href="{{ route('store.emergency.create') }}" 
+             class="px-3 py-2 rounded-xl bg-white hover:bg-amber-50 text-amber-700 font-bold text-xs border border-amber-200 shadow-xs transition inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>+ Belanja Darurat</span>
+          </a>
+        @endif
+
+        @if($user?->hasPermission('pos.cash_shift') || $user?->isSuperAdmin())
+          <a href="{{ route('store.shifts.index') }}" 
+             class="px-3 py-2 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 shadow-xs transition inline-flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <span>Shift Kasir</span>
+          </a>
+        @endif
+
+        <a href="{{ route('store.transfers.index') }}" 
+           class="px-3 py-2 rounded-xl bg-white hover:bg-blue-50 text-blue-700 font-bold text-xs border border-blue-200 shadow-xs transition inline-flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+          </svg>
+          <span>Transfer Masuk</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS OPERASIONAL & STATISTIK TOKO (DI BAWAH JUDUL) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <!-- 1. STATUS OPERASIONAL -->
+    <div class="bg-white rounded-3xl p-5 sm:p-6 border border-[#ECEBF4] shadow-sm space-y-4">
+      <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <h2 class="font-display font-bold text-base text-textMain tracking-tight">Status Operasional</h2>
+        </div>
+        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 uppercase tracking-wider">Live Toko</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Status 1: Kasir Buka Shift -->
+        <div class="bg-panelBg p-3.5 rounded-2xl border border-[#ECEBF4] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold text-textMuted tracking-wider">Kasir Aktif</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </div>
+          <p class="font-mono font-extrabold text-lg text-emerald-700">
+            {{ $stats['active_cashiers_count'] ?? ($stats['active_shift'] ? 1 : 0) }} Kasir
+          </p>
+          <span class="text-[10px] text-textMuted block truncate">Shift kasir berjalan</span>
+        </div>
+
+        <!-- Status 2: SKU Perlu Restock -->
+        <div class="bg-panelBg p-3.5 rounded-2xl border border-[#ECEBF4] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold text-textMuted tracking-wider">Restock</span>
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          </div>
+          <p class="font-mono font-extrabold text-lg text-amber-700">
+            {{ $stats['low_stock_count'] ?? 0 }} SKU
+          </p>
+          <span class="text-[10px] text-textMuted block truncate">Stok menipis (≤10)</span>
+        </div>
+
+        <!-- Status 3: Transfer Transit -->
+        <div class="bg-panelBg p-3.5 rounded-2xl border border-[#ECEBF4] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold text-textMuted tracking-wider">Transit</span>
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          </div>
+          <p class="font-mono font-extrabold text-lg text-blue-700">
+            {{ $stats['incoming_transfers_count'] ?? 0 }} Kiriman
+          </p>
+          <span class="text-[10px] text-textMuted block truncate">Menuju toko ini</span>
+        </div>
+      </div>
+
+      <!-- Info Sesi Kasir Terkini -->
+      @php $currentShift = $stats['active_shift'] ?? null; @endphp
+      <div class="p-3.5 rounded-2xl bg-panelBg/80 border border-[#ECEBF4] text-xs flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </div>
+          <div>
+            <span class="text-[10px] text-textMuted uppercase font-bold block">Sesi Shift Kasir Terkini</span>
+            <span class="font-bold text-textMain">{{ $currentShift ? $currentShift->cashier?->name . ' (Modal: Rp ' . number_format($currentShift->starting_cash ?? $currentShift->opening_cash ?? 0, 0, ',', '.') . ')' : 'Belum ada sesi kasir aktif hari ini' }}</span>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold shrink-0 {{ $currentShift ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-600' }}">
+          {{ $currentShift ? 'Laci Terbuka' : 'Laci Tertutup' }}
+        </span>
       </div>
     </div>
 
-    <!-- Desktop Subtitle (Hidden on Mobile) -->
-    <p class="hidden md:block text-[11px] sm:text-xs text-textMuted mt-1 max-w-2xl leading-normal">
-      {{ $activeLocation?->name ?? 'Toko Pasar Raya' }} ({{ $activeLocation?->code ?? 'STR-PASAR-1' }}) • Pusat penerimaan stok transit dari gudang utama, pencatatan belanja darurat instan berfoto nota, dan monitoring rak etalase toko.
-    </p>
+    <!-- 2. STATISTIK TOKO -->
+    <div class="bg-white rounded-3xl p-5 sm:p-6 border border-[#ECEBF4] shadow-sm space-y-4">
+      <div class="flex items-center justify-between border-b border-[#ECEBF4] pb-3">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-sidebar" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          <h2 class="font-display font-bold text-base text-textMain tracking-tight">Statistik Toko</h2>
+        </div>
+        <span class="text-[10px] font-bold text-textMuted uppercase tracking-wider">Bulan Berjalan</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <!-- Metrik 1: Belanja Emergency Bulan Ini -->
+        <div class="bg-panelBg p-4 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+          <div>
+            <span class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Belanja Emergency</span>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-xl font-black text-amber-700 font-mono">{{ $stats['emergency_purchases_count'] ?? 0 }}</span>
+              <span class="text-[10px] font-bold text-textMuted">Transaksi</span>
+            </div>
+            <p class="text-[11px] text-textMuted mt-1">
+              Total: <strong class="text-sidebar font-mono font-bold">Rp {{ number_format($stats['total_emergency_spent'] ?? 0, 0, ',', '.') }}</strong>
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Metrik 2: Total SKU Terdisplay di Rak -->
+        <div class="bg-panelBg p-4 rounded-2xl border border-[#ECEBF4] flex items-center justify-between shadow-xs">
+          <div>
+            <span class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Display Rak Toko</span>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-xl font-black text-sidebar font-mono">{{ $stats['total_sku_shelf'] ?? 0 }}</span>
+              <span class="text-[10px] font-bold text-textMuted">SKU Aktif</span>
+            </div>
+            <p class="text-[11px] text-textMuted mt-1">
+              Katalog: <strong class="text-sidebar font-mono font-bold">{{ $stats['total_products'] ?? 0 }} SKU</strong>
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Incoming Transfers Alert / Table -->
@@ -367,8 +517,4 @@
     </div>
   </div>
 </main>
-@endsection
-
-@section('right_panel')
-  @include('store.partials.right-panel')
 @endsection

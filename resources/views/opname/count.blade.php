@@ -48,23 +48,7 @@
     </div>
   </div>
 
-  @if(session('success'))
-    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-semibold flex items-center gap-2">
-      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-      <span>{{ session('success') }}</span>
-    </div>
-  @endif
 
-  @if($errors->any())
-    <div class="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs">
-      <p class="font-bold mb-1">Terdapat kesalahan:</p>
-      <ul class="list-disc list-inside space-y-0.5">
-        @foreach($errors->all() as $err)
-          <li>{{ $err }}</li>
-        @endforeach
-      </ul>
-    </div>
-  @endif
 
   <!-- Counting Table Form -->
   <form method="POST" action="{{ route('opname.count.save', $opname->id) }}" class="space-y-4">

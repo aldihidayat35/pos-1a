@@ -302,4 +302,45 @@ class PosAndCashShiftTest extends TestCase
         $this->assertNotNull($anomaly);
         $this->assertEquals('RED', $anomaly->severity);
     }
+
+    public function test_receipt_page_renders_thermal_receipt_without_right_panel_and_with_print_styles(): void
+    {
+        $sale = Sale::first();
+        if (!$sale) {
+            $shift = CashShift::create([
+                'user_id' => $this->stafToko->id,
+                'location_id' => $this->store->id,
+                'shift_number' => 'SFT-TEST-001',
+                'opened_at' => now(),
+                'opening_cash' => 500000.0,
+                'status' => 'OPEN',
+            ]);
+            $sale = Sale::create([
+                'sale_number' => 'POS-TEST-001',
+                'cash_shift_id' => $shift->id,
+                'location_id' => $this->store->id,
+                'cashier_id' => $this->stafToko->id,
+                'customer_name' => 'Pelanggan Uji',
+                'subtotal' => 50000.0,
+                'total_amount' => 50000.0,
+                'paid_amount' => 50000.0,
+                'change_amount' => 0.0,
+                'payment_method' => 'CASH',
+                'status' => 'POSTED',
+                'posted_at' => now(),
+            ]);
+        }
+
+        $response = $this->actingAs($this->stafToko)->get(route('store.pos.receipt', $sale->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('Struk Pembayaran Transaksi');
+        $response->assertSee('id="thermalReceipt"', false);
+        $response->assertSee('@media print', false);
+        $response->assertSee('size: 80mm auto;', false);
+        // Ensure right panel widgets are NOT present on the receipt page
+        $response->assertDontSee('Fungsi Otomasi');
+        $response->assertDontSee('Optimasi Rak');
+        $response->assertDontSee('Statistik Throughput');
+    }
 }

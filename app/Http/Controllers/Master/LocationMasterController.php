@@ -33,6 +33,11 @@ class LocationMasterController extends Controller
         return view('master.locations.index', compact('locations'));
     }
 
+    public function create(): View
+    {
+        return view('master.locations.create');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -41,12 +46,18 @@ class LocationMasterController extends Controller
             'type' => ['required', 'in:WAREHOUSE,STORE,TRANSIT'],
             'phone' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string', 'max:500'],
+        ], [
+            'code.required' => 'Kode lokasi wajib diisi.',
+            'code.unique' => 'Kode lokasi ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama lokasi cabang wajib diisi.',
+            'type.required' => 'Tipe lokasi cabang wajib dipilih.',
+            'type.in' => 'Tipe lokasi harus berupa WAREHOUSE, STORE, atau TRANSIT.',
         ]);
 
         $validated['code'] = strtoupper(trim($validated['code']));
         $location = Location::create($validated);
 
-        return back()->with('success', "Lokasi [{$location->name}] ({$location->code}) berhasil ditambahkan!");
+        return redirect()->route('master.locations.index')->with('success', "Lokasi [{$location->name}] ({$location->code}) berhasil ditambahkan!");
     }
 
     public function update(Request $request, Location $location): RedirectResponse
@@ -58,6 +69,12 @@ class LocationMasterController extends Controller
             'phone' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string', 'max:500'],
             'is_active' => ['nullable', 'boolean'],
+        ], [
+            'code.required' => 'Kode lokasi wajib diisi.',
+            'code.unique' => 'Kode lokasi ini sudah digunakan oleh data lain.',
+            'name.required' => 'Nama lokasi cabang wajib diisi.',
+            'type.required' => 'Tipe lokasi cabang wajib dipilih.',
+            'type.in' => 'Tipe lokasi harus berupa WAREHOUSE, STORE, atau TRANSIT.',
         ]);
 
         $validated['code'] = strtoupper(trim($validated['code']));
